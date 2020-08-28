@@ -8,7 +8,6 @@ import { property } from '@loopback/repository'
 import { model } from '@loopback/repository'
 import { Role } from './role.model'
 import { Audit } from '.'
-
 import { id } from './pg'
 import { email } from './pg'
 import { boolean } from './pg'

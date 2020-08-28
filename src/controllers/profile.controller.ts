@@ -58,7 +58,7 @@ export class ProfileController {
     @inject(SecurityBindings.USER) session: UserProfile,
     @param.where(Profile) where?: Where<Profile>
   ): Promise<Count> {
-    profile.editedAt = new Date().toDateString()
+    profile.editedAt = new Date().toLocaleString()
     profile.editedBy = (await this.acountService.convertToUser(session)).id
     return this.profileRepo.updateAll(profile, where)
   }
@@ -88,7 +88,7 @@ export class ProfileController {
     @requestBody(spec.requestPartialBoby()) profile: Profile,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<void> {
-    profile.editedAt = new Date().toDateString()
+    profile.editedAt = new Date().toLocaleString()
     profile.editedBy = (await this.acountService.convertToUser(session)).id
     await this.profileRepo.updateById(id, profile)
   }
@@ -101,7 +101,7 @@ export class ProfileController {
     await this.profileRepo.updateById(id, {
       deleted: true,
       deletedBy: (await this.acountService.convertToUser(session)).id,
-      deletedAt: new Date().toDateString()
+      deletedAt: new Date().toLocaleString()
     })
   }
 }

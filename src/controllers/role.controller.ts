@@ -56,7 +56,7 @@ export class RoleController {
     @inject(SecurityBindings.USER) session: UserProfile,
     @param.where(Role) where?: Where<Role>
   ): Promise<Count> {
-    role.editedAt = new Date().toDateString()
+    role.editedAt = new Date().toLocaleString()
     role.editedBy = (await this.acountService.convertToUser(session)).id
     return this.roleRepo.updateAll(role, where)
   }
@@ -76,7 +76,7 @@ export class RoleController {
     @requestBody(spec.requestPartialBoby()) role: Role,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<void> {
-    role.editedAt = new Date().toDateString()
+    role.editedAt = new Date().toLocaleString()
     role.editedBy = (await this.acountService.convertToUser(session)).id
     await this.roleRepo.updateById(id, role)
   }
@@ -92,7 +92,7 @@ export class RoleController {
       await this.roleRepo.updateById(id, {
         deleted: true,
         deletedBy: (await this.acountService.convertToUser(session)).id,
-        deletedAt: new Date().toDateString()
+        deletedAt: new Date().toLocaleString()
       })
     }
   }

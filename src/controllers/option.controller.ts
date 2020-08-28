@@ -56,7 +56,7 @@ export class OptionController {
     @inject(SecurityBindings.USER) session: UserProfile,
     @param.where(Option) where?: Where<Option>
   ): Promise<Count> {
-    option.editedAt = new Date().toDateString()
+    option.editedAt = new Date().toLocaleString()
     option.editedBy = (await this.acountService.convertToUser(session)).id
     return this.optionRepo.updateAll(option, where)
   }
@@ -76,7 +76,7 @@ export class OptionController {
     @requestBody(spec.requestPartialBoby()) option: Option,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<void> {
-    option.editedAt = new Date().toDateString()
+    option.editedAt = new Date().toLocaleString()
     option.editedBy = (await this.acountService.convertToUser(session)).id
     await this.optionRepo.updateById(id, option)
   }
@@ -89,7 +89,7 @@ export class OptionController {
     await this.optionRepo.updateById(id, {
       deleted: true,
       deletedBy: (await this.acountService.convertToUser(session)).id,
-      deletedAt: new Date().toDateString()
+      deletedAt: new Date().toLocaleString()
     })
   }
 }

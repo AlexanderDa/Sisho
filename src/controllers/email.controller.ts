@@ -17,6 +17,7 @@ import { StorageService } from '../services'
 import { EmailService } from '../services'
 import { StorageBindings } from '../keys'
 import { EmailBindings } from '../keys'
+import { EMAIL } from '../configs'
 
 @authenticate('jwt')
 export class EmailController {
@@ -30,6 +31,10 @@ export class EmailController {
 
   @post('/api/email/welcome', spect.response())
   async create(@requestBody(spect.email()) { email }: { email: string }): Promise<void> {
+    if (!EMAIL.isSupported()) {
+      throw new HttpErrors.Forbidden('EMAIL_NOT_SUPPORTED')
+    }
+
     const user = await this.userRepo.findOne({ where: { email } })
 
     if (user) {

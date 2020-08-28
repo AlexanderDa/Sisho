@@ -16,7 +16,24 @@ import { passport } from './pg'
 import { filename } from './pg'
 import { character } from './pg'
 
-@model()
+@model({
+  settings: {
+    indexes: {
+      uniqueProfileEmail: {
+        keys: { email: 1 },
+        options: { unique: true }
+      },
+      uniqueProfileDni: {
+        keys: { dni: 1 },
+        options: { unique: true }
+      },
+      uniqueProfilePassport: {
+        keys: { passport: 1 },
+        options: { unique: true }
+      }
+    }
+  }
+})
 export class Profile extends Audit {
   @id() id?: number
 

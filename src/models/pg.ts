@@ -76,7 +76,7 @@ export function boolean(definition: {
  * Postgres native `TIMESTAMP`.
  */
 export function timestamp(definition: {
-  default?: Date | null
+  default?: Date | string | null
   required?: boolean
   columnName?: string
 }) {

@@ -84,8 +84,8 @@ class Migrate {
       await repo.create({
         name: 'sisho',
         address: 'Company address',
-        primaryColor: '#00bcd4',
-        secondaryColor: '#b2ebf2'
+        primaryColor: '#E53935',
+        secondaryColor: '#E57373'
       })
     }
   }
