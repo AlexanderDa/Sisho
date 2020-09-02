@@ -3,66 +3,52 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { TokenService } from '@loopback/authentication'
-import { UserProfile } from '@loopback/security'
 import { HttpErrors } from '@loopback/rest'
 import { inject } from '@loopback/context'
 import { TokenBindings } from '../keys'
-import { promisify } from 'util'
+import jwt from 'jsonwebtoken'
 
-const jwt = require('jsonwebtoken')
-const signAsync = promisify(jwt.sign)
-const verifyAsync = promisify(jwt.verify)
+export interface JWTService {
+  generateToken(email: string, duration?: number): Promise<string>
+  verifyToken(token: string): Promise<{ email: string }>
+}
 
-export class JWTService implements TokenService {
-  constructor(
-    @inject(TokenBindings.SECRET) private jwtSecret: string,
-    @inject(TokenBindings.EXPIRES_IN) private jwtExpiresIn: string
-  ) {}
+export class MyJWTService implements JWTService {
+  constructor(@inject(TokenBindings.SECRET) private jwtSecret: string) {}
 
-  // eslint-disable-next-line
-  // @ts-ignore
-  async verifyToken(token: string): Promise<UserProfile> {
-    if (!token) {
-      throw new HttpErrors.Unauthorized('NO_TOKEN')
-    }
-
-    let userProfile: UserProfile
-
-    try {
-      // decode user profile from token
-      const decryptedToken = await verifyAsync(token, this.jwtSecret)
-      // don't copy over  token field 'iat' and 'exp', nor 'email' to user profile
-      // eslint-disable-next-line
-      // @ts-ignore
-      userProfile = Object.assign(
-        { id: '', name: '' },
-        { id: decryptedToken.id, name: decryptedToken.name }
-      )
-    } catch (error) {
-      throw new HttpErrors.Unauthorized('TOKEN_EXPIRED')
-    }
-
-    return userProfile
-  }
-
-  // eslint-disable-next-line
-  // @ts-ignore
-  async generateToken(userProfile: UserProfile): Promise<string> {
-    if (!userProfile) {
-      throw new HttpErrors.Unauthorized('Error generating token: userProfile is null')
+  generateToken(email: string, duration?: number): Promise<string> {
+    if (!email) {
+      throw new HttpErrors.Unauthorized('Error generating token: email is null')
     }
 
     // Generate a JSON Web Token
-    let token: string
-    try {
-      token = await signAsync(userProfile, this.jwtSecret, {
-        expiresIn: Number(this.jwtExpiresIn)
-      })
-    } catch (error) {
-      throw new HttpErrors.Unauthorized(`Error encoding token: ${error}`)
-    }
 
-    return token
+    return new Promise<string>((resolve, reject) => {
+      try {
+        const tokenGenerated: string = jwt.sign(
+          { email },
+          this.jwtSecret,
+          duration ? { expiresIn: duration } : {}
+        )
+        resolve(tokenGenerated)
+      } catch (error) {
+        reject(new HttpErrors.Unauthorized(`Error encoding token: ${error}`))
+      }
+    })
+  }
+  verifyToken(token: string): Promise<{ email: string }> {
+    if (!token) {
+      throw new HttpErrors.Unauthorized('NO_TOKEN')
+    }
+    return new Promise<{ email: string }>((resolve, reject) => {
+      try {
+        const result = jwt.verify(token, this.jwtSecret) as {
+          email: string
+        }
+        resolve(result)
+      } catch (error) {
+        reject(new HttpErrors.Unauthorized(`TOKEN_EXPIRED`))
+      }
+    })
   }
 }

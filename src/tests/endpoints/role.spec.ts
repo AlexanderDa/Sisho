@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
-import { setupApplicationWithToken } from './setup.spec'
+import { setupApplicationWithToken } from '../setup.spec'
 import { RoleRepository } from '../../repositories'
 import { message } from '../../utils'
 import { Role } from '../../models'

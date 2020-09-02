@@ -3,12 +3,12 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { Application } from '../..'
+import { Application } from '..'
 import { createRestAppClient } from '@loopback/testlab'
 import { givenHttpServerConfig } from '@loopback/testlab'
 import { Client } from '@loopback/testlab'
-import { DEFAULT_ADMIN } from '../../migrations'
-import { User } from '../../models'
+import { DEFAULT_ADMIN } from '../migrations'
+import { User } from '../models'
 
 /**
  * Setup the application with the client.

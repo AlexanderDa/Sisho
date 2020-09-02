@@ -13,24 +13,27 @@ import { ProfileRepository } from '../repositories'
 import { CompanyRepository } from '../repositories'
 import { UserRepository } from '../repositories'
 import * as spect from './specs/email.specs'
-import { StorageService } from '../services'
+import { StorageService, JWTService } from '../services'
 import { EmailService } from '../services'
-import { StorageBindings } from '../keys'
+import { StorageBindings, TokenBindings } from '../keys'
 import { EmailBindings } from '../keys'
 import { EMAIL } from '../configs'
 
-@authenticate('jwt')
 export class EmailController {
   constructor(
-    @inject(EmailBindings.SERVICE) public emailService: EmailService,
     @inject(StorageBindings.SERVICE) public storageService: StorageService,
+    @inject(EmailBindings.SERVICE) public emailService: EmailService,
+    @inject(TokenBindings.SERVICE) public jwtService: JWTService,
     @repository(UserRepository) public userRepo: UserRepository,
     @repository(CompanyRepository) public companyRepo: CompanyRepository,
     @repository(ProfileRepository) public profileRepo: ProfileRepository
   ) {}
 
+  @authenticate('jwt')
   @post('/api/email/welcome', spect.response())
-  async create(@requestBody(spect.email()) { email }: { email: string }): Promise<void> {
+  async activateAccunt(
+    @requestBody(spect.email()) { email }: { email: string }
+  ): Promise<void> {
     if (!EMAIL.isSupported()) {
       throw new HttpErrors.Forbidden('EMAIL_NOT_SUPPORTED')
     }
@@ -45,7 +48,43 @@ export class EmailController {
         username: profile.firstName,
         image: profile.image,
         email: user.email,
-        verificationToken: user.verificationToken
+        token: user.verificationToken
+      })
+    } else {
+      throw new HttpErrors.BadRequest('BAD_ACCOUNT')
+    }
+  }
+
+  @post('/api/email/restore', spect.noContent('Restore password request'))
+  async restorePasswort(
+    @requestBody(spect.email()) { email }: { email: string }
+  ): Promise<void> {
+    if (!EMAIL.isSupported()) {
+      throw new HttpErrors.Forbidden('EMAIL_NOT_SUPPORTED')
+    }
+
+    const user = await this.userRepo.findOne({ where: { email } })
+
+    if (user) {
+      if (user.deleted === true || user.isActive === false)
+        throw new HttpErrors.Unauthorized('INACTIVE_ACCOUNT')
+
+      if (user.emailVerified === false)
+        throw new HttpErrors.Unauthorized('EMAIL_NOT_VERIFIED')
+
+      const token = await this.jwtService.generateToken(user.email, 600)
+      await this.userRepo.updateById(user.id, {
+        passResetToken: token
+      })
+
+      const profile = await this.profileRepo.findById(user?.profileId)
+
+      await this.emailService.restorePassword({
+        logo: await this.companyLogo(),
+        username: profile.firstName,
+        image: profile.image,
+        email: user.email,
+        token
       })
     } else {
       throw new HttpErrors.BadRequest('BAD_ACCOUNT')

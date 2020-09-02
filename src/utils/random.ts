@@ -19,13 +19,6 @@ function randomString(length: number, date?: boolean): string {
 
 export const random = {
   /**
-   * Generate a random string for account verification code
-   * @param email
-   */
-  emailVerifiedCode: (email: string): string => {
-    return `${email.split('@')[0]}:${randomString(10, false)}`
-  },
-  /**
    * Generate a random email address.
    */
   email: (): string => {

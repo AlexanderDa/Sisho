@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
-import { setupApplicationWithToken } from './setup.spec'
+import { setupApplicationWithToken } from '../setup.spec'
 import { ProfileRepository } from '../../repositories'
 import { UserRepository } from '../../repositories'
 import { RoleRepository } from '../../repositories'
@@ -49,6 +49,8 @@ before('setupApplication', async () => {
 })
 
 after(async () => {
+  const userRepo = await app.getRepository(UserRepository)
+  await userRepo.deleteById(testModel.id)
   await app.stop()
 })
 
@@ -129,24 +131,6 @@ describe(message.withAccess('User'), () => {
         await clearUpdated()
       })
   })
-
-  it('DELETE  =>  /api/user/{id}', async () => {
-    await client
-      .delete(`/api/user/${testModel.id}`)
-      .auth(token, { type: 'bearer' })
-      .expect(204)
-      .then(async () => {
-        const userRepo = await app.getRepository(UserRepository)
-        const result = await userRepo.findById(testModel.id)
-        expect(result.deleted).to.be.eql(true)
-        expect(result.deletedBy).to.be.eql(session.id)
-        expect(result.deletedAt).to.be.not.null()
-        await userRepo.deleteById(testModel.id)
-
-        const profileRepo = await app.getRepository(ProfileRepository)
-        await profileRepo.deleteById(result.profileId)
-      })
-  })
 })
 
 describe(message.noAccess('User'), () => {
@@ -172,9 +156,5 @@ describe(message.noAccess('User'), () => {
 
   it('PATCH   =>  /api/user/{id}', async () => {
     await client.patch('/api/user/1').expect(401)
-  })
-
-  it('DELETE  =>  /api/user/{id}', async () => {
-    await client.delete('/api/user/1').expect(401)
   })
 })

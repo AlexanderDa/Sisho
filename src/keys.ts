@@ -6,9 +6,11 @@
 import { TokenService } from '@loopback/authentication'
 import { UserService } from '@loopback/authentication'
 import { BindingKey } from '@loopback/context'
-import { DecryptedHasher, EmailService } from './services'
+import { DecryptedHasher } from './services'
 import { StorageService } from './services'
 import { AccountService } from './services'
+import { EmailService } from './services'
+import { JWTService } from './services'
 import { Credentials } from './utils'
 import { User } from './models'
 
@@ -32,8 +34,11 @@ export namespace TokenBindings {
   export const EXPIRES_IN = BindingKey.create<string>(
     'authentication.jwt.expires.in.seconds'
   )
-  export const SERVICE = BindingKey.create<TokenService>(
-    'services.authentication.jwt.tokenservice'
+  export const SERVICE = BindingKey.create<JWTService>(
+    'services.authentication.jwt.service'
+  )
+  export const SESSION_SERVICE = BindingKey.create<TokenService>(
+    'services.authentication.jwt.session.service'
   )
 }
 

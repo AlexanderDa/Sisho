@@ -124,6 +124,27 @@ export function responseSimpleSchema<M extends object>(
   }
 }
 
+export function responseAuthNoContentSchema(description?: string): OperationObject {
+  return {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '204': {
+        description: description
+      }
+    }
+  }
+}
+
+export function responseNoContentSchema(description?: string): OperationObject {
+  return {
+    responses: {
+      '204': {
+        description: description
+      }
+    }
+  }
+}
+
 export interface CRUDSpecScheme {
   requestBody(): RequestBodyObject
   requestPartialBoby(): RequestBodyObject

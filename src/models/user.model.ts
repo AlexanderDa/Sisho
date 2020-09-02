@@ -4,19 +4,19 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { belongsTo } from '@loopback/repository'
-import { property } from '@loopback/repository'
 import { model } from '@loopback/repository'
 import { Role } from './role.model'
 import { Audit } from '.'
 import { id } from './pg'
 import { email } from './pg'
 import { boolean } from './pg'
+import { integer } from './pg'
 import { character } from './pg'
 
 @model({
   name: 'tuser',
   settings: {
-    hiddenProperties: ['password', 'verificationToken', 'passwordResetToken'],
+    hiddenProperties: ['password', 'verificationToken', 'passResetToken'],
     foreignKeys: {
       fkUserRole: {
         name: 'fk_user_role',
@@ -58,18 +58,13 @@ export class User extends Audit {
 
   @boolean({ default: false, required: false }) emailVerified?: boolean
 
-  @character({ length: 25 }) verificationToken: string
+  @character({ length: 200 }) verificationToken: string
 
-  @character({ length: 75 }) passResetToken?: string
+  @character({ length: 200 }) passResetToken?: string
 
-  @belongsTo(() => Role, {}, { required: true })
-  roleId: number
+  @belongsTo(() => Role, {}, { required: true }) roleId: number
 
-  @property({
-    type: 'number',
-    required: true
-  })
-  profileId: number
+  @integer({ required: true }) profileId: number
 
   constructor(data?: Partial<User>) {
     super(data)

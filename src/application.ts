@@ -16,12 +16,12 @@ import { JWTAuthenticationStrategy } from './auth'
 import { SECURITY_SCHEME_SPEC } from './auth'
 import path from 'path'
 import { MySequence } from './sequence'
+import { JWTSessionService, MyJWTService } from './services'
 import { MyAccountService } from './services'
 import { MyStorageService } from './services'
 import { MyEmailService } from './services'
 import { MyUserService } from './services'
 import { BcryptHasher } from './services'
-import { JWTService } from './services'
 import { PasswordBindings } from './keys'
 import { StorageBindings } from './keys'
 import { AccountBindings } from './keys'
@@ -99,7 +99,8 @@ export class Application extends BootMixin(
     // token service
     this.bind(TokenBindings.SECRET).to(TOKEN.secret)
     this.bind(TokenBindings.EXPIRES_IN).to(TOKEN.expiresIn)
-    this.bind(TokenBindings.SERVICE).toClass(JWTService)
+    this.bind(TokenBindings.SERVICE).toClass(MyJWTService)
+    this.bind(TokenBindings.SESSION_SERVICE).toClass(JWTSessionService)
 
     // Bind bcrypt hash services
     this.bind(PasswordBindings.ROUNDS).to(10)

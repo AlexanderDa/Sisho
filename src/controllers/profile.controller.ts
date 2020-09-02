@@ -18,7 +18,6 @@ import { post } from '@loopback/rest'
 import { param } from '@loopback/rest'
 import { get } from '@loopback/rest'
 import { patch } from '@loopback/rest'
-import { del } from '@loopback/rest'
 import { requestBody } from '@loopback/rest'
 import { Profile } from '../models'
 import { AccountBindings } from '../keys'
@@ -91,17 +90,5 @@ export class ProfileController {
     profile.editedAt = new Date().toLocaleString()
     profile.editedBy = (await this.acountService.convertToUser(session)).id
     await this.profileRepo.updateById(id, profile)
-  }
-
-  @del('/api/profile/{id}', spec.responseSimple('DELETE'))
-  async deleteById(
-    @inject(SecurityBindings.USER) session: UserProfile,
-    @param.path.number('id') id: number
-  ): Promise<void> {
-    await this.profileRepo.updateById(id, {
-      deleted: true,
-      deletedBy: (await this.acountService.convertToUser(session)).id,
-      deletedAt: new Date().toLocaleString()
-    })
   }
 }

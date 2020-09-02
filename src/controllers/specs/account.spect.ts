@@ -7,6 +7,7 @@ import { OPERATION_SECURITY_SPEC } from '../../auth'
 import { OperationObject } from '@loopback/rest'
 import { getModelSchemaRef } from '@loopback/rest'
 import { RequestBodyObject } from '@loopback/rest'
+import { responseAuthNoContentSchema } from './CRUDSpecs'
 import { User } from '../../models'
 
 /**
@@ -38,6 +39,27 @@ export function logged(): OperationObject {
 }
 
 /**
+ * specifications to response to restore password.
+ */
+export function responseRestorePass(): OperationObject {
+  return responseAuthNoContentSchema("Restore a user's password")
+}
+
+/**
+ * specifications to response  an deleted account .
+ */
+export function responseDelete(): OperationObject {
+  return responseAuthNoContentSchema('Delete an account')
+}
+
+/**
+ * specifications in response to update one password per session.
+ */
+export function responseUpdateMePass(): OperationObject {
+  return responseAuthNoContentSchema('Update the password of the user who logged')
+}
+
+/**
  * Specifications to request login
  */
 export function login(): RequestBodyObject {
@@ -65,6 +87,57 @@ export function login(): RequestBodyObject {
 }
 
 /**
+ * Specifications to change a password.
+ */
+export function toChangePassword(): RequestBodyObject {
+  return {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          required: ['password'],
+          properties: {
+            password: {
+              type: 'string',
+              minLength: 8,
+              description: 'current password'
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Specifications for changing a password for a logged account.
+ */
+export function toUpdateMyPassword(): RequestBodyObject {
+  return {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          required: ['newPassword', 'currentPassword'],
+          properties: {
+            newPassword: {
+              type: 'string',
+              minLength: 8
+            },
+            currentPassword: {
+              type: 'string',
+              minLength: 8
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * Specifications to request login
  */
 export function toActivate(): RequestBodyObject {
@@ -74,13 +147,9 @@ export function toActivate(): RequestBodyObject {
       'application/json': {
         schema: {
           type: 'object',
-          required: ['email', 'verificationToken', 'password'],
+          required: ['token', 'password'],
           properties: {
-            email: {
-              type: 'string',
-              format: 'email'
-            },
-            verificationToken: {
+            token: {
               type: 'string'
             },
             password: {

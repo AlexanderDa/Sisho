@@ -9,7 +9,7 @@ import { message } from '../../utils'
 
 const DECRYPTED = 'my message'
 
-describe(message.endpoint('Bcrypt'), () => {
+describe(message.service('Bcrypt'), () => {
   it('Encrypt and compare', async () => {
     const bcrypt: BcryptHasher = new BcryptHasher(Math.random())
     const encrypted = await bcrypt.encrypt(DECRYPTED)

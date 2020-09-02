@@ -47,11 +47,17 @@ export const message = {
   endpoint: (msg: string): string => {
     return `\x1b[36mEndpoint:    \x1b[0m${msg}\n`
   },
+  service: (msg: string): string => {
+    return `\x1b[36mService:     \x1b[0m${msg}\n`
+  },
   noAccess: (msg: string): string => {
     return `\x1b[33mNo access:   \x1b[0m${msg}\n`
   },
   withAccess: (msg: string): string => {
     return `\x1b[36mWith access: \x1b[0m${msg}\n`
+  },
+  integrated: (msg: string): string => {
+    return `\x1b[35mIntegrated:  \x1b[0m${msg}\n`
   }
 }
 

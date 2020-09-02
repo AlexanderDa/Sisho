@@ -16,7 +16,7 @@ interface EmailAccount {
   username: string
   image?: string
   email: string
-  verificationToken: string
+  token: string
 }
 
 export interface EmailService {
@@ -24,6 +24,7 @@ export interface EmailService {
    * Send the welcome email with the account activation code.
    */
   welcome(config: EmailAccount): Promise<void>
+  restorePassword(config: EmailAccount): Promise<void>
 }
 
 export class MyEmailService implements EmailService {
@@ -57,8 +58,29 @@ export class MyEmailService implements EmailService {
           query: JSON.stringify({
             username: config.username,
             image: config.image,
-            verificationToken: config.verificationToken,
-            email: config.email
+            token: config.token
+          })
+        })
+      }
+
+      await this.transporter.sendMail(mailOptions)
+    }
+  }
+
+  async restorePassword(config: EmailAccount): Promise<void> {
+    if (EMAIL.isSupported()) {
+      const mailOptions = {
+        from: `${app.name} <${EMAIL.address}>`,
+        to: config.email,
+        subject: 'Restaurar contraseña',
+        html: await renderFile(this.emailPath('restore.password.ejs'), {
+          logo: imgToURI(config.logo),
+          appUrl: SERVER.domain,
+          username: config.username,
+          query: JSON.stringify({
+            username: config.username,
+            image: config.image,
+            token: config.token
           })
         })
       }

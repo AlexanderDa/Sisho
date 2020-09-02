@@ -14,16 +14,18 @@ import { post } from '@loopback/rest'
 import { get } from '@loopback/rest'
 import { ProfileRepository } from '../repositories'
 import { AccountService } from '../services'
+import { JWTService } from '../services'
 import { AccountBindings } from '../keys'
+import { TokenBindings } from '../keys'
 import { Profile, User } from '../models'
-import { random } from '../utils'
 import spec from './specs/user.specs'
 
 @authenticate('jwt')
 export class ProfileUserController {
   constructor(
     @repository(ProfileRepository) protected profileRepository: ProfileRepository,
-    @inject(AccountBindings.SERVICE) public acountService: AccountService
+    @inject(AccountBindings.SERVICE) public acountService: AccountService,
+    @inject(TokenBindings.SERVICE) public jwtService: JWTService
   ) {}
 
   @get('/api/profile/{id}/user', spec.responseOne('Profile has one User'))
@@ -41,7 +43,7 @@ export class ProfileUserController {
     @requestBody(spec.requestBody()) user: Omit<User, 'id'>
   ): Promise<User> {
     user.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
-    user.verificationToken = random.emailVerifiedCode(user.email)
+    user.verificationToken = await this.jwtService.generateToken(user.email)
     return this.profileRepository.user(id).create(user)
   }
 }

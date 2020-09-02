@@ -7,7 +7,7 @@ import { Role } from '../models'
 
 export const DEFAULT_ADMIN_ROLE: Role = new Role({
   createdBy: 0,
-  name: 'Admin',
+  name: 'Administración',
   description: 'Usuario de administración'
 })
 

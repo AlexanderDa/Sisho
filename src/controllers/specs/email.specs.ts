@@ -6,7 +6,7 @@
 import { OperationObject } from '@loopback/rest'
 import { RequestBodyObject } from '@loopback/rest'
 import { OPERATION_SECURITY_SPEC } from '../../auth'
-
+export { responseNoContentSchema as noContent } from './CRUDSpecs'
 /**
  * specifications to response.
  */

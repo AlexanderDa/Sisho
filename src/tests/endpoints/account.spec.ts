@@ -4,33 +4,33 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Client, expect } from '@loopback/testlab'
-import { UserRepository, ProfileRepository } from '../../repositories'
-import { setupApplication } from './setup.spec'
+import { UserRepository } from '../../repositories'
+import { setupApplication } from '../setup.spec'
 import { DEFAULT_ADMIN } from '../../migrations'
 import { Application } from '../..'
-import { message, random } from '../../utils'
+import { message } from '../../utils'
+
+let app: Application
+let client: Client
+let adminId: number
+let repository: UserRepository
+
+before('setupApplication', async () => {
+  ;({ app, client } = await setupApplication())
+  repository = await app.getRepository(UserRepository)
+  adminId =
+    (
+      await repository.findOne({
+        where: { email: DEFAULT_ADMIN.email }
+      })
+    )?.id ?? 0
+})
+
+after(async () => {
+  await app.stop()
+})
 
 describe(message.endpoint('Account'), () => {
-  let app: Application
-  let client: Client
-  let adminId: number
-  let repository: UserRepository
-
-  before('setupApplication', async () => {
-    ;({ app, client } = await setupApplication())
-    repository = await app.getRepository(UserRepository)
-    adminId =
-      (
-        await repository.findOne({
-          where: { email: DEFAULT_ADMIN.email }
-        })
-      )?.id ?? 0
-  })
-
-  after(async () => {
-    await app.stop()
-  })
-
   it('POST    =>  /api/account/login      (Incorrect email)', async () => {
     await client
       .post('/api/account/login')
@@ -152,41 +152,17 @@ describe(message.endpoint('Account'), () => {
           })
       })
   })
+})
 
-  it('POST    =>  /api/account/activate   (Activate an account)', async () => {
-    const profileRepo = await app.getRepository(ProfileRepository)
-    const profileModel = await profileRepo.create({
-      createdBy: 0,
-      lastName: `ln${Date.now()}`,
-      firstName: `fn${Date.now()}`,
-      address: `address${Date.now()}`,
-      email: random.email()
-    })
-    const userModel = await repository.create({
-      createdBy: 0,
-      email: profileModel.email,
-      isActive: true,
-      verificationToken: random.emailVerifiedCode(profileModel.email),
-      profileId: profileModel.id,
-      roleId: 1
-    })
+describe(message.noAccess('Account'), () => {
+  it('PUT    =>  /api/account/user/{id}/password', async () => {
+    await client.put('/api/account/user/1/password').expect(401)
+  })
+  it('PUT    =>  /api/account/password', async () => {
+    await client.put('/api/account/password').expect(401)
+  })
 
-    await client
-      .post('/api/account/activate')
-      .send({
-        email: userModel.email,
-        verificationToken: userModel.verificationToken,
-        password: 'L4C0n7Ras3ñ4'
-      })
-      .then(async ({ body }) => {
-        expect(body).to.have.property('token').to.be.String()
-        expect(body).to.have.property('expiresAt').to.be.Number()
-        const result = await repository.findById(userModel.id)
-        expect(result.emailVerified).to.be.eql(true)
-        expect(result.verificationToken).to.be.eql('')
-      })
-
-    await repository.deleteById(userModel.id)
-    await profileRepo.deleteById(profileModel.id)
+  it('DELETE =>  /api/account/user/{id}', async () => {
+    await client.delete('/api/account/user/1').expect(401)
   })
 })

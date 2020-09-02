@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
-import { setupApplicationWithToken } from './setup.spec'
+import { setupApplicationWithToken } from '../setup.spec'
 import { ProfileRepository } from '../../repositories'
 import { message, random } from '../../utils'
 import { Profile } from '../../models'
@@ -33,6 +33,8 @@ before('setupApplication', async () => {
 })
 
 after(async () => {
+  const repo = await app.getRepository(ProfileRepository)
+  await repo.deleteById(testModel.id)
   await app.stop()
 })
 
@@ -41,9 +43,9 @@ describe(message.withAccess('Profile'), () => {
     await client
       .post('/api/profile')
       .send({
-        lastName: `ln${Date.now()}`,
-        firstName: `fn${Date.now()}`,
-        address: `address${Date.now()}`,
+        lastName: `test.ln${Date.now()}`,
+        firstName: `test.fn${Date.now()}`,
+        address: `test.address${Date.now()}`,
         email: random.email()
       })
       .auth(token, { type: 'bearer' })
@@ -112,21 +114,6 @@ describe(message.withAccess('Profile'), () => {
         await clearUpdated()
       })
   })
-
-  it('DELETE  =>  /api/profile/{id}', async () => {
-    await client
-      .delete(`/api/profile/${testModel.id}`)
-      .auth(token, { type: 'bearer' })
-      .expect(204)
-      .then(async () => {
-        const repo = await app.getRepository(ProfileRepository)
-        const result = await repo.findById(testModel.id)
-        expect(result.deleted).to.be.eql(true)
-        expect(result.deletedBy).to.be.eql(session.id)
-        expect(result.deletedAt).to.be.not.null()
-        await repo.deleteById(testModel.id)
-      })
-  })
 })
 
 describe(message.noAccess('Profile'), () => {
@@ -152,9 +139,5 @@ describe(message.noAccess('Profile'), () => {
 
   it('PATCH   =>  /api/profile/{id}', async () => {
     await client.patch('/api/profile/1').expect(401)
-  })
-
-  it('DELETE  =>  /api/profile/{id}', async () => {
-    await client.delete('/api/profile/1').expect(401)
   })
 })

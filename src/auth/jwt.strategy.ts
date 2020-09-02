@@ -16,7 +16,7 @@ export class JWTAuthenticationStrategy implements AuthenticationStrategy {
   name = 'jwt'
 
   constructor(
-    @inject(TokenBindings.SERVICE)
+    @inject(TokenBindings.SESSION_SERVICE)
     public tokenService: TokenService
   ) {}
 
