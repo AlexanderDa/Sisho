@@ -4,12 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import Vue from 'vue'
-import Vuex from 'vuex'
-import app from '@/store/AppStorage'
-import session from '@/store/SessionStore'
+import Component from 'vue-class-component'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
-  modules: { app, session }
-})
+@Component({})
+export default class PatientController extends Vue {}

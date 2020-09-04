@@ -8,12 +8,9 @@
               <form @submit.prevent="login()">
                 <v-card-text>
                   <div class="layout column align-center">
-                    <v-img
-                      class="ma-5"
-                      :src="$store.state.app.info.company.logo"
-                      :alt="$store.state.app.info.name"
-                      width="125"
-                    />
+                    <v-avatar size="120">
+                      <v-img class="ma-5 primary" src="/logo.svg" />
+                    </v-avatar>
                     <h1 class="flex my-4 primary--text">Sisho</h1>
                   </div>
 
@@ -25,7 +22,7 @@
                     required
                     v-model="email"
                   ></v-text-field>
-                  <Password v-model="password" time="1500" />
+                  <own-password-field v-model="password" time="1500" />
                   <v-alert
                     transition="scale-transition"
                     v-model="alert"
@@ -35,6 +32,9 @@
                   >
                     {{ error }}
                   </v-alert>
+                  <router-link :to="{ name: 'RestoreAccount' }" class="link">
+                    ¿Olvidaste tu contraseña?
+                  </router-link>
                 </v-card-text>
                 <v-card-actions>
                   <v-btn block color="primary white--text" type="submit">entrar</v-btn>

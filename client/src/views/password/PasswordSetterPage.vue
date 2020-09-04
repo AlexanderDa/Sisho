@@ -6,7 +6,7 @@
           <v-flex xs12 sm8 md4 lg4>
             <v-card class="elevation-12">
               <v-form
-                @submit.prevent="activate"
+                @submit.prevent="submit"
                 ref="form"
                 v-model="isValidForm"
                 lazy-validation
@@ -16,22 +16,27 @@
                     <v-avatar v-if="query.image" size="120px">
                       <v-img :src="query.image" :alt="query.username" />
                     </v-avatar>
-                    <img
-                      v-else
-                      src="@/assets/user.svg"
-                      alt="Usuario"
-                      width="120"
-                      height="120"
-                    />
+                    <v-avatar v-else class="primary" size="120px">
+                      <v-img
+                        src="@/assets/user.svg"
+                        alt="Usuario"
+                        width="120"
+                        height="120"
+                      />
+                    </v-avatar>
                     <h1 class="flex my-4 primary--text">
-                      Bienvenido
+                      {{ view === 'activate' ? 'Bienvenido' : 'Restablecer' }}
                     </h1>
                     <h3 class="flex my-4 primary--text">
                       {{ query.username }}
                     </h3>
                   </div>
-                  <Password v-model="password" :rules="rules.password" time="1500" />
-                  <Password
+                  <own-password-field
+                    v-model="password"
+                    :rules="rules.password"
+                    time="1500"
+                  />
+                  <own-password-field
                     v-model="confirmation"
                     :rules="[v => (v && v === password) || 'La contraseña no coincide.']"
                     time="1500"
@@ -54,8 +59,9 @@
                     block
                     color="primary white--text"
                     type="submit"
-                    >Activar</v-btn
                   >
+                    {{ view === 'activate' ? 'Activar' : 'Cambiar' }}
+                  </v-btn>
                 </v-card-actions>
               </v-form>
             </v-card>
@@ -68,7 +74,7 @@
 
 <script lang="ts">
 //@ts-ignore
-import Controller from './ActivateController'
+import Controller from './PasswordSetterController'
 export default Controller
 </script>
 

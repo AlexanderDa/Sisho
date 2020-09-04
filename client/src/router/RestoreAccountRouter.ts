@@ -4,9 +4,10 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { RouteConfig } from 'vue-router'
-const ActivateRoutes: RouteConfig = {
-  path: '/activate',
-  name: 'Activate',
-  component: () => import('@/views/password/PasswordSetterPage.vue')
+
+const RestoreAccountRoutes: RouteConfig = {
+  path: '/restore',
+  name: 'RestoreAccount',
+  component: () => import('@/views/password/PasswordRestorePage.vue')
 }
-export default ActivateRoutes
+export default RestoreAccountRoutes

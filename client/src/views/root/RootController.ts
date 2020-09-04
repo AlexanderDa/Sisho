@@ -5,6 +5,15 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { hasValidToken } from '@/utils/auth'
 
 @Component({ name: 'root-page' })
-export default class RootController extends Vue {}
+export default class RootController extends Vue {
+  async created(): Promise<void> {
+    if (hasValidToken()) {
+      this.$router.push({ name: 'App' })
+    } else {
+      this.$router.push({ name: 'Login' })
+    }
+  }
+}

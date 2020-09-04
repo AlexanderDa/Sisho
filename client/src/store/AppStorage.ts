@@ -3,7 +3,9 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { VuexModule, Mutation, Module } from 'vuex-module-decorators'
+import { VuexModule } from 'vuex-module-decorators'
+import { Mutation } from 'vuex-module-decorators'
+import { Module } from 'vuex-module-decorators'
 import App from '@/utils/AppInfo'
 
 @Module

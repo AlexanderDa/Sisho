@@ -41,9 +41,9 @@ before('setupApplication', async () => {
   const profileRepo = await app.getRepository(ProfileRepository)
   profileModel = await profileRepo.create({
     createdBy: session.id,
-    lastName: `ln${Date.now()}`,
-    firstName: `fn${Date.now()}`,
-    address: `address${Date.now()}`,
+    lastName: `test.ln${Date.now()}`,
+    firstName: `test.fn${Date.now()}`,
+    address: `test.address${Date.now()}`,
     email: random.email()
   })
 })
@@ -51,6 +51,8 @@ before('setupApplication', async () => {
 after(async () => {
   const userRepo = await app.getRepository(UserRepository)
   await userRepo.deleteById(testModel.id)
+  const profileRepo = await app.getRepository(ProfileRepository)
+  await profileRepo.deleteById(profileModel.id)
   await app.stop()
 })
 

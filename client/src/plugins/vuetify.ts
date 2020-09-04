@@ -17,12 +17,11 @@ export default new Vuetify({
     themes: {
       light: {
         primary: sessionStorage.getItem('primary') || '#fff',
-        secondary: sessionStorage.getItem('secondary') || '#fff',
-        accent: '#82B1FF',
-        error: '#FF5252',
-        info: '#2196F3',
-        success: '#4CAF50',
-        warning: '#FFC107'
+        secondary: sessionStorage.getItem('secondary') || '#fff'
+      },
+      dark: {
+        primary: sessionStorage.getItem('primary') || '#505050',
+        secondary: sessionStorage.getItem('secondary') || '#505050'
       }
     }
   },

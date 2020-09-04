@@ -1,27 +1,23 @@
-.notices
-    & .toast
+.v-notices
+    & .v-toast
         padding: 10px!important
         min-height: auto!important
         width: 300px!important
-    & .toast-icon
+        max-width: 400px!important
+    & .v-toast-icon
         margin: 0px 5px!important
-    & .toast-text
+    & .v-toast-text
         padding: 0px!important
-        & .toast-caption
-            max-height:50px
+        & .v-toast-caption
+            max-height:75px!important
             overflow: auto
-        & ::-webkit-scrollbar
-            width:  5px
-        & ::-webkit-scrollbar-track
-            background: rgba(255,255,255,0.3)
-        & ::-webkit-scrollbar-thumb
-            background: rgba(255,255,255,0.7)
+
 
 
 
 
 @media (max-width: 400px)
-    .notices
-        & .toast
+    .v-notices
+        & .v-toast
             width: calc(100% - 10px) !important
             margin: 5px!important
