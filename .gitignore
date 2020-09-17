@@ -63,6 +63,8 @@ typings/
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
 
+# sql files
+*.sql
 
 # loopback cli repositories config
 *.datasource.config.json

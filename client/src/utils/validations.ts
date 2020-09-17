@@ -54,7 +54,9 @@ export default {
    * @param msg custom message
    */
   equalLength: (v: string, length: number, msg?: string) =>
-    (v && v.length === length) || msg || `El atributo debe tener ${length} caracteres.`,
+    !v
+      ? true
+      : v.length === length || msg || `El atributo debe tener ${length} caracteres.`,
 
   /**
    * Rule to validate the min length of a string.
@@ -63,5 +65,14 @@ export default {
    * @param msg custom message
    */
   minLength: (v: string, length: number, msg?: string) =>
-    (v && v.length >= length) || msg || `Debe tener al menos ${length} caracteres.`
+    !v ? true : v.length >= length || msg || `Debe tener al menos ${length} caracteres.`,
+
+  /**
+   * Rule to validate the max length of a string.
+   * @param v value
+   * @param length max length
+   * @param msg custom message
+   */
+  maxLength: (v: string, length: number, msg?: string) =>
+    !v ? true : v.length <= length || msg || `Debe tener ${length} caracteres maximo.`
 }

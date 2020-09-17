@@ -1,23 +1,29 @@
 <template>
   <div class="drawer-panel">
     <v-card class="overflow-hidden body" height="100vh">
-      <v-app-bar
-        scroll-target="#scrolling-techniques-4"
-        color="primary"
-        absolute
-        dense
-        dark
-      >
+      <v-app-bar color="primary" absolute dense dark>
         <v-toolbar-title>
-          {{ title ? title.toUpperCase() : '' }}
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ title ? title.toUpperCase() : '' }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ subtitle ? subtitle.toUpperCase() : '' }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
         </v-toolbar-title>
+
         <v-spacer></v-spacer>
         <slot name="actions" />
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </v-app-bar>
-      <v-sheet id="scrolling-techniques-4" class="overflow-y-auto grey lighten-4">
+      <v-sheet
+        :class="scrollable ? 'overflow-y-auto' : ''"
+        class="grey lighten-4 particle"
+      >
         <v-container :fluid="fluid">
-          <slot name="content" />
+          <own-empty v-if="empty" width="400" />
+          <slot else name="content" />
         </v-container>
       </v-sheet>
     </v-card>
@@ -29,7 +35,7 @@
         absolute
       >
         <v-text-field
-          style="height: 40px; border-radius: 30px;"
+          style="height: 40px; border-radius: 30px"
           @keyup.enter="onSearch()"
           @click:clear="onClearSearch()"
           @input="v => v !== '' || onClearSearch()"
@@ -75,10 +81,11 @@
         </v-text-field>
       </v-app-bar>
       <v-sheet id="scrolling-techniques-7" class="overflow-y-auto">
-        <v-container style="height: 100vh; padding: 60px 0px;">
+        <v-container style="height: 100vh; padding: 60px 0px">
           <div class="drawer-content">
-            <slot name="drawer" /></div
-        ></v-container>
+            <slot name="drawer" />
+          </div>
+        </v-container>
       </v-sheet>
     </v-card>
   </div>
@@ -88,13 +95,17 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop, Emit } from 'vue-property-decorator'
+//@ts-ignore
 import Search from '@/utils/search'
 
-@Component({ name: 'v-drawer-panel' })
+@Component({})
 export default class DawerPanel extends Vue {
   @Prop() title!: string
+  @Prop() subtitle!: string
   @Prop({ default: false }) fluid!: boolean
   @Prop({ default: false }) filter!: boolean
+  @Prop({ default: false }) empty!: boolean
+  @Prop({ default: false }) scrollable!: boolean
   private drawer: boolean = true
   private value: string = ''
   private includeRemoveds: boolean = false
@@ -133,16 +144,16 @@ export default class DawerPanel extends Vue {
     display: flex
     justify-content: flex-end
 
-
+    header .v-list-item__subtitle
+      font-size: .6em
 
     .body
         width: 100%
-        & .v-toolbar__title
-            font-size: 1em
         & .v-sheet
             height: 100%
             & .container
                 margin-top: 50px
+                height: 100%
 
     .sidebar
         width: 400px

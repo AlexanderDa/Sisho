@@ -10,11 +10,13 @@ import { hasValidToken } from '@/utils/auth'
 @Component({ name: 'app-yalout' })
 export default class AppLayoutController extends Vue {
   mini: boolean = false
+  company: object = {}
   public items: Item[] = [
     { title: 'Hospital', icon: 'fa-hospital', routerName: 'Hospital' },
     { title: 'Usuarios', icon: 'fa-user', routerName: 'Users' },
     { title: 'Pacientes', icon: 'fa-user-injured', routerName: 'Patients' },
-    { title: 'Opciones', icon: 'fa-clipboard-list', routerName: 'Options' }
+    { title: 'Opciones', icon: 'fa-clipboard-list', routerName: 'Options' },
+    { title: 'Enfermedades', icon: 'fa-notes-medical', routerName: 'DiseaseTypes' }
   ]
 
   public optionItems: Item[] = [
@@ -28,6 +30,8 @@ export default class AppLayoutController extends Vue {
     } else {
       this.$router.push({ name: 'Root' })
     }
+
+    this.company = this.$store.state.app.info.company
   }
 
   private changeRoute(item: Item) {

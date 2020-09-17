@@ -18,7 +18,7 @@ import { Prop, Emit, Watch } from 'vue-property-decorator'
 @Component({ name: 'del-btn' })
 export default class ConfirmButton extends Vue {
   @Prop({ default: false }) disabled!: boolean
-  @Prop({ default: true }) small!: boolean
+  @Prop({ default: false }) small!: boolean
   @Prop({ default: 'fa-trash' }) icon!: string
   @Prop() color!: string
 

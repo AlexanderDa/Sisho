@@ -10,7 +10,7 @@
       </v-btn>
     </v-toolbar>
 
-    <div style="overflow-y: auto !important; height: 300px !important;">
+    <div style="overflow-y: auto !important; height: 300px !important">
       <v-form ref="form" v-model="isValidForm" lazy-validation>
         <v-col md="12" v-if="create">
           <v-text-field
@@ -31,7 +31,7 @@
           v-for="(item, index) in options"
           @dblclick="toEditOption(item)"
           :key="index"
-          style="border-top: 1px solid #dedede;"
+          style="border-top: 1px solid #dedede"
         >
           <v-list-item-content>
             <v-list-item-title
@@ -61,6 +61,7 @@
             <own-btn-confirm
               @click:confirm="removeOption(item)"
               color="secondary lighten-1"
+              small
             />
           </v-list-item-action>
         </v-list-item>

@@ -72,4 +72,7 @@ body
   -moz-user-select: none       // Firefox
   -ms-user-select: none        // IE 10+ and Edge
   user-select: none            // Non-prefixed version
+  & .particle
+    background-image: url(./assets/particle.svg)!important
+    background-size: 100%!important
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <own-panel title="Pacientes" />
+  <own-panel title="Pacientes" :empty="true" />
 </template>
 <script lang="ts">
 //@ts-ignore

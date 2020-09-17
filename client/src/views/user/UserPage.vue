@@ -1,5 +1,11 @@
 <template>
-  <own-panel @onSearch="findProfiles" title="usuarios" :fluid="true" :filter="true">
+  <own-panel
+    @onSearch="findProfiles"
+    title="usuarios"
+    :fluid="true"
+    :filter="true"
+    :scrollable="true"
+  >
     <template slot="actions">
       <v-btn
         v-if="elementIndex !== -1 && !user.emailVerified && !element.deleted"
@@ -41,7 +47,7 @@
     </template>
 
     <template slot="content">
-      <v-form @submit.prevent="submit" ref="form" v-model="isValidForm" lazy-validation>
+      <v-form ref="form" v-model="isValidForm" lazy-validation>
         <v-row>
           <v-col cols="12" sm="5" md="4">
             <v-card color="white" height="150">
@@ -95,7 +101,7 @@
 
               <v-card-text>
                 <v-row>
-                  <v-col cols="12" sm="4" style="display: flex; justify-content: center;">
+                  <v-col cols="12" sm="4" style="display: flex; justify-content: center">
                     <own-image-uploader
                       :src="element.image || require('@/assets/user.svg')"
                       @onUpload="updateImage"

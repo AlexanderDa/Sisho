@@ -39,6 +39,21 @@ export function character(definition: {
 }
 
 /**
+ * Postgres native `text`.
+ * @param definition
+ */
+export function text(definition: { required?: boolean; columnName?: string }) {
+  return property({
+    type: 'string',
+    required: definition.required,
+    postgresql: {
+      columnName: definition.columnName,
+      dataType: 'text'
+    }
+  })
+}
+
+/**
  * Postgres native `integer`.
  * @param definition
  */

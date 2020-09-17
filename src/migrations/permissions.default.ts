@@ -4,7 +4,9 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Permission } from '../models'
+import { DISEASETYPE } from '.'
 import { PERMISSION } from '.'
+import { DISEASE } from '.'
 import { PROFILE } from '.'
 import { COMPANY } from '.'
 import { MODULE } from '.'
@@ -67,6 +69,22 @@ const ADMIN_PERMISSIONS: Permission[] = [
   new Permission({
     createdBy: 0,
     moduleId: USER.id,
+    create: true,
+    read: true,
+    update: true,
+    delete: true
+  }),
+  new Permission({
+    createdBy: 0,
+    moduleId: DISEASETYPE.id,
+    create: true,
+    read: true,
+    update: true,
+    delete: true
+  }),
+  new Permission({
+    createdBy: 0,
+    moduleId: DISEASE.id,
     create: true,
     read: true,
     update: true,

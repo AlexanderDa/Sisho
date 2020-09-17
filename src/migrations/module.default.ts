@@ -13,6 +13,9 @@ export const OPTION: Module = new Module({ id: 5, name: 'options' })
 export const ROLE: Module = new Module({ id: 6, name: 'roles' })
 export const USER: Module = new Module({ id: 7, name: 'users' })
 
+export const DISEASETYPE: Module = new Module({ id: 8, name: 'diseasetypes' })
+export const DISEASE: Module = new Module({ id: 9, name: 'diseases' })
+
 /**
  * Default modules.
  */
@@ -23,5 +26,7 @@ export const MODULES: Module[] = [
   PERMISSION,
   PROFILE,
   ROLE,
-  USER
+  USER,
+  DISEASETYPE,
+  DISEASE
 ]

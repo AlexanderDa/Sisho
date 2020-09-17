@@ -33,6 +33,18 @@ const ActivateRoutes: RouteConfig = {
       path: '/options',
       name: 'Options',
       component: () => import('@/views/group/GroupPage.vue')
+    },
+    {
+      path: '/diseasetypes',
+      name: 'DiseaseTypes',
+      component: () => import('@/views/diseases/TypesPage.vue'),
+      children: [
+        {
+          path: '/diseasetype/:id/disease',
+          name: 'Disease',
+          component: () => import('@/views/diseases/DiseasePage.vue')
+        }
+      ]
     }
   ]
 }

@@ -61,7 +61,7 @@ export default class UserController extends Vue {
       this.clear()
     }
 
-    const filter: Filter<Profile> = { limit: 15, where: { deleted: false } }
+    const filter: Filter<Profile> = { limit: 25, where: { deleted: false } }
     if (search) {
       filter.where = {
         and: [

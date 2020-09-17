@@ -38,7 +38,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-img
                   class="secondary"
-                  style="cursor: pointer;"
+                  style="cursor: pointer"
                   v-bind="attrs"
                   v-on="on"
                   :src="
@@ -92,12 +92,24 @@
     </v-navigation-drawer>
 
     <v-main>
-      <router-view
-        class="app-container"
-        tag="v-container"
+      <v-container
+        class="fill-height grey lighten-4 app-company"
+        v-if="$route.name === 'App'"
         fluid
-        fill-height
-      ></router-view>
+      >
+        <v-row align="center" justify="center">
+          <div class="layout column row align-center">
+            <v-avatar size="150" v-if="company.logo === '/logo.svg'">
+              <v-img class="ma-5 primary" src="/logo.svg" />
+            </v-avatar>
+            <v-img v-else :src="company.logo" max-width="250" />
+            <h2 style="margin-top: 50px" class="grey--text text--darken-1">
+              {{ company.name }}
+            </h2>
+          </div>
+        </v-row>
+      </v-container>
+      <router-view class="app-container" tag="v-container" fluid fill-height />
     </v-main>
   </v-app>
 </template>
@@ -112,4 +124,8 @@ html
 .app-container
   height: 100%
   overflow: hidden
+
+.app-company
+  background-image: url(../../assets/particle.svg)
+  background-size: 100%
 </style>

@@ -3,8 +3,10 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
+export * from '@/models/DiseaseTypeModel'
 export * from '@/models/HospitalModel'
 export * from '@/models/ProfileModel'
+export * from '@/models/DiseaseModel'
 export * from '@/models/ModuleModel'
 export * from '@/models/OptionModel'
 export * from '@/models/GroupModel'
