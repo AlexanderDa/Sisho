@@ -113,6 +113,14 @@ export default class DiseaseController extends Vue {
    *                       Methods                         *
    ********************************************************/
 
+  showLog(element: Disease) {
+    //@ts-ignore
+    this.$launchLog(element, {
+      title: 'enfermedad',
+      msg: element.name
+    })
+  }
+
   toEditElement(element: Disease): void {
     this.elementIndex = this.elements.indexOf(element)
     this.element = Object.assign({}, element)

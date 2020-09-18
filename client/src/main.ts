@@ -13,6 +13,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import '@/plugins/notifications'
 import '@/plugins/resource'
 import '@/plugins/mask'
+import '@/plugins/log'
 import '@/components'
 
 Vue.config.productionTip = false

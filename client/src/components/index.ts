@@ -7,6 +7,7 @@ import Vue from 'vue'
 
 Vue.component('own-empty', () => import('@/components/empty.vue'))
 Vue.component('own-panel', () => import('@/components/drawer.panel.vue'))
+Vue.component('own-log-viewer', () => import('@/components/log.viewer.vue'))
 Vue.component('own-btn-confirm', () => import('@/components/btn.confirm.vue'))
 Vue.component('own-color-picker', () => import('@/components/color.picker.vue'))
 Vue.component('own-scroll-sheet', () => import('@/components/scroll.sheet.vue'))

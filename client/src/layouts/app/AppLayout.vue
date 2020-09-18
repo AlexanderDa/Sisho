@@ -1,5 +1,6 @@
 <template>
   <v-app id="sandbox">
+    <own-log-viewer />
     <v-navigation-drawer mini-variant permanent app>
       <template v-slot:prepend>
         <v-list-item class="px-2">

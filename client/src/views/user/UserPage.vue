@@ -23,10 +23,14 @@
       </v-btn>
 
       <own-btn-confirm
-        :disabled="elementIndex === -1 || element.deleted"
+        v-if="elementIndex > -1 && !element.deleted"
         @click:confirm="deleteElement()"
         :small="false"
       />
+
+      <v-btn v-if="elementIndex > -1" @click="showLog()" icon>
+        <v-icon>fa-history</v-icon>
+      </v-btn>
     </template>
 
     <template slot="drawer">

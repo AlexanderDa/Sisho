@@ -219,6 +219,15 @@ export default class UserController extends Vue {
   /********************************************************
    *                       Methods                         *
    ********************************************************/
+
+  showLog() {
+    //@ts-ignore
+    this.$launchLog(this.element, {
+      title: 'Usuario',
+      msg: `${this.element.lastName} ${this.element.firstName}`
+    })
+  }
+
   async toShowElement(element: Profile): Promise<void> {
     this.elementIndex = this.elements.indexOf(element)
     this.element = Object.assign({}, element)

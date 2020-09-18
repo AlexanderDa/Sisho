@@ -131,6 +131,14 @@ export default class DiseaseTypeController extends Vue {
    *                       Methods                         *
    ********************************************************/
 
+  showLog() {
+    //@ts-ignore
+    this.$launchLog(this.element, {
+      title: 'tipo de enfermedad',
+      msg: this.element.name
+    })
+  }
+
   toEdit(): void {
     this.editDialog = true
     Object.assign(this.elementEditor, this.element)

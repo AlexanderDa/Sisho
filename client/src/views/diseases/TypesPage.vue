@@ -19,6 +19,10 @@
       <v-btn @click="createDialog = true" icon>
         <v-icon>fa-plus</v-icon>
       </v-btn>
+
+      <v-btn v-if="elementIndex > -1" @click="showLog()" icon>
+        <v-icon>fa-history</v-icon>
+      </v-btn>
     </template>
     <template slot="drawer">
       <v-list-item

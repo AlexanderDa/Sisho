@@ -92,8 +92,9 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <div style="width: 100%; min-width: 70px">
-        <v-icon small class="mr-2" @click="toEditElement(item)"> fa-edit </v-icon>
+      <div style="width: 100%; min-width: 90px">
+        <v-icon small class="mr-4" @click="showLog(item)"> fa-history </v-icon>
+        <v-icon small class="mr-1" @click="toEditElement(item)"> fa-edit </v-icon>
         <own-btn-confirm @click:confirm="deleteElement(item)" small />
       </div>
     </template>
