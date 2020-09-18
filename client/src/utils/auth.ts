@@ -16,3 +16,11 @@ export function hasValidToken(): boolean {
   }
   return isValid
 }
+
+/**
+ * Returns the remaining time of the access token in milliseconds.
+ */
+export function timeLeft(): number {
+  const expiresAt = Number(sessionStorage.getItem('expiresAt'))
+  return Math.trunc(expiresAt * 1000 - new Date().getTime())
+}
