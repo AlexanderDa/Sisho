@@ -6,24 +6,24 @@
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
 import { setupApplicationWithToken } from '../setup.spec'
-import { DiseaseTypeRepository } from '../../repositories'
+import { ExamTypeRepository } from '../../repositories'
 import { message } from '../../utils'
-import { DiseaseType } from '../../models'
+import { ExamType } from '../../models'
 import { User } from '../../models'
 
 let app: Application
 let client: Client
 let token: string
 let session: User
-let testModel: DiseaseType
+let testModel: ExamType
 
 const clearUpdated = async () => {
-  const repo = await app.getRepository(DiseaseTypeRepository)
+  const repo = await app.getRepository(ExamTypeRepository)
   await repo.updateById(testModel.id, { editedAt: undefined, editedBy: undefined })
 }
 
 const wasEdited = async (): Promise<boolean> => {
-  const repo = await app.getRepository(DiseaseTypeRepository)
+  const repo = await app.getRepository(ExamTypeRepository)
   const result = await repo.findById(testModel.id)
   return result.editedAt !== null && result.editedBy === session.id
 }
@@ -36,10 +36,10 @@ after(async () => {
   await app.stop()
 })
 
-describe(message.withAccess('DiseaseType'), () => {
-  it('POST    =>  /api/diseasetype', async () => {
+describe(message.withAccess('ExamType'), () => {
+  it('POST    =>  /api/examtype', async () => {
     await client
-      .post('/api/diseasetype')
+      .post('/api/examtype')
       .send({
         name: `test.name${Date.now()}`
       })
@@ -53,9 +53,9 @@ describe(message.withAccess('DiseaseType'), () => {
       })
   })
 
-  it('GET     =>  /api/diseasetypes/count', async () => {
+  it('GET     =>  /api/examtypes/count', async () => {
     await client
-      .get('/api/diseasetypes/count')
+      .get('/api/examtypes/count')
       .query({})
       .auth(token, { type: 'bearer' })
       .expect(200)
@@ -64,9 +64,9 @@ describe(message.withAccess('DiseaseType'), () => {
       })
   })
 
-  it('GET     =>  /api/diseasetypes', async () => {
+  it('GET     =>  /api/examtypes', async () => {
     await client
-      .get('/api/diseasetypes')
+      .get('/api/examtypes')
       .auth(token, { type: 'bearer' })
       .expect(200)
       .then(res => {
@@ -74,9 +74,9 @@ describe(message.withAccess('DiseaseType'), () => {
       })
   })
 
-  it('PATCH   =>  /api/diseasetypes', async () => {
+  it('PATCH   =>  /api/examtypes', async () => {
     await client
-      .patch('/api/diseasetypes')
+      .patch('/api/examtypes')
       .auth(token, { type: 'bearer' })
       .query({ where: { id: testModel.id } })
       .send({ name: `test.name.pathc_${Date.now()}` })
@@ -88,18 +88,18 @@ describe(message.withAccess('DiseaseType'), () => {
       })
   })
 
-  it('GET     =>  /api/diseasetype/{id}', async () => {
+  it('GET     =>  /api/examtype/{id}', async () => {
     await client
-      .get(`/api/diseasetype/${testModel.id}`)
+      .get(`/api/examtype/${testModel.id}`)
       .auth(token, { type: 'bearer' })
       .expect(200)
       .then(res => {
         expect(res.body).to.have.property('createdAt').to.be.not.null()
       })
   })
-  it('PATCH   =>  /api/diseasetype/{id}', async () => {
+  it('PATCH   =>  /api/examtype/{id}', async () => {
     await client
-      .patch(`/api/diseasetype/${testModel.id}`)
+      .patch(`/api/examtype/${testModel.id}`)
       .auth(token, { type: 'bearer' })
       .send({ name: `test.patch.2_${Date.now()}` })
       .expect(204)
@@ -109,44 +109,44 @@ describe(message.withAccess('DiseaseType'), () => {
       })
   })
 
-  it('DELETE  =>  /api/diseasetype/{id}', async () => {
+  it('DELETE  =>  /api/examtype/{id}', async () => {
     await client
-      .delete(`/api/diseasetype/${testModel.id}`)
+      .delete(`/api/examtype/${testModel.id}`)
       .auth(token, { type: 'bearer' })
       .expect(204)
   })
 })
 
-describe(message.noAccess('DiseaseType'), () => {
-  it('POST    =>  /api/diseasetype', async () => {
-    await client.post('/api/diseasetype').expect(401)
+describe(message.noAccess('ExamType'), () => {
+  it('POST    =>  /api/examtype', async () => {
+    await client.post('/api/examtype').expect(401)
   })
 
-  it('GET     =>  /api/diseasetypes/count', async () => {
-    await client.get('/api/diseasetypes').expect(401)
+  it('GET     =>  /api/examtypes/count', async () => {
+    await client.get('/api/examtypes').expect(401)
   })
 
-  it('GET     =>  /api/disease/{id}/diseasetype', async () => {
-    await client.get('/api/disease/1/diseasetype').expect(401)
+  it('GET     =>  /api/exam/{id}/examtype', async () => {
+    await client.get('/api/exam/1/examtype').expect(401)
   })
 
-  it('GET     =>  /api/diseasetypes', async () => {
-    await client.get('/api/diseasetypes').expect(401)
+  it('GET     =>  /api/examtypes', async () => {
+    await client.get('/api/examtypes').expect(401)
   })
 
-  it('PATCH   =>  /api/diseasetypes', async () => {
-    await client.patch('/api/diseasetypes').expect(401)
+  it('PATCH   =>  /api/examtypes', async () => {
+    await client.patch('/api/examtypes').expect(401)
   })
 
-  it('GET     =>  /api/diseasetype/{id}', async () => {
-    await client.get('/api/diseasetype/1').expect(401)
+  it('GET     =>  /api/examtype/{id}', async () => {
+    await client.get('/api/examtype/1').expect(401)
   })
 
-  it('PATCH   =>  /api/diseasetype/{id}', async () => {
-    await client.patch('/api/diseasetype/1').expect(401)
+  it('PATCH   =>  /api/examtype/{id}', async () => {
+    await client.patch('/api/examtype/1').expect(401)
   })
 
-  it('DELETE  =>  /api/diseasetype/{id}', async () => {
-    await client.delete('/api/diseasetype/1').expect(401)
+  it('DELETE  =>  /api/examtype/{id}', async () => {
+    await client.delete('/api/examtype/1').expect(401)
   })
 })

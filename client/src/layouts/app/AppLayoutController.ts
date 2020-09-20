@@ -16,7 +16,8 @@ export default class AppLayoutController extends Vue {
     { title: 'Usuarios', icon: 'fa-user', routerName: 'Users' },
     { title: 'Pacientes', icon: 'fa-user-injured', routerName: 'Patients' },
     { title: 'Opciones', icon: 'fa-clipboard-list', routerName: 'Options' },
-    { title: 'Enfermedades', icon: 'fa-notes-medical', routerName: 'DiseaseTypes' }
+    { title: 'Enfermedades', icon: 'fa-notes-medical', routerName: 'DiseaseTypes' },
+    { title: 'Examenes', icon: 'fa-file-signature', routerName: 'ExamTypes' }
   ]
 
   public optionItems: Item[] = [

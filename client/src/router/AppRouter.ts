@@ -45,6 +45,18 @@ const ActivateRoutes: RouteConfig = {
           component: () => import('@/views/diseases/DiseasePage.vue')
         }
       ]
+    },
+    {
+      path: '/examtypes',
+      name: 'ExamTypes',
+      component: () => import('@/views/exams/ExamTypesPage.vue'),
+      children: [
+        {
+          path: '/examtype/:id/exam',
+          name: 'Exam',
+          component: () => import('@/views/exams/ExamPage.vue')
+        }
+      ]
     }
   ]
 }

@@ -6,11 +6,13 @@
 import { Permission } from '../models'
 import { DISEASETYPE } from '.'
 import { PERMISSION } from '.'
+import { EXAMTYPE } from '.'
 import { DISEASE } from '.'
 import { PROFILE } from '.'
 import { COMPANY } from '.'
 import { MODULE } from '.'
 import { OPTION } from '.'
+import { EXAM } from '.'
 import { ROLE } from '.'
 import { USER } from '.'
 
@@ -85,6 +87,22 @@ const ADMIN_PERMISSIONS: Permission[] = [
   new Permission({
     createdBy: 0,
     moduleId: DISEASE.id,
+    create: true,
+    read: true,
+    update: true,
+    delete: true
+  }),
+  new Permission({
+    createdBy: 0,
+    moduleId: EXAMTYPE.id,
+    create: true,
+    read: true,
+    update: true,
+    delete: true
+  }),
+  new Permission({
+    createdBy: 0,
+    moduleId: EXAM.id,
     create: true,
     read: true,
     update: true,

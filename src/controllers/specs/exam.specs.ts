@@ -12,14 +12,14 @@ import { requestBodySchema } from './CRUDSpecs'
 import { responseOneSchema } from './CRUDSpecs'
 import { responsePatchCountSchema } from './CRUDSpecs'
 import { responseListSchema } from './CRUDSpecs'
-import { DiseaseType } from '../../models'
+import { Exam } from '../../models'
 
-class DiseaseTypeCRUDSpecs implements CRUDSpecScheme {
+class ExamCRUDSpecs implements CRUDSpecScheme {
   /**
    * Specifications to request a body.
    */
   requestBody(): RequestBodyObject {
-    return requestBodySchema(DiseaseType, {
+    return requestBodySchema(Exam, {
       exclude: [
         'createdAt',
         'createdBy',
@@ -29,7 +29,8 @@ class DiseaseTypeCRUDSpecs implements CRUDSpecScheme {
         'deletedAt',
         'deletedBy',
         'id'
-      ]
+      ],
+      optional: ['examTypeId']
     })
   }
 
@@ -37,7 +38,7 @@ class DiseaseTypeCRUDSpecs implements CRUDSpecScheme {
    * Specifications to request partial body.
    */
   requestPartialBoby(): RequestBodyObject {
-    return requestBodySchema(DiseaseType, {
+    return requestBodySchema(Exam, {
       partial: true,
       exclude: [
         'createdAt',
@@ -53,20 +54,19 @@ class DiseaseTypeCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response total of disease types.
+   * Specifications to response total of exams.
    */
   responseCount(description?: string): OperationObject {
-    return responseCountSchema(DiseaseType, description)
+    return responseCountSchema(Exam, description)
   }
 
   /**
-   * Specifications to response one disease type.
+   * Specifications to response one exam.
    */
-  responseOne(description?: string, includeRelations?: boolean): OperationObject {
+  responseOne(description?: string): OperationObject {
     return responseOneSchema(
-      DiseaseType,
+      Exam,
       {
-        includeRelations,
         exclude: []
       },
       description
@@ -74,17 +74,17 @@ class DiseaseTypeCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response array of disease types.
+   * Specifications to response array of exams.
    */
-  responseList(description?: string): OperationObject {
-    return responseListSchema(DiseaseType, { includeRelations: true }, description)
+  responseList(description?: string, includeRelations?: boolean): OperationObject {
+    return responseListSchema(Exam, { includeRelations }, description)
   }
 
   /**
-   * Specifications to response count of disease types updates.
+   * Specifications to response count of exams updates.
    */
   responsePatchCount(description?: string): OperationObject {
-    return responsePatchCountSchema(DiseaseType, description)
+    return responsePatchCountSchema(Exam, description)
   }
 
   /**
@@ -95,8 +95,8 @@ class DiseaseTypeCRUDSpecs implements CRUDSpecScheme {
     method: 'PATCH' | 'PUT' | 'DELETE',
     description?: string
   ): OperationObject {
-    return responseSimpleSchema(DiseaseType, method, description)
+    return responseSimpleSchema(Exam, method, description)
   }
 }
 
-export default new DiseaseTypeCRUDSpecs()
+export default new ExamCRUDSpecs()

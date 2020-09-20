@@ -1,8 +1,8 @@
 <template>
   <own-panel
-    title="enfermedades"
+    title="tipos de examenes"
     @onSearch="findElements"
-    :empty="$route.name === 'DiseaseTypes'"
+    :empty="$route.name === 'ExamTypes'"
     :subtitle="element.name"
     :fluid="true"
     :filter="true"
@@ -52,9 +52,7 @@
         >
           <v-card>
             <v-toolbar class="primary lighten-1" dark dense>
-              <v-toolbar-title class="title">
-                Registrar tipo de enfermedad
-              </v-toolbar-title>
+              <v-toolbar-title class="title"> Registrar tipo de examen </v-toolbar-title>
               <v-spacer />
               <v-btn @click="resetCreator()" icon>
                 <v-icon>far fa-times-circle</v-icon>
@@ -96,7 +94,7 @@
           <v-card>
             <v-toolbar class="primary lighten-1" dark dense>
               <v-icon class="mr-3" small>fa-sliders-h</v-icon>
-              <v-toolbar-title class="title"> Editar tipo de enfermedad </v-toolbar-title>
+              <v-toolbar-title class="title"> Editar tipo de examex</v-toolbar-title>
               <v-spacer />
               <v-btn @click="resetEditor()" icon
                 ><v-icon>far fa-times-circle</v-icon></v-btn
@@ -135,6 +133,6 @@
 
 <script lang="ts">
 //@ts-ignore
-import Controller from './TypesController'
+import Controller from './ExamTypesController'
 export default Controller
 </script>

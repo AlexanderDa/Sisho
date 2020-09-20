@@ -3,29 +3,20 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
+import { authenticate } from '@loopback/authentication'
 import { repository } from '@loopback/repository'
-import { param, get, getModelSchemaRef } from '@loopback/rest'
+import { param, get } from '@loopback/rest'
 import { Disease, DiseaseType } from '../models'
 import { DiseaseRepository } from '../repositories'
+import spec from './specs/disease-type.specs'
 
+@authenticate('jwt')
 export class DiseaseDiseaseTypeController {
   constructor(
-    @repository(DiseaseRepository)
-    public diseaseRepository: DiseaseRepository
+    @repository(DiseaseRepository) public diseaseRepository: DiseaseRepository
   ) {}
 
-  @get('/diseases/{id}/disease-type', {
-    responses: {
-      '200': {
-        description: 'DiseaseType belonging to Disease',
-        content: {
-          'application/json': {
-            schema: { type: 'array', items: getModelSchemaRef(DiseaseType) }
-          }
-        }
-      }
-    }
-  })
+  @get('/api/disease/{id}/diseasetype', spec.responseOne())
   async getDiseaseType(
     @param.path.number('id') id: typeof Disease.prototype.id
   ): Promise<DiseaseType> {

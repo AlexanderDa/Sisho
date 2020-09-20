@@ -16,6 +16,9 @@ export const USER: Module = new Module({ id: 7, name: 'users' })
 export const DISEASETYPE: Module = new Module({ id: 8, name: 'diseasetypes' })
 export const DISEASE: Module = new Module({ id: 9, name: 'diseases' })
 
+export const EXAMTYPE: Module = new Module({ id: 10, name: 'examtypes' })
+export const EXAM: Module = new Module({ id: 11, name: 'exams' })
+
 /**
  * Default modules.
  */
@@ -28,5 +31,7 @@ export const MODULES: Module[] = [
   ROLE,
   USER,
   DISEASETYPE,
-  DISEASE
+  DISEASE,
+  EXAMTYPE,
+  EXAM
 ]

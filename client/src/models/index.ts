@@ -4,6 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 export * from '@/models/DiseaseTypeModel'
+export * from '@/models/ExamTypeModel'
 export * from '@/models/HospitalModel'
 export * from '@/models/ProfileModel'
 export * from '@/models/DiseaseModel'
@@ -12,6 +13,7 @@ export * from '@/models/OptionModel'
 export * from '@/models/GroupModel'
 export * from '@/models/RoleModel'
 export * from '@/models/UserModel'
+export * from '@/models/ExamModel'
 
 export interface Base {
   createdAt?: string
