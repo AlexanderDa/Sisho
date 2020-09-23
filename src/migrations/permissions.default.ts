@@ -4,6 +4,12 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Permission } from '../models'
+import { ANTECEDENT } from '.'
+import { DIAGNOSTIC } from '.'
+import { MEDICALEXAM } from '.'
+import { MEDICALRECORD } from '.'
+import { PATIENT } from '.'
+import { VITALSIGN } from '.'
 import { DISEASETYPE } from '.'
 import { PERMISSION } from '.'
 import { EXAMTYPE } from '.'
@@ -20,95 +26,38 @@ import { USER } from '.'
  * Default permissions.
  */
 const ADMIN_PERMISSIONS: Permission[] = [
-  new Permission({
-    createdBy: 0,
-    moduleId: PERMISSION.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: PROFILE.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: COMPANY.id,
-    create: false,
-    read: true,
-    update: true,
-    delete: false
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: MODULE.id,
-    create: false,
-    read: true,
-    update: false,
-    delete: false
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: OPTION.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: ROLE.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: USER.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: DISEASETYPE.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: DISEASE.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: EXAMTYPE.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  }),
-  new Permission({
-    createdBy: 0,
-    moduleId: EXAM.id,
-    create: true,
-    read: true,
-    update: true,
-    delete: true
-  })
+  crud(PERMISSION.id),
+  crud(PROFILE.id),
+  crud(COMPANY.id, { c: false }),
+  crud(MODULE.id, { c: false, u: false, d: false }),
+  crud(OPTION.id),
+  crud(ROLE.id),
+  crud(USER.id),
+  crud(DISEASETYPE.id),
+  crud(DISEASE.id),
+  crud(EXAMTYPE.id),
+  crud(EXAM.id),
+  crud(PATIENT.id),
+  crud(ANTECEDENT.id, { c: false }),
+  crud(DIAGNOSTIC.id, { c: false }),
+  crud(MEDICALEXAM.id, { c: false }),
+  crud(MEDICALRECORD.id, { c: false }),
+  crud(VITALSIGN.id, { c: false })
 ]
+
+function crud(
+  moduleId?: number,
+  config?: { c?: boolean; r?: boolean; u?: boolean; d?: boolean }
+): Permission {
+  return new Permission({
+    createdBy: 0,
+    moduleId,
+    create: config?.c ?? true,
+    read: config?.r ?? true,
+    update: config?.u ?? true,
+    delete: config?.d ?? true
+  })
+}
 
 export const DEFAULT_PERMISSIONS: { ADMIN: Permission[] } = {
   ADMIN: ADMIN_PERMISSIONS

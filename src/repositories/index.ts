@@ -3,12 +3,18 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
+export * from './medical-record.repository'
+export * from './medical-exam.repository'
 export * from './disease-type.repository'
+export * from './antecedent.repository'
+export * from './vital-sign.repository'
+export * from './diagnostic.repository'
 export * from './permission.repository'
 export * from './exam-type.repository'
 export * from './company.repository'
 export * from './profile.repository'
 export * from './disease.repository'
+export * from './patient.repository'
 export * from './module.repository'
 export * from './option.repository'
 export * from './group.repository'

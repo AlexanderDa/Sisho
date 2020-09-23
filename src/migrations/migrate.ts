@@ -254,7 +254,31 @@ class Migrate {
    * @param existingSchema
    */
   private async createDB(existingSchema: 'drop' | 'alter'): Promise<void> {
-    await this.app.migrateSchema({ existingSchema })
+    await this.app.migrateSchema({
+      existingSchema,
+      models: [
+        // simple
+        'Company',
+        'Patient',
+        'Role',
+        'Profile',
+        'DiseaseType',
+        'ExamType',
+        'Module',
+        'tgroup',
+        // with dependencies
+        'tuser',
+        'Disease',
+        'Exam',
+        'Permission',
+        'Option',
+        'Antecedent',
+        'MedicalRecord',
+        'VitalSign',
+        'Diagnostic',
+        'MedicalExam'
+      ]
+    })
   }
 
   /**

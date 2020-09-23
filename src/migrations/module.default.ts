@@ -18,6 +18,12 @@ export const DISEASE: Module = new Module({ id: 9, name: 'diseases' })
 
 export const EXAMTYPE: Module = new Module({ id: 10, name: 'examtypes' })
 export const EXAM: Module = new Module({ id: 11, name: 'exams' })
+export const PATIENT: Module = new Module({ id: 12, name: 'patients' })
+export const ANTECEDENT: Module = new Module({ id: 13, name: 'antecedents' })
+export const DIAGNOSTIC: Module = new Module({ id: 14, name: 'diagnostics' })
+export const MEDICALEXAM: Module = new Module({ id: 15, name: 'medicalexams' })
+export const MEDICALRECORD: Module = new Module({ id: 16, name: 'medicalrecords' })
+export const VITALSIGN: Module = new Module({ id: 17, name: 'vitalsigns' })
 
 /**
  * Default modules.
@@ -33,5 +39,11 @@ export const MODULES: Module[] = [
   DISEASETYPE,
   DISEASE,
   EXAMTYPE,
-  EXAM
+  EXAM,
+  PATIENT,
+  ANTECEDENT,
+  DIAGNOSTIC,
+  MEDICALEXAM,
+  MEDICALRECORD,
+  VITALSIGN
 ]

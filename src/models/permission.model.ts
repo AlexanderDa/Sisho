@@ -18,12 +18,12 @@ import { boolean } from './pg'
       }
     },
     foreignKeys: {
-      /* fkPermissionRole: {
+      fkPermissionRole: {
         name: 'fk_permission_role',
         entity: 'Role',
         entityKey: 'id',
         foreignKey: 'roleid'
-      },*/
+      },
       fkPermissionModule: {
         name: 'fk_permission_module',
         entity: 'Module',

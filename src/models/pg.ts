@@ -57,12 +57,12 @@ export function text(definition: { required?: boolean; columnName?: string }) {
  * Postgres native `integer`.
  * @param definition
  */
-export function integer(definition: { required?: boolean; columnName?: string }) {
+export function integer(definition?: { required?: boolean; columnName?: string }) {
   return property({
     type: 'number',
-    required: definition.required,
+    required: definition?.required,
     postgresql: {
-      columnName: definition.columnName,
+      columnName: definition?.columnName,
       dataType: 'integer'
     }
   })
@@ -90,18 +90,37 @@ export function boolean(definition: {
 /**
  * Postgres native `TIMESTAMP`.
  */
-export function timestamp(definition: {
+export function timestamp(definition?: {
   default?: Date | string | null
   required?: boolean
   columnName?: string
 }) {
   return property({
     type: 'date',
-    required: definition.required,
-    default: definition.default,
+    required: definition?.required,
+    default: definition?.default,
     postgresql: {
-      columnName: definition.columnName,
+      columnName: definition?.columnName,
       dataType: 'TIMESTAMP WITH TIME ZONE'
+    }
+  })
+}
+
+/**
+ * Postgres native `DATE`.
+ */
+export function date(definition?: {
+  default?: Date | string | null
+  required?: boolean
+  columnName?: string
+}) {
+  return property({
+    type: 'date',
+    required: definition?.required,
+    default: definition?.default ?? null,
+    postgresql: {
+      columnName: definition?.columnName,
+      dataType: 'DATE'
     }
   })
 }
@@ -110,11 +129,11 @@ export function timestamp(definition: {
  * Domain to `email`.
  * @param definition
  */
-export function email(definition: { required?: boolean; columnName?: string }) {
+export function email(definition?: { required?: boolean; columnName?: string }) {
   return character({
     length: 50,
-    required: definition.required,
-    columnName: definition.columnName
+    required: definition?.required,
+    columnName: definition?.columnName
   })
 }
 
@@ -122,11 +141,11 @@ export function email(definition: { required?: boolean; columnName?: string }) {
  * Domain to `filename`.
  * @param definition
  */
-export function filename(definition: { required?: boolean; columnName?: string }) {
+export function filename(definition?: { required?: boolean; columnName?: string }) {
   return character({
     length: 75,
-    required: definition.required,
-    columnName: definition.columnName
+    required: definition?.required,
+    columnName: definition?.columnName
   })
 }
 
@@ -134,11 +153,11 @@ export function filename(definition: { required?: boolean; columnName?: string }
  * Domain to `phone number`.
  * @param definition
  */
-export function phone(definition: { required?: boolean; columnName?: string }) {
+export function phone(definition?: { required?: boolean; columnName?: string }) {
   return character({
     length: 13,
-    required: definition.required,
-    columnName: definition.columnName
+    required: definition?.required,
+    columnName: definition?.columnName
   })
 }
 
@@ -146,11 +165,11 @@ export function phone(definition: { required?: boolean; columnName?: string }) {
  * Domain to `dni`.
  * @param definition
  */
-export function dni(definition: { required?: boolean; columnName?: string }) {
+export function dni(definition?: { required?: boolean; columnName?: string }) {
   return character({
     length: 10,
-    required: definition.required,
-    columnName: definition.columnName
+    required: definition?.required,
+    columnName: definition?.columnName
   })
 }
 
@@ -158,11 +177,11 @@ export function dni(definition: { required?: boolean; columnName?: string }) {
  * Domain to `passport`.
  * @param definition
  */
-export function passport(definition: { required?: boolean; columnName?: string }) {
+export function passport(definition?: { required?: boolean; columnName?: string }) {
   return character({
     length: 13,
-    required: definition.required,
-    columnName: definition.columnName
+    required: definition?.required,
+    columnName: definition?.columnName
   })
 }
 
@@ -170,11 +189,11 @@ export function passport(definition: { required?: boolean; columnName?: string }
  * Domain to `address`.
  * @param definition
  */
-export function address(definition: { required?: boolean; columnName?: string }) {
+export function address(definition?: { required?: boolean; columnName?: string }) {
   return character({
     length: 100,
-    required: definition.required,
-    columnName: definition.columnName
+    required: definition?.required,
+    columnName: definition?.columnName
   })
 }
 
