@@ -4,13 +4,16 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { hasOne, hasMany } from '@loopback/repository'
-import { model } from '@loopback/repository'
 import { MedicalExam } from './medical-exam.model'
 import { Diagnostic } from './diagnostic.model'
 import { VitalSign } from './vital-sign.model'
+import { model } from '@loopback/repository'
 import { Disease } from './disease.model'
 import { Exam } from './exam.model'
+import { character } from './pg'
 import { integer } from './pg'
+import { boolean } from './pg'
+import { text } from './pg'
 import { id } from './pg'
 import { Audit } from '.'
 
@@ -30,6 +33,14 @@ export class MedicalRecord extends Audit {
   @id() id?: number
 
   @integer({ required: true }) patientId: number
+
+  @character({ length: 150, required: true }) reason: string
+
+  @text() currentIllness?: string
+
+  @boolean({ default: false }) done: boolean
+
+  @boolean({ default: false }) canceled: boolean
 
   @hasOne(() => VitalSign) vitalSign: VitalSign
 

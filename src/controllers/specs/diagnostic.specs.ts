@@ -4,40 +4,52 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { responsePatchCountSchema } from './CRUDSpecs'
+import { getModelSchemaRef } from '@loopback/rest'
 import { responseSimpleSchema } from './CRUDSpecs'
 import { RequestBodyObject } from '@loopback/rest'
 import { responseCountSchema } from './CRUDSpecs'
-import { responseListSchema } from './CRUDSpecs'
 import { OperationObject } from '@loopback/rest'
+import { responseListSchema } from './CRUDSpecs'
 import { responseOneSchema } from './CRUDSpecs'
 import { requestBodySchema } from './CRUDSpecs'
 import { CRUDSpecScheme } from './CRUDSpecs'
-import { Role } from '../../models'
+import { Diagnostic } from '../../models'
 
-class RoleCRUDSpecs implements CRUDSpecScheme {
+class DiagnosticCRUDSpecs implements CRUDSpecScheme {
   /**
    * Specifications to request a body.
    */
   requestBody(): RequestBodyObject {
-    return requestBodySchema(Role, {
-      exclude: [
-        'createdAt',
-        'createdBy',
-        'editedAt',
-        'editedBy',
-        'deleted',
-        'deletedAt',
-        'deletedBy',
-        'id'
-      ]
-    })
+    return {
+      content: {
+        'application/json': {
+          schema: {
+            type: 'array',
+            description: 'disease id',
+            items: getModelSchemaRef(Diagnostic, {
+              exclude: [
+                'createdAt',
+                'createdBy',
+                'editedAt',
+                'editedBy',
+                'deleted',
+                'deletedAt',
+                'deletedBy',
+                'id',
+                'medicalRecordId'
+              ]
+            })
+          }
+        }
+      }
+    }
   }
 
   /**
    * Specifications to request partial body.
    */
   requestPartialBoby(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(Diagnostic, {
       partial: true,
       exclude: [
         'createdAt',
@@ -53,18 +65,18 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response total of roles.
+   * Specifications to response total of diagnostics.
    */
   responseCount(description?: string): OperationObject {
-    return responseCountSchema(Role, description)
+    return responseCountSchema(Diagnostic, description)
   }
 
   /**
-   * Specifications to response one role.
+   * Specifications to response one diagnostic.
    */
   responseOne(description?: string, includeRelations?: boolean): OperationObject {
     return responseOneSchema(
-      Role,
+      Diagnostic,
       {
         includeRelations,
         exclude: []
@@ -74,24 +86,24 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response one role whitout relations.
+   * Specifications to response one diagnostic whitout relations.
    */
   responseOneSimple(description?: string): OperationObject {
-    return responseOneSchema(Role, undefined, description)
+    return responseOneSchema(Diagnostic, undefined, description)
   }
 
   /**
-   * Specifications to response array of roles.
+   * Specifications to response array of diagnostics.
    */
   responseList(description?: string): OperationObject {
-    return responseListSchema(Role, { includeRelations: true }, description)
+    return responseListSchema(Diagnostic, { includeRelations: true }, description)
   }
 
   /**
-   * Specifications to response count of roles updates.
+   * Specifications to response count of diagnostics updates.
    */
   responsePatchCount(description?: string): OperationObject {
-    return responsePatchCountSchema(Role, description)
+    return responsePatchCountSchema(Diagnostic, description)
   }
 
   /**
@@ -102,8 +114,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
     method: 'PATCH' | 'PUT' | 'DELETE',
     description?: string
   ): OperationObject {
-    return responseSimpleSchema(Role, method, description)
+    return responseSimpleSchema(Diagnostic, method, description)
   }
 }
 
-export default new RoleCRUDSpecs()
+export default new DiagnosticCRUDSpecs()

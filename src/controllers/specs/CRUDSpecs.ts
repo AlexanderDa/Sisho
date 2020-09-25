@@ -150,7 +150,7 @@ export interface CRUDSpecScheme {
   requestPartialBoby(): RequestBodyObject
 
   responseCount(description?: string): OperationObject
-  responseOne(description?: string): OperationObject
+  responseOne(description?: string, includeRelations?: boolean): OperationObject
   responseList(description?: string): OperationObject
   responsePatchCount(description?: string): OperationObject
   responseSimple(

@@ -12,14 +12,14 @@ import { OperationObject } from '@loopback/rest'
 import { responseOneSchema } from './CRUDSpecs'
 import { requestBodySchema } from './CRUDSpecs'
 import { CRUDSpecScheme } from './CRUDSpecs'
-import { Role } from '../../models'
+import { Antecedent } from '../../models'
 
-class RoleCRUDSpecs implements CRUDSpecScheme {
+class AntecedentCRUDSpecs implements CRUDSpecScheme {
   /**
    * Specifications to request a body.
    */
   requestBody(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(Antecedent, {
       exclude: [
         'createdAt',
         'createdBy',
@@ -29,7 +29,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
         'deletedAt',
         'deletedBy',
         'id'
-      ]
+      ],
+      optional: ['patientId']
     })
   }
 
@@ -37,7 +38,7 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
    * Specifications to request partial body.
    */
   requestPartialBoby(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(Antecedent, {
       partial: true,
       exclude: [
         'createdAt',
@@ -53,18 +54,18 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response total of roles.
+   * Specifications to response total of antecedents.
    */
   responseCount(description?: string): OperationObject {
-    return responseCountSchema(Role, description)
+    return responseCountSchema(Antecedent, description)
   }
 
   /**
-   * Specifications to response one role.
+   * Specifications to response one antecedent.
    */
   responseOne(description?: string, includeRelations?: boolean): OperationObject {
     return responseOneSchema(
-      Role,
+      Antecedent,
       {
         includeRelations,
         exclude: []
@@ -74,24 +75,24 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response one role whitout relations.
+   * Specifications to response one antecedent whitout relations.
    */
   responseOneSimple(description?: string): OperationObject {
-    return responseOneSchema(Role, undefined, description)
+    return responseOneSchema(Antecedent, undefined, description)
   }
 
   /**
-   * Specifications to response array of roles.
+   * Specifications to response array of antecedents.
    */
   responseList(description?: string): OperationObject {
-    return responseListSchema(Role, { includeRelations: true }, description)
+    return responseListSchema(Antecedent, { includeRelations: true }, description)
   }
 
   /**
-   * Specifications to response count of roles updates.
+   * Specifications to response count of antecedents updates.
    */
   responsePatchCount(description?: string): OperationObject {
-    return responsePatchCountSchema(Role, description)
+    return responsePatchCountSchema(Antecedent, description)
   }
 
   /**
@@ -102,8 +103,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
     method: 'PATCH' | 'PUT' | 'DELETE',
     description?: string
   ): OperationObject {
-    return responseSimpleSchema(Role, method, description)
+    return responseSimpleSchema(Antecedent, method, description)
   }
 }
 
-export default new RoleCRUDSpecs()
+export default new AntecedentCRUDSpecs()

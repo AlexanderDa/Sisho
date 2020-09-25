@@ -3,23 +3,23 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { responsePatchCountSchema } from './CRUDSpecs'
-import { responseSimpleSchema } from './CRUDSpecs'
-import { RequestBodyObject } from '@loopback/rest'
-import { responseCountSchema } from './CRUDSpecs'
-import { responseListSchema } from './CRUDSpecs'
 import { OperationObject } from '@loopback/rest'
-import { responseOneSchema } from './CRUDSpecs'
-import { requestBodySchema } from './CRUDSpecs'
+import { RequestBodyObject } from '@loopback/rest'
 import { CRUDSpecScheme } from './CRUDSpecs'
-import { Role } from '../../models'
+import { responseCountSchema } from './CRUDSpecs'
+import { responseSimpleSchema } from './CRUDSpecs'
+import { requestBodySchema } from './CRUDSpecs'
+import { responseOneSchema } from './CRUDSpecs'
+import { responsePatchCountSchema } from './CRUDSpecs'
+import { responseListSchema } from './CRUDSpecs'
+import { VitalSign } from '../../models'
 
-class RoleCRUDSpecs implements CRUDSpecScheme {
+class VitalSignCRUDSpecs implements CRUDSpecScheme {
   /**
    * Specifications to request a body.
    */
   requestBody(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(VitalSign, {
       exclude: [
         'createdAt',
         'createdBy',
@@ -29,7 +29,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
         'deletedAt',
         'deletedBy',
         'id'
-      ]
+      ],
+      optional: ['medicalRecordId']
     })
   }
 
@@ -37,7 +38,7 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
    * Specifications to request partial body.
    */
   requestPartialBoby(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(VitalSign, {
       partial: true,
       exclude: [
         'createdAt',
@@ -53,18 +54,18 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response total of roles.
+   * Specifications to response total of vital signs.
    */
   responseCount(description?: string): OperationObject {
-    return responseCountSchema(Role, description)
+    return responseCountSchema(VitalSign, description)
   }
 
   /**
-   * Specifications to response one role.
+   * Specifications to response one vital sign.
    */
   responseOne(description?: string, includeRelations?: boolean): OperationObject {
     return responseOneSchema(
-      Role,
+      VitalSign,
       {
         includeRelations,
         exclude: []
@@ -74,24 +75,24 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response one role whitout relations.
+   * Specifications to response one vital sign whitout relations.
    */
   responseOneSimple(description?: string): OperationObject {
-    return responseOneSchema(Role, undefined, description)
+    return responseOneSchema(VitalSign, undefined, description)
   }
 
   /**
-   * Specifications to response array of roles.
+   * Specifications to response array of vital signs.
    */
   responseList(description?: string): OperationObject {
-    return responseListSchema(Role, { includeRelations: true }, description)
+    return responseListSchema(VitalSign, { includeRelations: true }, description)
   }
 
   /**
-   * Specifications to response count of roles updates.
+   * Specifications to response count of vital signs updates.
    */
   responsePatchCount(description?: string): OperationObject {
-    return responsePatchCountSchema(Role, description)
+    return responsePatchCountSchema(VitalSign, description)
   }
 
   /**
@@ -102,8 +103,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
     method: 'PATCH' | 'PUT' | 'DELETE',
     description?: string
   ): OperationObject {
-    return responseSimpleSchema(Role, method, description)
+    return responseSimpleSchema(VitalSign, method, description)
   }
 }
 
-export default new RoleCRUDSpecs()
+export default new VitalSignCRUDSpecs()

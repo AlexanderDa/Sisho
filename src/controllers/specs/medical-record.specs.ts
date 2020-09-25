@@ -11,15 +11,15 @@ import { responseListSchema } from './CRUDSpecs'
 import { OperationObject } from '@loopback/rest'
 import { responseOneSchema } from './CRUDSpecs'
 import { requestBodySchema } from './CRUDSpecs'
+import { MedicalRecord } from '../../models'
 import { CRUDSpecScheme } from './CRUDSpecs'
-import { Role } from '../../models'
 
-class RoleCRUDSpecs implements CRUDSpecScheme {
+class MedicalRecordCRUDSpecs implements CRUDSpecScheme {
   /**
    * Specifications to request a body.
    */
   requestBody(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(MedicalRecord, {
       exclude: [
         'createdAt',
         'createdBy',
@@ -29,7 +29,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
         'deletedAt',
         'deletedBy',
         'id'
-      ]
+      ],
+      optional: ['patientId']
     })
   }
 
@@ -37,7 +38,7 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
    * Specifications to request partial body.
    */
   requestPartialBoby(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(MedicalRecord, {
       partial: true,
       exclude: [
         'createdAt',
@@ -53,18 +54,18 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response total of roles.
+   * Specifications to response total of medical records.
    */
   responseCount(description?: string): OperationObject {
-    return responseCountSchema(Role, description)
+    return responseCountSchema(MedicalRecord, description)
   }
 
   /**
-   * Specifications to response one role.
+   * Specifications to response one medical record.
    */
   responseOne(description?: string, includeRelations?: boolean): OperationObject {
     return responseOneSchema(
-      Role,
+      MedicalRecord,
       {
         includeRelations,
         exclude: []
@@ -74,24 +75,24 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response one role whitout relations.
+   * Specifications to response one medical record whitout relations.
    */
   responseOneSimple(description?: string): OperationObject {
-    return responseOneSchema(Role, undefined, description)
+    return responseOneSchema(MedicalRecord, undefined, description)
   }
 
   /**
-   * Specifications to response array of roles.
+   * Specifications to response array of medical records.
    */
   responseList(description?: string): OperationObject {
-    return responseListSchema(Role, { includeRelations: true }, description)
+    return responseListSchema(MedicalRecord, { includeRelations: true }, description)
   }
 
   /**
-   * Specifications to response count of roles updates.
+   * Specifications to response count of medical records updates.
    */
   responsePatchCount(description?: string): OperationObject {
-    return responsePatchCountSchema(Role, description)
+    return responsePatchCountSchema(MedicalRecord, description)
   }
 
   /**
@@ -102,8 +103,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
     method: 'PATCH' | 'PUT' | 'DELETE',
     description?: string
   ): OperationObject {
-    return responseSimpleSchema(Role, method, description)
+    return responseSimpleSchema(MedicalRecord, method, description)
   }
 }
 
-export default new RoleCRUDSpecs()
+export default new MedicalRecordCRUDSpecs()

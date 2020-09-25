@@ -42,12 +42,12 @@ export function character(definition: {
  * Postgres native `text`.
  * @param definition
  */
-export function text(definition: { required?: boolean; columnName?: string }) {
+export function text(definition?: { required?: boolean; columnName?: string }) {
   return property({
     type: 'string',
-    required: definition.required,
+    required: definition?.required,
     postgresql: {
-      columnName: definition.columnName,
+      columnName: definition?.columnName,
       dataType: 'text'
     }
   })
@@ -71,17 +71,17 @@ export function integer(definition?: { required?: boolean; columnName?: string }
 /**
  * Postgres native `boolean`.
  */
-export function boolean(definition: {
+export function boolean(definition?: {
   default?: boolean
   required?: boolean
   columnName?: string
 }) {
   return property({
     type: 'boolean',
-    required: definition.required,
-    default: definition.default,
+    required: definition?.required,
+    default: definition?.default,
     postgresql: {
-      columnName: definition.columnName,
+      columnName: definition?.columnName,
       dataType: 'boolean'
     }
   })
@@ -98,7 +98,7 @@ export function timestamp(definition?: {
   return property({
     type: 'date',
     required: definition?.required,
-    default: definition?.default,
+    default: definition?.default ?? null,
     postgresql: {
       columnName: definition?.columnName,
       dataType: 'TIMESTAMP WITH TIME ZONE'

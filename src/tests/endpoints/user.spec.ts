@@ -136,12 +136,16 @@ describe(message.withAccess('User'), () => {
 })
 
 describe(message.noAccess('User'), () => {
-  it('POST    =>  /api/user', async () => {
+  it('POST    =>  /api/profile/1/user', async () => {
     await client.post('/api/profile/1/user').expect(401)
   })
 
+  it('GET     =>  /api/profile/1/user', async () => {
+    await client.get('/api/profile/1/user').expect(401)
+  })
+
   it('GET     =>  /api/users/count', async () => {
-    await client.get('/api/users').expect(401)
+    await client.get('/api/users/count').expect(401)
   })
 
   it('GET     =>  /api/users', async () => {

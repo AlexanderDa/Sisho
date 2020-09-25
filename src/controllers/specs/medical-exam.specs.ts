@@ -4,40 +4,52 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { responsePatchCountSchema } from './CRUDSpecs'
+import { getModelSchemaRef } from '@loopback/rest'
 import { responseSimpleSchema } from './CRUDSpecs'
 import { RequestBodyObject } from '@loopback/rest'
 import { responseCountSchema } from './CRUDSpecs'
-import { responseListSchema } from './CRUDSpecs'
 import { OperationObject } from '@loopback/rest'
+import { responseListSchema } from './CRUDSpecs'
 import { responseOneSchema } from './CRUDSpecs'
 import { requestBodySchema } from './CRUDSpecs'
 import { CRUDSpecScheme } from './CRUDSpecs'
-import { Role } from '../../models'
+import { MedicalExam } from '../../models'
 
-class RoleCRUDSpecs implements CRUDSpecScheme {
+class MedicalExamCRUDSpecs implements CRUDSpecScheme {
   /**
    * Specifications to request a body.
    */
   requestBody(): RequestBodyObject {
-    return requestBodySchema(Role, {
-      exclude: [
-        'createdAt',
-        'createdBy',
-        'editedAt',
-        'editedBy',
-        'deleted',
-        'deletedAt',
-        'deletedBy',
-        'id'
-      ]
-    })
+    return {
+      content: {
+        'application/json': {
+          schema: {
+            type: 'array',
+            description: 'disease id',
+            items: getModelSchemaRef(MedicalExam, {
+              exclude: [
+                'createdAt',
+                'createdBy',
+                'editedAt',
+                'editedBy',
+                'deleted',
+                'deletedAt',
+                'deletedBy',
+                'id',
+                'medicalRecordId'
+              ]
+            })
+          }
+        }
+      }
+    }
   }
 
   /**
    * Specifications to request partial body.
    */
   requestPartialBoby(): RequestBodyObject {
-    return requestBodySchema(Role, {
+    return requestBodySchema(MedicalExam, {
       partial: true,
       exclude: [
         'createdAt',
@@ -53,18 +65,18 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response total of roles.
+   * Specifications to response total of medical exams.
    */
   responseCount(description?: string): OperationObject {
-    return responseCountSchema(Role, description)
+    return responseCountSchema(MedicalExam, description)
   }
 
   /**
-   * Specifications to response one role.
+   * Specifications to response one medical exam.
    */
   responseOne(description?: string, includeRelations?: boolean): OperationObject {
     return responseOneSchema(
-      Role,
+      MedicalExam,
       {
         includeRelations,
         exclude: []
@@ -74,24 +86,24 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
   }
 
   /**
-   * Specifications to response one role whitout relations.
+   * Specifications to response one medical exam whitout relations.
    */
   responseOneSimple(description?: string): OperationObject {
-    return responseOneSchema(Role, undefined, description)
+    return responseOneSchema(MedicalExam, undefined, description)
   }
 
   /**
-   * Specifications to response array of roles.
+   * Specifications to response array of medical exams.
    */
   responseList(description?: string): OperationObject {
-    return responseListSchema(Role, { includeRelations: true }, description)
+    return responseListSchema(MedicalExam, { includeRelations: true }, description)
   }
 
   /**
-   * Specifications to response count of roles updates.
+   * Specifications to response count of medical exams updates.
    */
   responsePatchCount(description?: string): OperationObject {
-    return responsePatchCountSchema(Role, description)
+    return responsePatchCountSchema(MedicalExam, description)
   }
 
   /**
@@ -102,8 +114,8 @@ class RoleCRUDSpecs implements CRUDSpecScheme {
     method: 'PATCH' | 'PUT' | 'DELETE',
     description?: string
   ): OperationObject {
-    return responseSimpleSchema(Role, method, description)
+    return responseSimpleSchema(MedicalExam, method, description)
   }
 }
 
-export default new RoleCRUDSpecs()
+export default new MedicalExamCRUDSpecs()
