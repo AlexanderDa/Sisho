@@ -1,6 +1,6 @@
 <template>
   <own-scroll-sheet title="Hospital">
-    <template slot="icons">
+    <template slot="actions">
       <v-btn :disabled="!isValidForm" @click="update()" icon>
         <v-icon>fa-save</v-icon>
       </v-btn>

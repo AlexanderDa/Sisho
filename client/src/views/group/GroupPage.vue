@@ -1,6 +1,6 @@
 <template>
   <own-scroll-sheet title="Opciones">
-    <template slot="icons">
+    <template slot="actions">
       <v-btn @click="loadGroups()" icon><v-icon>fa-redo-alt</v-icon></v-btn>
     </template>
     <v-row>

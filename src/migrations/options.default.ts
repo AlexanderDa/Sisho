@@ -4,6 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Option } from '../models'
+import { SEX } from '.'
 import { BLOODTYPE } from '.'
 import { CIVILSTATUS } from '.'
 
@@ -23,5 +24,9 @@ export const OPTIONS: Option[] = [
   new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Soltero/a' }),
   new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Casado/a' }),
   new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Divorciado/a' }),
-  new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Viudo/a' })
+  new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Viudo/a' }),
+
+  new Option({ createdBy: 0, groupId: SEX.id, name: 'Masculino' }),
+  new Option({ createdBy: 0, groupId: SEX.id, name: 'Femenino' }),
+  new Option({ createdBy: 0, groupId: SEX.id, name: 'Otro' })
 ]

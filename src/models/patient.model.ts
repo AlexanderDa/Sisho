@@ -42,13 +42,15 @@ export class Patient extends Audit {
 
   @phone() mobile?: string
 
-  @email() email: string
+  @email() email?: string
 
   @address({ required: true }) address: string
 
   @integer() blooType?: number
 
   @integer({ required: true }) sex: number
+
+  @integer({ required: true }) civilStatus: number
 
   @hasOne(() => Antecedent) antecedent: Antecedent
 

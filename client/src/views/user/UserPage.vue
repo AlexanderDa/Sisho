@@ -1,11 +1,5 @@
 <template>
-  <own-panel
-    @onSearch="findProfiles"
-    title="usuarios"
-    :fluid="true"
-    :filter="true"
-    :scrollable="true"
-  >
+  <own-panel title="usuarios" :fluid="true" :scrollable="true">
     <template slot="actions">
       <v-btn
         v-if="elementIndex !== -1 && !user.emailVerified && !element.deleted"
@@ -33,6 +27,9 @@
       </v-btn>
     </template>
 
+    <template slot="drawer:header">
+      <own-search-field @input="findProfiles" :filter="true" rounded />
+    </template>
     <template slot="drawer">
       <v-list-item v-for="item in elements" :key="item.id" @click="toShowElement(item)">
         <v-list-item-avatar>

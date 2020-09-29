@@ -13,11 +13,12 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <slot name="icons" />
+      <slot name="actions" />
     </v-app-bar>
     <v-sheet id="scrolling-techniques-7" class="overflow-y-auto grey lighten-4 particle">
       <v-container style="height: 100vh !important; padding-top: 50px" :fluid="fluid">
-        <slot name="default" />
+        <own-empty v-if="empty" width="400" />
+        <slot else name="default" />
       </v-container>
     </v-sheet>
   </v-card>
@@ -32,5 +33,6 @@ import { Prop, Emit } from 'vue-property-decorator'
 export default class ScrollSheet extends Vue {
   @Prop() title!: string
   @Prop({ default: false }) fluid!: boolean
+  @Prop({ default: false }) empty!: boolean
 }
 </script>

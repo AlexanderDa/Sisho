@@ -102,20 +102,23 @@ export default class LogViewerComponent extends Vue {
         createdBy: {
           user: data.createdBy?.user || '',
           image: data.createdBy?.image || require('@/assets/user.svg'),
-          date: log.createdAt || ''
+          //@ts-ignore
+          date: this.$formatDateTime(log.createdAt)
         },
         editedBy: data.editedBy
           ? {
               user: data.editedBy.user,
               image: data.editedBy.image || require('@/assets/user.svg'),
-              date: log.editedAt || ''
+              //@ts-ignore
+              date: this.$formatDateTime(log.editedAt)
             }
           : undefined,
         deletedBy: data.deletedBy
           ? {
               user: data.deletedBy.user,
               image: data.deletedBy.image || require('@/assets/user.svg'),
-              date: log.deletedAt || ''
+              //@ts-ignore
+              date: this.$formatDateTime(log.deletedAt)
             }
           : undefined
       }

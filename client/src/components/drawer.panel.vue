@@ -30,58 +30,18 @@
     <v-card class="overflow-hidden sidebar" v-if="drawer">
       <v-app-bar
         scroll-target="#scrolling-techniques-7"
-        elevate-on-scroll
         color="grey lighten-4"
+        v-if="hasDrawerHeader"
+        elevate-on-scroll
         absolute
       >
-        <v-text-field
-          style="height: 40px; border-radius: 30px"
-          @keyup.enter="onSearch()"
-          @click:clear="onClearSearch()"
-          @input="v => v !== '' || onClearSearch()"
-          v-model="value"
-          autocomplete="off"
-          label="Buscar ..."
-          clearable
-          dense
-          solo
-        >
-          <template v-slot:prepend v-if="filter">
-            <v-menu offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="secondary" v-bind="attrs" v-on="on" small icon>
-                  <v-icon small>fa-sliders-h</v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-toolbar class="primary lighten-1" dark dense>
-                  <v-icon class="mr-3" small>fa-sliders-h</v-icon>
-                  <v-toolbar-title class="subtitle-1">Filtro de busqueda</v-toolbar-title>
-                </v-toolbar>
-
-                <v-divider></v-divider>
-
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-switch v-model="includeRemoveds" />
-                    </v-list-item-action>
-                    <v-list-item-title>Incluir eliminados</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-card>
-            </v-menu>
-          </template>
-
-          <template v-slot:append>
-            <v-btn @click="onSearch()" color="secondary" small icon>
-              <v-icon small>fa-search</v-icon>
-            </v-btn>
-          </template>
-        </v-text-field>
+        <slot name="drawer:header" />
       </v-app-bar>
       <v-sheet id="scrolling-techniques-7" class="overflow-y-auto">
-        <v-container style="height: 100vh; padding: 60px 0px">
+        <v-container
+          :style="hasDrawerHeader ? 'padding: 60px 0px' : ''"
+          style="height: 100vh"
+        >
           <div class="drawer-content">
             <slot name="drawer" />
           </div>
@@ -94,36 +54,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop, Emit } from 'vue-property-decorator'
-//@ts-ignore
-import Search from '@/utils/search'
+import { Prop } from 'vue-property-decorator'
 
 @Component({})
 export default class DawerPanel extends Vue {
   @Prop() title!: string
   @Prop() subtitle!: string
   @Prop({ default: false }) fluid!: boolean
-  @Prop({ default: false }) filter!: boolean
   @Prop({ default: false }) empty!: boolean
   @Prop({ default: false }) scrollable!: boolean
   private drawer: boolean = true
-  private value: string = ''
-  private includeRemoveds: boolean = false
-
-  onClearSearch(): void {
-    this.value = ''
-    this.onSearch()
-  }
-
-  @Emit('onSearch')
-  onSearch(): Search | null {
-    return this.value
-      ? {
-          value: this.value,
-          includeRemoveds: this.includeRemoveds
-        }
-      : null
-  }
 
   private mounted(): void {
     window.addEventListener('resize', () => {
@@ -133,6 +73,10 @@ export default class DawerPanel extends Vue {
         this.drawer = true
       }
     })
+  }
+
+  public get hasDrawerHeader(): boolean {
+    return this.$slots['drawer:header'] ? true : false
   }
 }
 </script>
@@ -157,7 +101,6 @@ export default class DawerPanel extends Vue {
 
     .sidebar
         width: 400px
-        background-color: red
         & .search
             padding: 0px 10px
         & .drawer-content

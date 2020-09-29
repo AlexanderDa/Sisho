@@ -1,11 +1,9 @@
 <template>
   <own-panel
     title="tipos de examenes"
-    @onSearch="findElements"
     :empty="$route.name === 'ExamTypes'"
     :subtitle="element.name"
     :fluid="true"
-    :filter="true"
   >
     <template slot="actions">
       <own-btn-confirm
@@ -24,6 +22,11 @@
         <v-icon>fa-history</v-icon>
       </v-btn>
     </template>
+
+    <template slot="drawer:header">
+      <own-search-field @input="findElements" :filter="true" rounded />
+    </template>
+
     <template slot="drawer">
       <v-list-item
         v-for="item in elements"
