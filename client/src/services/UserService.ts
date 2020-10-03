@@ -7,7 +7,6 @@ import { Audit } from '@/services/Service'
 import { patch } from '@/services/Service'
 import { post } from '@/services/Service'
 import { get } from '@/services/Service'
-import { del } from '@/services/Service'
 import { Filter } from '@/utils/query'
 import { Where } from '@/utils/query'
 import { User } from '@/models'
@@ -18,7 +17,7 @@ class UserService {
    * @param id profile id
    * @param user user to create
    */
-  async create(id: number, user: Partial<User>): Promise<User> {
+  async createByProfileId(id: number, user: Partial<User>): Promise<User> {
     const res = await post({ url: '/api/profile/{id}/user', params: { id } }, user)
     const data: User = res.json()
     return data

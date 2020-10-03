@@ -4,6 +4,8 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Base } from '@/models'
+import { User } from '@/models'
+import { createUser } from './UserModel'
 
 export interface Profile extends Base {
   dni?: string
@@ -16,6 +18,7 @@ export interface Profile extends Base {
   image?: string
   address: string
   blooType?: string
+  user?: User
 }
 
 export function createProfile(): Profile {
@@ -23,6 +26,7 @@ export function createProfile(): Profile {
     id: 0,
     firstName: '',
     lastName: '',
-    address: ''
+    address: '',
+    user: createUser()
   }
 }

@@ -4,7 +4,8 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import Vue from 'vue'
-import { Module, Permission } from '@/models'
+import { Permission } from '@/models'
+import { Module } from '@/models'
 
 Vue.mixin({
   methods: {
@@ -12,13 +13,15 @@ Vue.mixin({
       return this.$store.state.module.elements.map((element: Module) => element.name)
     },
 
-    $permissions(module: string): Permission {
+    $permissions(module: string): Permission | null {
+      let per: Permission | null = null
       const mod: Module = this.$store.state.module.elements.find(
         (element: Module) => element.name === module
       )
-      const per: Permission = this.$store.state.permission.elements.find(
-        (element: Permission) => element.moduleId === mod.id
-      )
+      if (mod)
+        per = this.$store.state.permission.elements.find(
+          (element: Permission) => element.moduleId === mod.id
+        )
       return per
     },
     $access(module: string): boolean {
@@ -28,22 +31,22 @@ Vue.mixin({
     $canCreate(module: string): boolean {
       //@ts-ignore
       const per: Permission = this.$permissions(module)
-      return per.create || false
+      return per ? per.create : false
     },
     $canRead(module: string): boolean {
       //@ts-ignore
       const per: Permission = this.$permissions(module)
-      return per.read || false
+      return per ? per.read : false
     },
     $canEdit(module: string): boolean {
       //@ts-ignore
       const per: Permission = this.$permissions(module)
-      return per.edit || false
+      return per ? per.edit : false
     },
     $canDelete(module: string): boolean {
       //@ts-ignore
       const per: Permission = this.$permissions(module)
-      return per.del || false
+      return per ? per.del : false
     }
   }
 })

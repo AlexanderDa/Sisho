@@ -11,9 +11,7 @@ import emailService from '@/services/EmailService'
 import userService from '@/services/UserService'
 import validate from '@/utils/validations'
 import { createProfile } from '@/models'
-import { createUser } from '@/models'
 import { Profile } from '@/models'
-import { User } from '@/models'
 import alert from '@/utils/alert'
 import Search from '@/utils/search'
 import { Filter } from '@/utils/query'
@@ -27,12 +25,22 @@ export default class UserController extends Vue {
   // GUI
   private isValidForm = false
   private passError = ''
+  private form: boolean = false
+  private headers: object[] = [
+    { text: 'Image', value: 'image' },
+    { text: 'Nombres', value: 'firstName' },
+    { text: 'Email', value: 'email' },
+    { text: 'Estado', value: 'user.isActive', align: 'center' },
+    { text: 'Cédula', value: 'dni' },
+    { text: 'Pasaporte', value: 'passport' },
+    { text: 'Móvil', value: 'mobile' },
+    { text: 'Acciones', value: 'actions', align: 'right' }
+  ]
 
   // Element data
   private elements: Profile[] = []
   private elementIndex = -1
   private element: Profile = createProfile()
-  private user: User = createUser()
   private password: string = ''
 
   // Validations
@@ -57,11 +65,11 @@ export default class UserController extends Vue {
    *                    API Services                       *
    ********************************************************/
   async findProfiles(search?: Search): Promise<void> {
-    if (this.elements.length > 0) {
-      this.clear()
+    const filter: Filter<Profile> = {
+      limit: 25,
+      where: { deleted: false },
+      include: [{ relation: 'user' }]
     }
-
-    const filter: Filter<Profile> = { limit: 25, where: { deleted: false } }
     if (search) {
       filter.where = {
         and: [
@@ -69,6 +77,7 @@ export default class UserController extends Vue {
           { deleted: search.includeRemoveds ? undefined : false },
           {
             or: [
+              { email: { ilike: `%${search.value}%` } },
               { firstName: { ilike: `%${search.value}%` } },
               { lastName: { ilike: `%${search.value}%` } },
               { dni: { ilike: `%${search.value}%` } },
@@ -81,14 +90,8 @@ export default class UserController extends Vue {
     profileService.find(filter).then(res => (this.elements = res))
   }
 
-  async findUserByProfile(profileId?: number): Promise<void> {
-    if (profileId)
-      userService.findByProfileId(profileId).then(user => {
-        this.user = user
-      })
-  }
   async createElement(): Promise<void> {
-    profileService
+    await profileService
       .create({
         lastName: this.element.lastName,
         firstName: this.element.firstName,
@@ -99,39 +102,36 @@ export default class UserController extends Vue {
         email: this.element.email,
         address: this.element.address
       })
-      .then(async created => {
-        this.element = created
-        this.elements.push(created)
-        this.elementIndex = this.elements.indexOf(created)
-        alert.onCreateSuccess('El perfil de usuario fue creado.')
-        await this.createUser()
+      .then(async profile => {
+        userService
+          .createByProfileId(profile.id, {
+            email: profile.email,
+            roleId: this.element.user?.roleId,
+            profileId: profile.id
+          })
+          .then(async user => {
+            profile.user = user
+            this.element = profile
+            this.elements.push(profile)
+            this.elementIndex = this.elements.indexOf(profile)
+            alert.onCreateSuccess('El perfil de usuario fue creado.')
+          })
+          .catch(err => alert.onCreateError(err, 'cuenta de usuario'))
       })
       .catch(err => alert.onCreateError(err, 'perfil de usuario'))
   }
 
-  async createUser(): Promise<void> {
-    userService
-      .create(this.element.id, {
-        email: this.element.email,
-        roleId: this.user.roleId,
-        profileId: this.element.id
-      })
-      .then(async user => {
-        this.user = user
-      })
-      .catch(err => alert.onCreateError(err, 'cuenta de usuario'))
-  }
-
   async updateUser(): Promise<void> {
-    userService
-      .updateById(this.user.id, {
-        email: this.element.email,
-        roleId: this.user.roleId,
-        profileId: this.element.id,
-        isActive: this.user.isActive
-      })
-      .then(() => {})
-      .catch(err => alert.onUpdateError(err, 'cuenta de usuario'))
+    if (this.element.user)
+      userService
+        .updateById(this.element.user.id, {
+          email: this.element.email,
+          roleId: this.element.user.roleId,
+          profileId: this.element.id,
+          isActive: this.element.user.isActive
+        })
+        .then(() => {})
+        .catch(err => alert.onUpdateError(err, 'cuenta de usuario'))
   }
 
   async updateImage(url: string): Promise<void> {
@@ -167,15 +167,15 @@ export default class UserController extends Vue {
       .catch(err => alert.onUpdateError(err, 'perfil de usuario'))
   }
 
-  async deleteElement(): Promise<void> {
-    await accountService
-      .delete(this.user.id)
-      .then(async () => {
-        this.elements.splice(this.elementIndex, 1)
-        alert.onDeleteSuccess('Cuenta de usuario eliminada')
-        this.clear()
-      })
-      .catch(err => alert.onDeleteError(err, 'cuenta de usuario'))
+  async deleteElement(element: Profile): Promise<void> {
+    if (element.user)
+      await accountService
+        .delete(element.user.id)
+        .then(async () => {
+          this.elements.splice(this.elementIndex, 1)
+          alert.onDeleteSuccess('Cuenta de usuario eliminada')
+        })
+        .catch(err => alert.onDeleteError(err, 'cuenta de usuario'))
   }
 
   async sendWelcomeEmail(): Promise<void> {
@@ -228,15 +228,16 @@ export default class UserController extends Vue {
     })
   }
 
-  async toShowElement(element: Profile): Promise<void> {
+  async toEditElement(element: Profile): Promise<void> {
     this.elementIndex = this.elements.indexOf(element)
     this.element = Object.assign({}, element)
-    await this.findUserByProfile(this.element.id)
+    this.form = true
   }
 
-  clear(): void {
+  reset(): void {
     this.elementIndex = -1
     this.element = createProfile()
+    this.form = false
     //@ts-expect-error
     this.$refs.form.reset()
     this.passError = ''
