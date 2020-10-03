@@ -9,25 +9,34 @@ import { VuexModule } from 'vuex-module-decorators'
 import { Mutation } from 'vuex-module-decorators'
 import { Module } from 'vuex-module-decorators'
 import { Action } from 'vuex-module-decorators'
-import { createProfile } from '@/models'
-import { Profile } from '@/models'
+import { createUser, User } from '@/models'
+import { createProfile, Profile } from '@/models'
 
 @Module
 export default class SessionStore extends VuexModule {
-  public profile: Profile = createProfile()
+  public user: User | null = null
+  public profile: Profile | null = null
 
   @Mutation
-  setProfile(profile: Profile) {
-    this.profile = profile
+  setProfile(data: { user: User | null; profile: Profile | null }) {
+    this.user = data.user
+    this.profile = data.profile
   }
 
   @Action({ commit: 'setProfile' })
-  async loadProfile(): Promise<Profile> {
+  async loadProfile(): Promise<{ user: User; profile: Profile }> {
     let profile: Profile = createProfile()
-    if (this.profile.id === 0) {
+    let user: User = createUser()
+    if (!this.profile) {
       const me = await accountService.me()
       profile = await profileService.findById(me.profileId)
+
+      user.id = me.id
+      user.email = me.email
+      user.isActive = me.isActive
+      user.profileId = me.profileId
+      user.roleId = me.roleId
     }
-    return profile
+    return { user, profile }
   }
 }

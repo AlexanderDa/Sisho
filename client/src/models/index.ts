@@ -6,6 +6,7 @@
 export * from '@/models/MedicalRecordModel'
 export * from '@/models/DiseaseTypeModel'
 export * from '@/models/MedicalExamModel'
+export * from '@/models/PermissionModel'
 export * from '@/models/AntecedentModel'
 export * from '@/models/DiagnosticModel'
 export * from '@/models/VitalSignModel'

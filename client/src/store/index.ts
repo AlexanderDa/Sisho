@@ -8,9 +8,11 @@ import Vuex from 'vuex'
 import app from '@/store/AppStorage'
 import session from '@/store/SessionStore'
 import option from '@/store/OptionStorage'
+import module from '@/store/ModuleStorage'
+import permission from '@/store/PermissionStorage'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules: { app, session, option }
+  modules: { app, module, permission, session, option }
 })

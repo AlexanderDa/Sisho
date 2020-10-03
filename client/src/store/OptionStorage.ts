@@ -32,4 +32,9 @@ export default class OptionStore extends VuexModule {
     }
     return elements
   }
+
+  @Action({})
+  async optionNameById(id: number): Promise<string | undefined> {
+    return this.elements.find(item => item.id === id)?.name
+  }
 }

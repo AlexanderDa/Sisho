@@ -240,8 +240,8 @@ class Migrate {
           permission:
             `${result.create ? 'C' : '_'}` +
             `${result.read ? 'R' : '_'}` +
-            `${result.update ? 'U' : '_'}` +
-            `${result.delete ? 'D' : '_'}`
+            `${result.edit ? 'U' : '_'}` +
+            `${result.del ? 'D' : '_'}`
         })
       }
     }

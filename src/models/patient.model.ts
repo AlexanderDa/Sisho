@@ -18,15 +18,32 @@ import { integer } from './pg'
 import { passport } from './pg'
 import { filename } from './pg'
 import { character } from './pg'
-import { MedicalRecord } from './medical-record.model'
+import { MedicalRecord } from './'
 
-@model()
+@model({
+  indexes: {
+    uniquePatientDNI: {
+      keys: { dni: 1 },
+      options: { unique: true }
+    },
+    uniquePatientPassport: {
+      keys: { passport: 1 },
+      options: { unique: true }
+    },
+    uniquePatientHC: {
+      keys: { hc: 1 },
+      options: { unique: true }
+    }
+  }
+})
 export class Patient extends Audit {
   @id() id?: number
 
   @dni() dni?: string
 
   @passport() passport?: string
+
+  @character({ required: true, length: 10 }) hc: string
 
   @character({ required: true, length: 25 }) lastName: string
 

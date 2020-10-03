@@ -7,6 +7,7 @@ import { RouteConfig } from 'vue-router'
 const ActivateRoutes: RouteConfig = {
   path: '/app',
   name: 'App',
+  meta: { auth: true },
   component: () => import('@/layouts/app/AppLayout.vue'),
   children: [
     {
@@ -17,26 +18,26 @@ const ActivateRoutes: RouteConfig = {
     {
       path: '/users',
       name: 'Users',
+      meta: { modules: ['users', 'profiles'] },
       component: () => import('@/views/user/UserPage.vue')
     },
-    {
-      path: '/patients',
-      name: 'Patients',
-      component: () => import('@/views/patient/PatientPage.vue')
-    },
+
     {
       path: '/hospital',
       name: 'Hospital',
+      meta: { modules: ['company'] },
       component: () => import('@/views/hospital/HospitalPage.vue')
     },
     {
       path: '/options',
       name: 'Options',
+      meta: { modules: ['options'] },
       component: () => import('@/views/group/GroupPage.vue')
     },
     {
       path: '/diseasetypes',
       name: 'DiseaseTypes',
+      meta: { modules: ['diseases', 'diseasetypes'] },
       component: () => import('@/views/diseases/TypesPage.vue'),
       children: [
         {
@@ -49,6 +50,7 @@ const ActivateRoutes: RouteConfig = {
     {
       path: '/examtypes',
       name: 'ExamTypes',
+      meta: { modules: ['exams', 'examtypes'] },
       component: () => import('@/views/exams/ExamTypesPage.vue'),
       children: [
         {
@@ -57,6 +59,17 @@ const ActivateRoutes: RouteConfig = {
           component: () => import('@/views/exams/ExamPage.vue')
         }
       ]
+    },
+    {
+      path: '/patients',
+      name: 'Patients',
+      meta: { modules: ['patients'] },
+      component: () => import('@/views/patient/PatientPage.vue')
+    },
+    {
+      path: '/patient/:id/medidalrecords',
+      name: 'PatientMedRec',
+      component: () => import('@/views/medrec/MedicalRecordPage.vue')
     }
   ]
 }

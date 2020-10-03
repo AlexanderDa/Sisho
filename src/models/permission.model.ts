@@ -43,10 +43,10 @@ export class Permission extends Audit {
   read: boolean
 
   @boolean({ default: false, required: true, columnName: 'u' })
-  update: boolean
+  edit: boolean
 
   @boolean({ default: false, required: true, columnName: 'd' })
-  delete: boolean
+  del: boolean
 
   @integer({ required: true }) roleId: number
 

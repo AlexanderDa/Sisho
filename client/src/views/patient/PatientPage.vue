@@ -1,24 +1,43 @@
 <template>
   <own-scroll-sheet title="Pacientes" :fluid="!form">
     <template slot="actions">
-      <v-btn @click="showLog(element)" v-if="form && elementIndex > -1" icon>
-        <v-icon> fa-history </v-icon>
-      </v-btn>
+      <template v-if="form">
+        <own-btn
+          @click="showLog(element)"
+          v-if="elementIndex > -1"
+          tooltip="Historial"
+          icon
+        >
+          <v-icon> fa-history </v-icon>
+        </own-btn>
 
-      <v-btn v-if="form" icon> <v-icon>fa-notes-medical</v-icon> </v-btn>
+        <own-btn
+          @click="$router.push({ name: 'PatientMedRec', params: { id: element.id } })"
+          v-if="elementIndex > -1 && $access('medicalrecords')"
+          tooltip="Ficha médica"
+          icon
+        >
+          <v-icon>fa-notes-medical</v-icon>
+        </own-btn>
 
-      <v-btn
-        v-if="form"
-        :disabled="!isValidForm || element.deleted"
-        @click="submit()"
-        icon
-      >
-        <v-icon>fa-save</v-icon>
-      </v-btn>
-      <v-btn v-else @click="form = true" icon> <v-icon>fa-plus</v-icon> </v-btn>
-      <v-btn v-if="form" @click="reset()" icon
-        ><v-icon>far fa-times-circle</v-icon></v-btn
-      >
+        <own-btn
+          :disabled="!isValidForm || element.deleted"
+          @click="submit()"
+          tooltip="Guardar"
+          icon
+        >
+          <v-icon>fa-save</v-icon>
+        </own-btn>
+        <own-btn @click="reset()" tooltip="Cerrar" icon>
+          <v-icon>far fa-times-circle</v-icon>
+        </own-btn>
+      </template>
+
+      <template v-else>
+        <own-btn v-if="$canCreate('patients')" @click="form = true" tooltip="Nuevo" icon>
+          <v-icon>fa-plus</v-icon>
+        </own-btn>
+      </template>
     </template>
 
     <v-row v-if="form">
@@ -48,6 +67,17 @@
 
             <v-card-text>
               <v-row>
+                <v-col cols="12" md="9"> </v-col>
+                <v-col cols="12" md="3">
+                  <v-text-field
+                    :rules="rules.required"
+                    v-model="element.hc"
+                    autocomplete="off"
+                    label="HC"
+                    outlined
+                    dense
+                  />
+                </v-col>
                 <v-col cols="12" sm="6">
                   <v-text-field
                     v-model="element.firstName"
@@ -196,10 +226,34 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <div style="width: 100%; min-width: 120px">
-          <v-icon small class="mr-4" @click="showLog(item)"> fa-history </v-icon>
-          <v-icon small class="mr-4">fa-notes-medical</v-icon>
-          <v-icon small class="mr-1" @click="toEditElement(item)"> fa-edit </v-icon>
-          <own-btn-confirm @click:confirm="deleteElement(item)" small />
+          <own-btn @click="showLog(item)" tooltip="Historial" color="grey darken-2" icon>
+            <v-icon small> fa-history </v-icon>
+          </own-btn>
+
+          <own-btn
+            @click="$router.push({ name: 'PatientMedRec', params: { id: item.id } })"
+            v-if="$access('medicalrecords')"
+            color="grey darken-2"
+            tooltip="Ficha médica"
+            icon
+          >
+            <v-icon small>fa-notes-medical</v-icon>
+          </own-btn>
+
+          <own-btn
+            @click="toEditElement(item)"
+            v-if="$canEdit('patients')"
+            color="grey darken-2"
+            tooltip="Editar"
+            icon
+          >
+            <v-icon small> fa-edit </v-icon>
+          </own-btn>
+          <own-btn-confirm
+            v-if="$canDelete('patients')"
+            @click:confirm="deleteElement(item)"
+            small
+          />
         </div>
       </template>
     </v-data-table>

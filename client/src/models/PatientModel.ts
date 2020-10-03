@@ -8,6 +8,7 @@ import { Base } from '@/models'
 export interface Patient extends Base {
   dni?: string
   passport?: string
+  hc: string
   lastName: string
   firstName: string
   ocupation: string
@@ -25,6 +26,7 @@ export interface Patient extends Base {
 export function createPatient(): Patient {
   return {
     id: 0,
+    hc: '',
     firstName: '',
     lastName: '',
     address: '',

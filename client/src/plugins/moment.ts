@@ -5,20 +5,20 @@
 
 import Vue from 'vue'
 import moment from 'moment'
-moment.lang('es')
+moment.locale('es')
 
 Vue.mixin({
   methods: {
     $formatDate(date: string): string {
-      return moment(date).format('LL')
+      return date ? moment(date).format('LL') : ''
     },
 
     $formatDateISO(date: string): string {
-      return new Date(date).toISOString().substr(0, 10)
+      return date ? new Date(date).toISOString().substr(0, 10) : ''
     },
 
     $formatDateTime(date: string): string {
-      return moment(date).format('LLL')
+      return date ? moment(date).format('LLL') : ''
     },
 
     $calcAge(date: string): number {

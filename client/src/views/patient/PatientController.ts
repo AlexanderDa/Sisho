@@ -23,6 +23,7 @@ export default class PatientController extends Vue {
   private isValidForm = false
   private form: boolean = false
   private headers: object[] = [
+    { text: 'HC', value: 'hc' },
     { text: 'Apellidos', value: 'lastName' },
     { text: 'Nombres', value: 'firstName' },
     { text: 'Cédula', value: 'dni' },
@@ -54,6 +55,7 @@ export default class PatientController extends Vue {
 
   async beforeMount(): Promise<void> {
     this.findElements()
+    await this.$store.dispatch('loadOptions')
   }
 
   /********************************************************
@@ -83,10 +85,11 @@ export default class PatientController extends Vue {
           { deleted: search.includeRemoveds ? undefined : false },
           {
             or: [
-              { firstName: { ilike: `%${search.value}%` } },
-              { lastName: { ilike: `%${search.value}%` } },
+              { hc: { ilike: `%${search.value}%` } },
               { dni: { ilike: `%${search.value}%` } },
-              { passport: { ilike: `%${search.value}%` } }
+              { passport: { ilike: `%${search.value}%` } },
+              { firstName: { ilike: `%${search.value}%` } },
+              { lastName: { ilike: `%${search.value}%` } }
             ]
           }
         ]
@@ -101,6 +104,7 @@ export default class PatientController extends Vue {
     service
       .updateById(this.element.id, {
         dni: this.element.dni?.replace('-', ''),
+        hc: this.element.hc,
         passport: this.element.passport,
         lastName: this.element.lastName,
         firstName: this.element.firstName,
@@ -115,7 +119,8 @@ export default class PatientController extends Vue {
         sex: this.element.sex
       })
       .then(() => {
-        Object.assign(this.elements[this.elementIndex], this.element)
+        ;(this.element.dni = this.element.dni?.replace('-', '')),
+          Object.assign(this.elements[this.elementIndex], this.element)
         alert.onUpdateSuccess('Paciente actualizado')
       })
       .catch(err => alert.onUpdateError(err, 'paciente'))

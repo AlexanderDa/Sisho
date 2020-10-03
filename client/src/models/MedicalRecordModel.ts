@@ -7,10 +7,17 @@ import { Base } from '@/models'
 
 export interface MedicalRecord extends Base {
   patientId?: number
+  reason: string
+  currentIllness?: string
+  done: boolean
+  canceled: boolean | null
 }
 
 export function createMedicalRecord(): MedicalRecord {
   return {
-    id: 0
+    id: 0,
+    reason: '',
+    done: false,
+    canceled: null
   }
 }

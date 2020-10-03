@@ -9,7 +9,7 @@ import { Module } from '@/models/ModuleModel'
 
 class ModuleService {
   /**
-   * Search profile records by role.
+   * Search module records by role.
    * @param id role id.
    * @param filter module filter.
    */
@@ -23,7 +23,18 @@ class ModuleService {
   }
 
   /**
-   * Search profile records.
+   * Search module records by role.
+   * @param id role id.
+   * @param filter module filter.
+   */
+  async findAllowedToMe(filter?: Filter<Module>) {
+    const res = await get('/api/myrole/modules', { filter: JSON.stringify(filter) })
+    const data: Module[] = res.json()
+    return data
+  }
+
+  /**
+   * Search module records.
    * @param filter search filter
    */
   async find(filter?: Filter<Module>): Promise<Module[]> {
