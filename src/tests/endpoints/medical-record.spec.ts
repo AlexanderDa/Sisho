@@ -6,11 +6,12 @@
 import { Client, expect } from '@loopback/testlab'
 import { setupApplicationWithToken } from '../setup.spec'
 import { MedicalRecordRepository } from '../../repositories'
-import { MedicalRecord } from '../../models'
+import { Medic, MedicalRecord } from '../../models'
 import { Patient } from '../../models'
 import { message } from '../../utils'
 import { User } from '../../models'
 import { Application } from '../..'
+import { random } from '../../utils'
 
 let app: Application
 let client: Client
@@ -18,6 +19,7 @@ let token: string
 let session: User
 let testModel: MedicalRecord
 let patientModel: Patient
+let medicModel: Medic
 
 const clearUpdated = async () => {
   const repo = await app.getRepository(MedicalRecordRepository)
@@ -43,20 +45,35 @@ describe(message.withAccess('MedicalRecord'), () => {
     await client
       .post('/api/patient')
       .send({
+        hc: random.string(5),
         lastName: 'ln_test',
         firstName: 'fn_test',
         ocupation: 'ocupation',
         birthday: new Date(),
         address: 'address_test',
-        sex: 0
+        sex: 0,
+        civilStatus: 0
       })
       .auth(token, { type: 'bearer' })
       .expect(200)
       .then(({ body }) => (patientModel = new Patient(body)))
 
+    // Create a Medic
+    await client
+      .post('/api/medic')
+      .send({
+        lastName: 'ln_test',
+        firstName: 'fn_test',
+        address: 'address_test',
+        regProfessional: random.string(10)
+      })
+      .auth(token, { type: 'bearer' })
+      .expect(200)
+      .then(({ body }) => (medicModel = new Medic(body)))
+
     await client
       .post(`/api/patient/${patientModel.id}/medicalrecord`)
-      .send({ reason: 'reason_test', currentIllness: 'illness' })
+      .send({ reason: 'reason_test', medicId: medicModel.id, currentIllness: 'illness' })
       .auth(token, { type: 'bearer' })
       .expect(200)
       .then(({ body }) => {
@@ -140,6 +157,11 @@ describe(message.withAccess('MedicalRecord'), () => {
       .then(async () => {
         await client
           .delete(`/api/patient/${patientModel.id}`)
+          .auth(token, { type: 'bearer' })
+          .expect(204)
+
+        await client
+          .delete(`/api/medic/${medicModel.id}`)
           .auth(token, { type: 'bearer' })
           .expect(204)
       })

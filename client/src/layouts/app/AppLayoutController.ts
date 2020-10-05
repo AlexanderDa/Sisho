@@ -49,6 +49,12 @@ export default class AppLayoutController extends Vue {
         icon: 'fa-user-injured',
         routerName: 'Patients'
       })
+    if (modules.includes('medics'))
+      this.items.push({
+        title: 'Médicos',
+        icon: 'fa-user-md',
+        routerName: 'Medics'
+      })
     if (modules.includes('options'))
       this.items.push({
         title: 'Opciones',

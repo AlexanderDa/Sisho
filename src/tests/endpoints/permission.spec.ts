@@ -54,8 +54,8 @@ describe(message.withAccess('Permission'), () => {
       .send({
         create: true,
         read: true,
-        update: true,
-        delete: true,
+        edit: true,
+        del: true,
         roleId: roleModel.id,
         moduleId: OPTION.id
       })
@@ -94,7 +94,7 @@ describe(message.withAccess('Permission'), () => {
       .patch('/api/permissions')
       .auth(token, { type: 'bearer' })
       .query({ where: { id: testModel.id } })
-      .send({ delete: false })
+      .send({ del: false })
       .expect(200)
       .then(async res => {
         expect(res.body).to.have.property('count').to.be.Number()

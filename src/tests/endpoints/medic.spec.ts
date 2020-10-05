@@ -6,9 +6,9 @@
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
 import { setupApplicationWithToken } from '../setup.spec'
-import { PatientRepository } from '../../repositories'
+import { MedicRepository } from '../../repositories'
 import { message } from '../../utils'
-import { Patient } from '../../models'
+import { Medic } from '../../models'
 import { User } from '../../models'
 import { random } from '../../utils'
 
@@ -16,15 +16,15 @@ let app: Application
 let client: Client
 let token: string
 let session: User
-let testModel: Patient
+let testModel: Medic
 
 const clearUpdated = async () => {
-  const repo = await app.getRepository(PatientRepository)
+  const repo = await app.getRepository(MedicRepository)
   await repo.updateById(testModel.id, { editedAt: undefined, editedBy: undefined })
 }
 
 const wasEdited = async (): Promise<boolean> => {
-  const repo = await app.getRepository(PatientRepository)
+  const repo = await app.getRepository(MedicRepository)
   const result = await repo.findById(testModel.id)
   return result.editedAt !== null && result.editedBy === session.id
 }
@@ -37,19 +37,15 @@ after(async () => {
   await app.stop()
 })
 
-describe(message.withAccess('Patient'), () => {
-  it('POST    =>  /api/patient', async () => {
+describe(message.withAccess('Medic'), () => {
+  it('POST    =>  /api/medic', async () => {
     await client
-      .post('/api/patient')
+      .post('/api/medic')
       .send({
-        hc: random.string(5),
         lastName: 'ln_test',
         firstName: 'fn_test',
-        ocupation: 'ocupation',
-        birthday: new Date('2019-02-20'),
         address: 'address_test',
-        sex: 0,
-        civilStatus: 0
+        regProfessional: random.string(10)
       })
       .auth(token, { type: 'bearer' })
       .expect(200)
@@ -61,9 +57,9 @@ describe(message.withAccess('Patient'), () => {
       })
   })
 
-  it('GET     =>  /api/patients/count', async () => {
+  it('GET     =>  /api/medics/count', async () => {
     await client
-      .get('/api/patients/count')
+      .get('/api/medics/count')
       .auth(token, { type: 'bearer' })
       .expect(200)
       .then(res => {
@@ -71,9 +67,9 @@ describe(message.withAccess('Patient'), () => {
       })
   })
 
-  it('GET     =>  /api/patients', async () => {
+  it('GET     =>  /api/medics', async () => {
     await client
-      .get('/api/patients')
+      .get('/api/medics')
       .auth(token, { type: 'bearer' })
       .expect(200)
       .then(res => {
@@ -81,9 +77,9 @@ describe(message.withAccess('Patient'), () => {
       })
   })
 
-  it('PATCH   =>  /api/patients', async () => {
+  it('PATCH   =>  /api/medics', async () => {
     await client
-      .patch('/api/patients')
+      .patch('/api/medics')
       .auth(token, { type: 'bearer' })
       .query({ where: { id: testModel.id } })
       .send({ firstName: `fn_patch_${Date.now()}` })
@@ -95,9 +91,9 @@ describe(message.withAccess('Patient'), () => {
       })
   })
 
-  it('GET     =>  /api/patient/{id}', async () => {
+  it('GET     =>  /api/medic/{id}', async () => {
     await client
-      .get(`/api/patient/${testModel.id}`)
+      .get(`/api/medic/${testModel.id}`)
       .auth(token, { type: 'bearer' })
       .expect(200)
       .then(res => {
@@ -105,9 +101,9 @@ describe(message.withAccess('Patient'), () => {
       })
   })
 
-  it('PATCH   =>  /api/patient/{id}', async () => {
+  it('PATCH   =>  /api/medic/{id}', async () => {
     await client
-      .patch(`/api/patient/${testModel.id}`)
+      .patch(`/api/medic/${testModel.id}`)
       .auth(token, { type: 'bearer' })
       .send({ lastName: `ln_patch_${Date.now()}` })
       .expect(204)
@@ -117,40 +113,40 @@ describe(message.withAccess('Patient'), () => {
       })
   })
 
-  it('DELETE  =>  /api/patient/{id}', async () => {
+  it('DELETE  =>  /api/medic/{id}', async () => {
     await client
-      .delete(`/api/patient/${testModel.id}`)
+      .delete(`/api/medic/${testModel.id}`)
       .auth(token, { type: 'bearer' })
       .expect(204)
   })
 })
 
-describe(message.noAccess('Patient'), () => {
-  it('POST    =>  /api/patient', async () => {
-    await client.post('/api/patient').expect(401)
+describe(message.noAccess('Medic'), () => {
+  it('POST    =>  /api/medic', async () => {
+    await client.post('/api/medic').expect(401)
   })
 
-  it('GET     =>  /api/patients/count', async () => {
-    await client.get('/api/patients').expect(401)
+  it('GET     =>  /api/medics/count', async () => {
+    await client.get('/api/medics').expect(401)
   })
 
-  it('GET     =>  /api/patients', async () => {
-    await client.get('/api/patients').expect(401)
+  it('GET     =>  /api/medics', async () => {
+    await client.get('/api/medics').expect(401)
   })
 
-  it('PATCH   =>  /api/patients', async () => {
-    await client.patch('/api/patients').expect(401)
+  it('PATCH   =>  /api/medics', async () => {
+    await client.patch('/api/medics').expect(401)
   })
 
-  it('GET     =>  /api/patient/{id}', async () => {
-    await client.get('/api/patient/1').expect(401)
+  it('GET     =>  /api/medic/{id}', async () => {
+    await client.get('/api/medic/1').expect(401)
   })
 
-  it('PATCH   =>  /api/patient/{id}', async () => {
-    await client.patch('/api/patient/1').expect(401)
+  it('PATCH   =>  /api/medic/{id}', async () => {
+    await client.patch('/api/medic/1').expect(401)
   })
 
-  it('DELETE  =>  /api/patient/{id}', async () => {
-    await client.delete('/api/patient/1').expect(401)
+  it('DELETE  =>  /api/medic/{id}', async () => {
+    await client.delete('/api/medic/1').expect(401)
   })
 })

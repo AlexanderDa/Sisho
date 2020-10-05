@@ -12,7 +12,22 @@
       >
         <v-icon>fa-history</v-icon>
       </own-btn>
-      <own-btn @click="submit()" tooltip="Guardar" color="primary" icon>
+      <own-btn
+        v-if="$canCreate('antecedents') && this.creation"
+        @click="create()"
+        tooltip="Guardar"
+        color="primary"
+        icon
+      >
+        <v-icon>fa-save</v-icon>
+      </own-btn>
+      <own-btn
+        v-if="$canEdit('antecedents') && !this.creation"
+        @click="update()"
+        tooltip="Guardar"
+        color="primary"
+        icon
+      >
         <v-icon>fa-save</v-icon>
       </own-btn>
     </v-toolbar>
@@ -174,13 +189,6 @@ export default class AntecedentComponent extends Vue {
         alert.onCreateSuccess('Antecedente del paciente Actualizado.')
       })
       .catch((err: object) => alert.onUpdateError(err, 'antecedente'))
-  }
-  private async submit(): Promise<void> {
-    if (this.creation) {
-      await this.create()
-    } else {
-      await this.update()
-    }
   }
 
   showLog() {

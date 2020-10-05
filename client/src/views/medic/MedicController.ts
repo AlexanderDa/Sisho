@@ -5,16 +5,16 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { createPatient } from '@/models'
-import { Patient } from '@/models'
+import { createMedic } from '@/models'
+import { Medic } from '@/models'
 import { Filter } from '@/utils/query'
 import Search from '@/utils/search'
-import service from '@/services/PatientService'
+import service from '@/services/MedicService'
 import validate from '@/utils/validations'
 import alert from '@/utils/alert'
 
 @Component({})
-export default class PatientController extends Vue {
+export default class MedicController extends Vue {
   /********************************************************
    *                      Attributes                       *
    ********************************************************/
@@ -23,21 +23,20 @@ export default class PatientController extends Vue {
   private isValidForm = false
   private form: boolean = false
   private headers: object[] = [
-    { text: 'HC', value: 'hc' },
-    { text: 'Apellidos', value: 'lastName' },
+    { text: 'Image', value: 'image' },
     { text: 'Nombres', value: 'firstName' },
     { text: 'Cédula', value: 'dni' },
     { text: 'Pasaporte', value: 'passport' },
-    { text: 'Fecha de nacimiento', value: 'birthday' },
+    { text: 'Registro profesional', value: 'regProfessional' },
     { text: 'Móvil', value: 'mobile' },
     { text: 'Email', value: 'email' },
     { text: 'Acciones', value: 'actions', align: 'right' }
   ]
 
   // Element data
-  private elements: Patient[] = []
+  private elements: Medic[] = []
   private elementIndex = -1
-  private element: Patient = createPatient()
+  private element: Medic = createMedic()
 
   // Validations
   private rules: object = {
@@ -62,9 +61,8 @@ export default class PatientController extends Vue {
    *                    API Services                       *
    ********************************************************/
   async createElement(): Promise<void> {
-    let element: Patient = this.element
-    ;(element.birthday = new Date(element.birthday).toISOString()),
-      (element.dni = element.dni?.replace('-', ''))
+    let element: Medic = this.element
+    element.dni = element.dni?.replace('-', '')
     service
       .create(element)
       .then(async created => {
@@ -77,7 +75,7 @@ export default class PatientController extends Vue {
   }
 
   async findElements(search?: Search): Promise<void> {
-    const filter: Filter<Patient> = { limit: 25, where: { deleted: false } }
+    const filter: Filter<Medic> = { limit: 25, where: { deleted: false } }
     if (search) {
       filter.where = {
         and: [
@@ -85,11 +83,11 @@ export default class PatientController extends Vue {
           { deleted: search.includeRemoveds ? undefined : false },
           {
             or: [
-              { hc: { ilike: `%${search.value}%` } },
               { dni: { ilike: `%${search.value}%` } },
               { passport: { ilike: `%${search.value}%` } },
               { firstName: { ilike: `%${search.value}%` } },
-              { lastName: { ilike: `%${search.value}%` } }
+              { lastName: { ilike: `%${search.value}%` } },
+              { regProfessional: { ilike: `%${search.value}%` } }
             ]
           }
         ]
@@ -104,19 +102,14 @@ export default class PatientController extends Vue {
     service
       .updateById(this.element.id, {
         dni: this.element.dni?.replace('-', ''),
-        hc: this.element.hc,
         passport: this.element.passport,
         lastName: this.element.lastName,
         firstName: this.element.firstName,
-        ocupation: this.element.ocupation,
-        birthday: new Date(this.element.birthday).toISOString(),
         telephone: this.element.telephone,
         mobile: this.element.mobile,
         email: this.element.email,
         address: this.element.address,
-        blooType: this.element.blooType,
-        civilStatus: this.element.civilStatus,
-        sex: this.element.sex
+        regProfessional: this.element.regProfessional
       })
       .then(() => {
         ;(this.element.dni = this.element.dni?.replace('-', '')),
@@ -137,7 +130,7 @@ export default class PatientController extends Vue {
       .catch(() => alert.error('Error ', 'Error al subir imagen'))
   }
 
-  async deleteElement(element: Patient): Promise<void> {
+  async deleteElement(element: Medic): Promise<void> {
     await service
       .delete(element.id)
       .then(() => {
@@ -163,13 +156,13 @@ export default class PatientController extends Vue {
    *                       Methods                         *
    ********************************************************/
 
-  toEditElement(element: Patient): void {
+  toEditElement(element: Medic): void {
     this.elementIndex = this.elements.indexOf(element)
     this.element = Object.assign({}, element)
     this.form = true
   }
 
-  showLog(element: Patient) {
+  showLog(element: Medic) {
     //@ts-ignore
     this.$launchLog(element, {
       title: 'paciente',
@@ -179,7 +172,7 @@ export default class PatientController extends Vue {
 
   reset(): void {
     this.elementIndex = -1
-    this.element = createPatient()
+    this.element = createMedic()
     this.form = false
     //@ts-expect-error
     this.$refs.form.reset()

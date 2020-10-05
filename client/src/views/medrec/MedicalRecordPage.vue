@@ -24,14 +24,6 @@
           <v-icon> fa-history </v-icon>
         </own-btn>
 
-        <own-btn
-          :disabled="!isValidForm || element.deleted"
-          @click="submit()"
-          tooltip="Guardar"
-          icon
-        >
-          <v-icon>fa-save</v-icon>
-        </own-btn>
         <own-btn @click="reset()" tooltip="Cerrar" icon>
           <v-icon>far fa-times-circle</v-icon>
         </own-btn>

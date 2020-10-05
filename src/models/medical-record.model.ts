@@ -40,8 +40,6 @@ import { Cros } from './cros.model'
 export class MedicalRecord extends Audit {
   @id() id?: number
 
-  @integer({ required: true }) patientId: number
-
   @character({ length: 150, required: true }) reason: string
 
   @text() currentIllness?: string
@@ -51,6 +49,8 @@ export class MedicalRecord extends Audit {
   @boolean({ default: false }) canceled: boolean
 
   @integer({ required: true }) medicId?: number
+
+  @integer({ required: true }) patientId: number
 
   @hasOne(() => Rpe) rpe: Rpe
 

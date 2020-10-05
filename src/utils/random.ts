@@ -19,6 +19,13 @@ function randomString(length: number, date?: boolean): string {
 
 export const random = {
   /**
+   * Generate a random string.
+   */
+  string: (length: number, date?: boolean): string => {
+    return randomString(length, date)
+  },
+
+  /**
    * Generate a random email address.
    */
   email: (): string => {

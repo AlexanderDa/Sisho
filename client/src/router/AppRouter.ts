@@ -67,8 +67,15 @@ const ActivateRoutes: RouteConfig = {
       component: () => import('@/views/patient/PatientPage.vue')
     },
     {
+      path: '/medics',
+      name: 'Medics',
+      meta: { modules: ['medics'] },
+      component: () => import('@/views/medic/MedicPage.vue')
+    },
+    {
       path: '/patient/:id/medidalrecords',
       name: 'PatientMedRec',
+      meta: { modules: ['antecedents', 'diagnostics', 'medicalrecords', 'vitalsigns'] },
       component: () => import('@/views/medrec/MedicalRecordPage.vue')
     }
   ]

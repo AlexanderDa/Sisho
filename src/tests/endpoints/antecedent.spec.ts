@@ -11,6 +11,7 @@ import { Patient } from '../../models'
 import { message } from '../../utils'
 import { User } from '../../models'
 import { Application } from '../..'
+import { random } from '../../utils'
 
 let app: Application
 let client: Client
@@ -39,16 +40,18 @@ after(async () => {
 })
 
 describe(message.withAccess('Antecedent'), () => {
-  it('POST    =>  /api/antecedent', async () => {
+  it('POST    =>  /api/pacient/{id}/antecedent', async () => {
     await client
       .post('/api/patient')
       .send({
+        hc: random.string(5),
         lastName: 'ln_test',
         firstName: 'fn_test',
         ocupation: 'ocupation',
         birthday: new Date(),
         address: 'address_test',
-        sex: 0
+        sex: 0,
+        civilStatus: 0
       })
       .auth(token, { type: 'bearer' })
       .expect(200)
