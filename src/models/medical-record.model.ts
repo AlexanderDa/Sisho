@@ -16,6 +16,8 @@ import { boolean } from './pg'
 import { text } from './pg'
 import { id } from './pg'
 import { Audit } from '.'
+import { Rpe } from './rpe.model'
+import { Cros } from './cros.model'
 
 @model({
   settings: {
@@ -25,6 +27,12 @@ import { Audit } from '.'
         entity: 'Patient',
         entityKey: 'id',
         foreignKey: 'patientid'
+      },
+      fkMedRecMedic: {
+        name: 'fk_medrec_medic',
+        entity: 'Medic',
+        entityKey: 'id',
+        foreignKey: 'medicid'
       }
     }
   }
@@ -42,13 +50,19 @@ export class MedicalRecord extends Audit {
 
   @boolean({ default: false }) canceled: boolean
 
-  @hasOne(() => VitalSign) vitalSign: VitalSign
+  @integer({ required: true }) medicId?: number
 
-  @hasMany(() => Disease, { through: { model: () => Diagnostic } })
-  diseases: Disease[]
+  @hasOne(() => Rpe) rpe: Rpe
+
+  @hasOne(() => Cros) cros: Cros
+
+  @hasOne(() => VitalSign) vitalSign: VitalSign
 
   @hasMany(() => Exam, { through: { model: () => MedicalExam } })
   exams: Exam[]
+
+  @hasMany(() => Disease, { through: { model: () => Diagnostic } })
+  diseases: Disease[]
 
   constructor(data?: Partial<MedicalRecord>) {
     super(data)

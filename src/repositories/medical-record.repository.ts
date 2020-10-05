@@ -11,7 +11,7 @@ import { VitalSignRepository } from './vital-sign.repository'
 import { DefaultCrudRepository } from '@loopback/repository'
 import { DiseaseRepository } from './disease.repository'
 import { SishoPgcDataSource } from '../datasources'
-import { MedicalRecordRelations } from '../models'
+import { MedicalRecordRelations, Rpe, Cros } from '../models'
 import { ExamRepository } from './exam.repository'
 import { repository } from '@loopback/repository'
 import { inject, Getter } from '@loopback/core'
@@ -21,6 +21,8 @@ import { Diagnostic } from '../models'
 import { VitalSign } from '../models'
 import { Disease } from '../models'
 import { Exam } from '../models'
+import { RpeRepository } from './rpe.repository'
+import { CrosRepository } from './cros.repository'
 
 export class MedicalRecordRepository extends DefaultCrudRepository<
   MedicalRecord,
@@ -46,6 +48,10 @@ export class MedicalRecordRepository extends DefaultCrudRepository<
     typeof MedicalRecord.prototype.id
   >
 
+  public readonly rpe: HasOneRepositoryFactory<Rpe, typeof MedicalRecord.prototype.id>
+
+  public readonly cros: HasOneRepositoryFactory<Cros, typeof MedicalRecord.prototype.id>
+
   constructor(
     @inject('datasources.sishoPGC') dataSource: SishoPgcDataSource,
     @repository.getter('VitalSignRepository')
@@ -57,9 +63,17 @@ export class MedicalRecordRepository extends DefaultCrudRepository<
     @repository.getter('MedicalExamRepository')
     protected medicalExamRepositoryGetter: Getter<MedicalExamRepository>,
     @repository.getter('ExamRepository')
-    protected examRepositoryGetter: Getter<ExamRepository>
+    protected examRepositoryGetter: Getter<ExamRepository>,
+    @repository.getter('RpeRepository')
+    protected rpeRepositoryGetter: Getter<RpeRepository>,
+    @repository.getter('CrosRepository')
+    protected crosRepositoryGetter: Getter<CrosRepository>
   ) {
     super(MedicalRecord, dataSource)
+    this.cros = this.createHasOneRepositoryFactoryFor('cros', crosRepositoryGetter)
+    this.registerInclusionResolver('cros', this.cros.inclusionResolver)
+    this.rpe = this.createHasOneRepositoryFactoryFor('rpe', rpeRepositoryGetter)
+    this.registerInclusionResolver('rpe', this.rpe.inclusionResolver)
     this.exams = this.createHasManyThroughRepositoryFactoryFor(
       'exams',
       examRepositoryGetter,

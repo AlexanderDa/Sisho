@@ -266,6 +266,7 @@ class Migrate {
         'ExamType',
         'Module',
         'tgroup',
+
         // with dependencies
         'tuser',
         'Disease',
@@ -273,7 +274,12 @@ class Migrate {
         'Permission',
         'Option',
         'Antecedent',
+        'Medic',
+        'MedicalSpecialty',
+        'Specialist',
         'MedicalRecord',
+        'Rpe',
+        'Cros',
         'VitalSign',
         'Diagnostic',
         'MedicalExam'

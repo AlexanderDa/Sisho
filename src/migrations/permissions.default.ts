@@ -4,6 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Permission } from '../models'
+import { MEDICALSPECIALTY } from '.'
 import { DISEASETYPE } from '.'
 import { PERMISSION } from '.'
 import { EXAMTYPE } from '.'
@@ -11,6 +12,7 @@ import { DISEASE } from '.'
 import { PROFILE } from '.'
 import { COMPANY } from '.'
 import { OPTION } from '.'
+import { MEDIC } from '.'
 import { EXAM } from '.'
 import { ROLE } from '.'
 import { USER } from '.'
@@ -19,15 +21,17 @@ import { USER } from '.'
  * Default permissions.
  */
 const ADMIN_PERMISSIONS: Permission[] = [
-  crud(PERMISSION.id),
-  crud(PROFILE.id),
   crud(COMPANY.id, { c: false }),
-  crud(OPTION.id),
-  crud(ROLE.id),
-  crud(USER.id),
+  crud(MEDICALSPECIALTY.id),
   crud(DISEASETYPE.id),
-  crud(DISEASE.id),
+  crud(PERMISSION.id),
   crud(EXAMTYPE.id),
+  crud(DISEASE.id),
+  crud(PROFILE.id),
+  crud(OPTION.id),
+  crud(MEDIC.id),
+  crud(USER.id),
+  crud(ROLE.id),
   crud(EXAM.id)
 ]
 
