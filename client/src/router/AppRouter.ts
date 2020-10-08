@@ -77,6 +77,12 @@ const ActivateRoutes: RouteConfig = {
       name: 'PatientMedRec',
       meta: { modules: ['antecedents', 'diagnostics', 'medicalrecords', 'vitalsigns'] },
       component: () => import('@/views/medrec/MedicalRecordPage.vue')
+    },
+    {
+      path: '/vitalsigns',
+      name: 'VitalSigns',
+      meta: { modules: ['vitalsigns'] },
+      component: () => import('@/views/vitalsign/VitalSignPage.vue')
     }
   ]
 }

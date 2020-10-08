@@ -73,7 +73,13 @@ export default class AppLayoutController extends Vue {
         icon: 'fa-file-signature',
         routerName: 'ExamTypes'
       })
-    //if (modules.includes('')) this.items.push()
+
+    if (modules.includes('vitalsigns'))
+      this.items.push({
+        title: 'Signos vitales',
+        icon: 'fa-heartbeat',
+        routerName: 'VitalSigns'
+      })
   }
 
   private changeRoute(item: Item) {

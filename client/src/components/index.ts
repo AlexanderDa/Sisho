@@ -19,3 +19,6 @@ Vue.component('own-panel', () => import('@/components/drawer.panel.vue'))
 Vue.component('own-btn', () => import('@/components/btn.tooltip.vue'))
 Vue.component('own-roles', () => import('@/components/roles.vue'))
 Vue.component('own-empty', () => import('@/components/empty.vue'))
+
+Vue.component('own-search-patient', () => import('@/components/search.patient.vue'))
+Vue.component('own-search-medic', () => import('@/components/search.medic.vue'))
