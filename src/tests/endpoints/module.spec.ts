@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
-import { setupApplicationWithToken } from '../setup.spec'
+import { setupApplicationWithToken } from '../init/setup.spec'
 import { message } from '../../utils'
 
 let app: Application

@@ -17,8 +17,8 @@ class MedicService {
    * Create a new medic record.
    * @param medic medic to create
    */
-  async create(medic: Omit<Partial<Medic>, Audit>): Promise<Medic> {
-    const res = await post('/api/medic', medic)
+  async create(id: number, medic: Omit<Partial<Medic>, Audit>): Promise<Medic> {
+    const res = await post({ url: '/api/user/{id}/medic', params: { id } }, medic)
     const data: Medic = res.json()
     return data
   }
@@ -51,6 +51,20 @@ class MedicService {
   async findById(id: number, filter?: Filter<Medic>): Promise<Medic> {
     const res = await get(
       { url: '/api/medic/{id}', params: { id } },
+      { filter: JSON.stringify(filter) }
+    )
+    const data: Medic = await res.json()
+    return data
+  }
+
+  /**
+   * Search for a  medic record by user id.
+   * @param id user id
+   * @param filter search filter
+   */
+  async findByUserId(id: number, filter?: Filter<Medic>): Promise<Medic> {
+    const res = await get(
+      { url: '/api/user/{id}/medic', params: { id } },
       { filter: JSON.stringify(filter) }
     )
     const data: Medic = await res.json()

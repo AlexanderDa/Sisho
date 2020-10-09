@@ -18,7 +18,7 @@ const ActivateRoutes: RouteConfig = {
     {
       path: '/users',
       name: 'Users',
-      meta: { modules: ['users', 'profiles'] },
+      meta: { modules: ['users', 'profiles', 'medics'] },
       component: () => import('@/views/user/UserPage.vue')
     },
 

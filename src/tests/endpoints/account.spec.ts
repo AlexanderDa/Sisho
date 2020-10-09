@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { UserRepository } from '../../repositories'
-import { setupApplication } from '../setup.spec'
+import { setupApplication } from '../init/setup.spec'
 import { DEFAULT_ADMIN } from '../../migrations'
 import { Application } from '../..'
 import { message } from '../../utils'

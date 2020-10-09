@@ -4,14 +4,15 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Client, expect } from '@loopback/testlab'
-import { setupApplicationWithToken } from '../setup.spec'
+import { setupApplicationWithToken } from '../init/setup.spec'
 import { MedicalRecordRepository } from '../../repositories'
 import { Medic, MedicalRecord } from '../../models'
 import { Patient } from '../../models'
 import { message } from '../../utils'
 import { User } from '../../models'
 import { Application } from '../..'
-import { random } from '../../utils'
+import { createMedRec } from '../init/init.medrec.spec'
+import { delMedRec } from '../init/init.medrec.spec'
 
 let app: Application
 let client: Client
@@ -42,46 +43,16 @@ after(async () => {
 
 describe(message.withAccess('MedicalRecord'), () => {
   it('POST    =>  /api/medicalrecord', async () => {
-    await client
-      .post('/api/patient')
-      .send({
-        hc: random.string(5),
-        lastName: 'ln_test',
-        firstName: 'fn_test',
-        ocupation: 'ocupation',
-        birthday: new Date(),
-        address: 'address_test',
-        sex: 0,
-        civilStatus: 0
-      })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (patientModel = new Patient(body)))
+    await createMedRec(client, token).then(res => {
+      patientModel = new Patient(res.patient)
+      medicModel = new Medic(res.medic)
+      testModel = new MedicalRecord(res.medRec)
 
-    // Create a Medic
-    await client
-      .post('/api/medic')
-      .send({
-        lastName: 'ln_test',
-        firstName: 'fn_test',
-        address: 'address_test',
-        regProfessional: random.string(10)
-      })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (medicModel = new Medic(body)))
-
-    await client
-      .post(`/api/patient/${patientModel.id}/medicalrecord`)
-      .send({ reason: 'reason_test', medicId: medicModel.id, currentIllness: 'illness' })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => {
-        expect(body).to.have.property('createdAt').to.be.not.null()
-        expect(body).to.have.property('createdBy').to.be.eql(session.id)
-        // element created
-        testModel = new MedicalRecord(body)
-      })
+      expect(res.medRec).to.have.property('createdAt').to.be.not.null()
+      expect(res.medRec).to.have.property('createdBy').to.be.eql(session.id)
+      // element created
+      testModel = res.medRec
+    })
   })
 
   it('GET     =>  /api/patient/{id}/medicalrecords', async () => {
@@ -150,21 +121,7 @@ describe(message.withAccess('MedicalRecord'), () => {
   })
 
   it('DELETE  =>  /api/medicalrecord/{id}', async () => {
-    await client
-      .delete(`/api/medicalrecord/${testModel.id}`)
-      .auth(token, { type: 'bearer' })
-      .expect(204)
-      .then(async () => {
-        await client
-          .delete(`/api/patient/${patientModel.id}`)
-          .auth(token, { type: 'bearer' })
-          .expect(204)
-
-        await client
-          .delete(`/api/medic/${medicModel.id}`)
-          .auth(token, { type: 'bearer' })
-          .expect(204)
-      })
+    await delMedRec(client, token, medicModel, testModel)
   })
 })
 

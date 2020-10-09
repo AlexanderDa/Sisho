@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { setupApplicationWithToken } from '../setup.spec'
+import { setupApplicationWithToken } from '../init/setup.spec'
 import { Client, expect } from '@loopback/testlab'
 import { message } from '../../utils'
 import { Application } from '../..'

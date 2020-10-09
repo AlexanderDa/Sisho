@@ -6,12 +6,14 @@
 import {
   DefaultCrudRepository,
   repository,
-  BelongsToAccessor
+  BelongsToAccessor,
+  HasOneRepositoryFactory
 } from '@loopback/repository'
-import { User, UserRelations, Role } from '../models'
+import { User, UserRelations, Role, Medic } from '../models'
 import { SishoPgcDataSource } from '../datasources'
 import { inject, Getter } from '@loopback/core'
 import { RoleRepository } from './role.repository'
+import { MedicRepository } from './medic.repository'
 
 export class UserRepository extends DefaultCrudRepository<
   User,
@@ -20,12 +22,18 @@ export class UserRepository extends DefaultCrudRepository<
 > {
   public readonly role: BelongsToAccessor<Role, typeof User.prototype.id>
 
+  public readonly medic: HasOneRepositoryFactory<Medic, typeof User.prototype.id>
+
   constructor(
     @inject('datasources.sishoPGC') dataSource: SishoPgcDataSource,
     @repository.getter('RoleRepository')
-    protected roleRepositoryGetter: Getter<RoleRepository>
+    protected roleRepositoryGetter: Getter<RoleRepository>,
+    @repository.getter('MedicRepository')
+    protected medicRepositoryGetter: Getter<MedicRepository>
   ) {
     super(User, dataSource)
+    this.medic = this.createHasOneRepositoryFactoryFor('medic', medicRepositoryGetter)
+    this.registerInclusionResolver('medic', this.medic.inclusionResolver)
     this.role = this.createBelongsToAccessorFor('role', roleRepositoryGetter)
     this.registerInclusionResolver('role', this.role.inclusionResolver)
   }

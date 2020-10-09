@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
-import { setupApplication } from '../setup.spec'
+import { setupApplication } from '../init/setup.spec'
 import { message } from '../../utils'
 
 describe(message.endpoint('App'), () => {

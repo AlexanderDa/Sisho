@@ -29,7 +29,8 @@ class MedicCRUDSpecs implements CRUDSpecScheme {
         'deletedAt',
         'deletedBy',
         'id'
-      ]
+      ],
+      optional: ['userId', 'lastName', 'firstName', 'address']
     })
   }
 

@@ -3,22 +3,23 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { Client, expect } from '@loopback/testlab'
-import { setupApplicationWithToken } from '../setup.spec'
+import { setupApplicationWithToken } from '../init/setup.spec'
+import { createMedRec } from '../init/init.medrec.spec'
 import { VitalSignRepository } from '../../repositories'
-import { VitalSign, Patient, Medic } from '../../models'
+import { delMedRec } from '../init/init.medrec.spec'
+import { Client, expect } from '@loopback/testlab'
+import { VitalSign, Medic } from '../../models'
 import { MedicalRecord } from '../../models'
 import { message } from '../../utils'
-import { User } from '../../models'
 import { Application } from '../..'
-import { random } from '../../utils'
+import { User } from '../../models'
 
 let app: Application
 let client: Client
 let token: string
 let session: User
 let testModel: VitalSign
-let patientModel: Patient
+
 let medicModel: Medic
 let medRecModel: MedicalRecord
 
@@ -43,41 +44,10 @@ after(async () => {
 
 describe(message.withAccess('VitalSign'), () => {
   it('POST    =>  /api/patient/{id}/vitalsign', async () => {
-    await client
-      .post('/api/patient')
-      .send({
-        hc: random.string(5),
-        lastName: 'ln_test',
-        firstName: 'fn_test',
-        ocupation: 'ocupation',
-        birthday: new Date(),
-        address: 'address_test',
-        sex: 0,
-        civilStatus: 0
-      })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (patientModel = new Patient(body)))
-
-    // Create a Medic
-    await client
-      .post('/api/medic')
-      .send({
-        lastName: 'ln_test',
-        firstName: 'fn_test',
-        address: 'address_test',
-        regProfessional: random.string(10)
-      })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (medicModel = new Medic(body)))
-
-    await client
-      .post(`/api/patient/${patientModel.id}/medicalrecord`)
-      .send({ reason: 'reason_test', medicId: medicModel.id, currentIllness: 'illness' })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (medRecModel = new MedicalRecord(body)))
+    await createMedRec(client, token).then(res => {
+      medicModel = new Medic(res.medic)
+      medRecModel = new MedicalRecord(res.medRec)
+    })
 
     await client
       .post(`/api/medicalrecord/${medRecModel.id}/vitalsign`)
@@ -172,19 +142,8 @@ describe(message.withAccess('VitalSign'), () => {
       .auth(token, { type: 'bearer' })
       .expect(204)
       .then(async () => {
-        await client
-          .delete(`/api/medicalrecord/${medRecModel.id}`)
-          .auth(token, { type: 'bearer' })
-          .expect(204)
-        await client
-          .delete(`/api/patient/${patientModel.id}`)
-          .auth(token, { type: 'bearer' })
-          .expect(204)
+        await delMedRec(client, token, medicModel, medRecModel)
       })
-    await client
-      .delete(`/api/medic/${medicModel.id}`)
-      .auth(token, { type: 'bearer' })
-      .expect(204)
   })
 })
 

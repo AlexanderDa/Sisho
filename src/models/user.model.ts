@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { belongsTo } from '@loopback/repository'
+import { belongsTo, hasOne } from '@loopback/repository'
 import { model } from '@loopback/repository'
 import { Role } from './role.model'
 import { Audit } from '.'
@@ -12,6 +12,7 @@ import { email } from './pg'
 import { boolean } from './pg'
 import { integer } from './pg'
 import { character } from './pg'
+import { Medic } from './medic.model'
 
 @model({
   name: 'tuser',
@@ -62,9 +63,11 @@ export class User extends Audit {
 
   @character({ length: 200 }) passResetToken?: string
 
-  @belongsTo(() => Role, {}, { required: true }) roleId: number
-
   @integer({ required: true }) profileId: number
+
+  @hasOne(() => Medic, { keyTo: 'userId' }) medic: Medic
+
+  @belongsTo(() => Role, {}, { required: true }) roleId: number
 
   constructor(data?: Partial<User>) {
     super(data)

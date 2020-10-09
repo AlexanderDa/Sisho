@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
-import { setupApplicationWithToken } from '../setup.spec'
+import { setupApplicationWithToken } from '../init/setup.spec'
 import { PatientRepository } from '../../repositories'
 import { message } from '../../utils'
 import { Patient } from '../../models'

@@ -4,7 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Client, expect } from '@loopback/testlab'
-import { setupApplicationWithToken } from '../setup.spec'
+import { setupApplicationWithToken } from '../init/setup.spec'
 import { AntecedentRepository } from '../../repositories'
 import { Antecedent } from '../../models'
 import { Patient } from '../../models'

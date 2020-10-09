@@ -19,7 +19,6 @@ import spec from './specs/medic.specs'
 import { inject } from '@loopback/core'
 import { patch } from '@loopback/rest'
 import { param } from '@loopback/rest'
-import { post } from '@loopback/rest'
 import { get } from '@loopback/rest'
 import { del } from '@loopback/rest'
 import { Medic } from '../models'
@@ -30,15 +29,6 @@ export class MedicController {
     @repository(MedicRepository) public medicRepo: MedicRepository,
     @inject(AccountBindings.SERVICE) public acountService: AccountService
   ) {}
-
-  @post('/api/medic', spec.responseOne())
-  async create(
-    @requestBody(spec.requestBody()) medic: Omit<Medic, 'id'>,
-    @inject(SecurityBindings.USER) session: UserProfile
-  ): Promise<Medic> {
-    medic.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
-    return this.medicRepo.create(medic)
-  }
 
   @get('/api/medics/count', spec.responseCount())
   async count(@param.where(Medic) where?: Where<Medic>): Promise<Count> {

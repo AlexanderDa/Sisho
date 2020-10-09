@@ -3,26 +3,24 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { MedicalRecordRepository, MedicRepository } from '../../repositories'
+import { DiagnosticRepository, DiseaseRepository } from '../../repositories'
+import { setupApplicationWithToken } from '../init/setup.spec'
 import { DiseaseTypeRepository } from '../../repositories'
-import { setupApplicationWithToken } from '../setup.spec'
-import { PatientRepository } from '../../repositories'
+import { createMedRec } from '../init/init.medrec.spec'
+import { delMedRec } from '../init/init.medrec.spec'
 import { Client, expect } from '@loopback/testlab'
 import { MedicalRecord } from '../../models'
 import { DiseaseType } from '../../models'
 import { Disease } from '../../models'
-import { Patient } from '../../models'
 import { message } from '../../utils'
 import { Medic } from '../../models'
 import { Application } from '../..'
-import { random } from '../../utils'
 
 let app: Application
 let client: Client
 let token: string
 let disTypeModel: DiseaseType
 let diseaseModel: Disease
-let patientModel: Patient
 let medicModel: Medic
 let medRecModel: MedicalRecord
 
@@ -31,15 +29,15 @@ before('setupApplication', async () => {
 })
 
 after(async () => {
-  const repo = await app.getRepository(MedicalRecordRepository)
-  await repo.diseases(medRecModel.id).delete()
-  await repo.deleteById(medRecModel.id)
+  const diagRepo = await app.getRepository(DiagnosticRepository)
+  await diagRepo.deleteAll({
+    and: [{ diseaseId: diseaseModel.id }, { medicalRecordId: medRecModel.id }]
+  })
 
-  const pRepo = await app.getRepository(PatientRepository)
-  await pRepo.deleteById(patientModel.id)
+  await delMedRec(client, token, medicModel, medRecModel)
 
-  const mRepo = await app.getRepository(MedicRepository)
-  await mRepo.deleteById(medicModel.id)
+  const dRepo = await app.getRepository(DiseaseRepository)
+  await dRepo.deleteById(diseaseModel.id)
 
   const dtRepo = await app.getRepository(DiseaseTypeRepository)
   await dtRepo.deleteById(disTypeModel.id)
@@ -52,10 +50,8 @@ describe(message.withAccess('Diagnostic'), () => {
     // create an disease
     await client
       .post('/api/diseasetype')
-      .send({
-        name: `test.name${Date.now()}`
-      })
       .auth(token, { type: 'bearer' })
+      .send({ name: `test.name${Date.now()}` })
       .expect(200)
       .then(({ body }) => (disTypeModel = new DiseaseType(body)))
 
@@ -66,42 +62,10 @@ describe(message.withAccess('Diagnostic'), () => {
       .expect(200)
       .then(({ body }) => (diseaseModel = new Disease(body)))
 
-    // Create a patient and their medical record
-    await client
-      .post('/api/patient')
-      .send({
-        hc: random.string(5),
-        lastName: 'ln_test',
-        firstName: 'fn_test',
-        ocupation: 'ocupation',
-        birthday: new Date(),
-        address: 'address_test',
-        sex: 0,
-        civilStatus: 0
-      })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (patientModel = new Patient(body)))
-
-    // Create a Medic
-    await client
-      .post('/api/medic')
-      .send({
-        lastName: 'ln_test',
-        firstName: 'fn_test',
-        address: 'address_test',
-        regProfessional: random.string(10)
-      })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (medicModel = new Medic(body)))
-
-    await client
-      .post(`/api/patient/${patientModel.id}/medicalrecord`)
-      .send({ reason: 'reason_test', medicId: medicModel.id, currentIllness: 'illness' })
-      .auth(token, { type: 'bearer' })
-      .expect(200)
-      .then(({ body }) => (medRecModel = new MedicalRecord(body)))
+    await createMedRec(client, token).then(res => {
+      medicModel = new Medic(res.medic)
+      medRecModel = new MedicalRecord(res.medRec)
+    })
 
     // create the diagnostics
     await client
@@ -116,7 +80,7 @@ describe(message.withAccess('Diagnostic'), () => {
 
   it('GET     =>  /api/medicalrecord/{id}/diagnostics', async () => {
     await client
-      .get(`/api/medicalrecord/${patientModel.id}/diagnostics`)
+      .get(`/api/medicalrecord/${medRecModel.id}/diagnostics`)
       .auth(token, { type: 'bearer' })
       .expect(200)
   })

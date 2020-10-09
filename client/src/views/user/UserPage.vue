@@ -43,7 +43,7 @@
     <v-form ref="form" v-if="form" v-model="isValidForm" lazy-validation>
       <v-row>
         <v-col cols="12" sm="5" md="4">
-          <v-card color="white" height="150">
+          <v-card color="white" height="200">
             <v-system-bar color="primary lighten-1" dark>
               <v-icon>fa-user-circle</v-icon>Cuenta
               <v-spacer />
@@ -54,6 +54,14 @@
                 v-model="element.user.isActive"
                 class="ma-0"
                 :label="element.user.isActive ? 'Cuenta activa' : 'Cuenta inactiva'"
+              />
+
+              <v-switch
+                :disabled="isMedic"
+                v-if="$canCreate('medics')"
+                v-model="registerAsMedic"
+                class="ma-0"
+                label="Registrar como médico"
               />
             </v-card-text>
           </v-card>

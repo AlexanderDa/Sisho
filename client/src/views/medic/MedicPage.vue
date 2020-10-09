@@ -28,16 +28,13 @@
         >
           <v-icon>fa-save</v-icon>
         </own-btn>
+
         <own-btn @click="reset()" tooltip="Cerrar" icon>
           <v-icon>far fa-times-circle</v-icon>
         </own-btn>
       </template>
 
-      <template v-else>
-        <own-btn v-if="$canCreate('medics')" @click="form = true" tooltip="Nuevo" icon>
-          <v-icon>fa-plus</v-icon>
-        </own-btn>
-      </template>
+      <template v-else> </template>
     </template>
 
     <v-row v-if="form">

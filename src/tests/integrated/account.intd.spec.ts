@@ -5,7 +5,7 @@
 
 import { Client, expect } from '@loopback/testlab'
 import { Application } from '../..'
-import { setupApplicationWithToken } from '../setup.spec'
+import { setupApplicationWithToken } from '../init/setup.spec'
 import { MyJWTService } from '../../services/jwt.service'
 import { DEFAULT_ADMIN_ROLE } from '../../migrations'
 import { UserRepository } from '../../repositories'

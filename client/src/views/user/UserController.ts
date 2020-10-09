@@ -9,8 +9,9 @@ import profileService from '@/services/ProfileService'
 import accountService from '@/services/AccountService'
 import emailService from '@/services/EmailService'
 import userService from '@/services/UserService'
+import medicService from '@/services/MedicService'
 import validate from '@/utils/validations'
-import { createProfile } from '@/models'
+import { Base, createMedic, createProfile } from '@/models'
 import { Profile } from '@/models'
 import alert from '@/utils/alert'
 import Search from '@/utils/search'
@@ -38,6 +39,8 @@ export default class UserController extends Vue {
   ]
 
   // Element data
+  private isMedic: boolean = false
+  private registerAsMedic: boolean = false
   private elements: Profile[] = []
   private elementIndex = -1
   private element: Profile = createProfile()
@@ -64,6 +67,21 @@ export default class UserController extends Vue {
   /********************************************************
    *                    API Services                       *
    ********************************************************/
+
+  async userIsMedic(userId: number): Promise<void> {
+    await medicService
+      .findByUserId(userId)
+      .then(res => {
+        if (res) {
+          this.isMedic = true
+          this.registerAsMedic = true
+        }
+      })
+      .catch(() => {
+        this.isMedic = false
+      })
+  }
+
   async findProfiles(search?: Search): Promise<void> {
     const filter: Filter<Profile> = {
       limit: 25,
@@ -103,7 +121,7 @@ export default class UserController extends Vue {
         address: this.element.address
       })
       .then(async profile => {
-        userService
+        await userService
           .createByProfileId(profile.id, {
             email: profile.email,
             roleId: this.element.user?.roleId,
@@ -119,6 +137,16 @@ export default class UserController extends Vue {
           .catch(err => alert.onCreateError(err, 'cuenta de usuario'))
       })
       .catch(err => alert.onCreateError(err, 'perfil de usuario'))
+  }
+
+  async createMedic(): Promise<void> {
+    if (this.element.user && !this.isMedic)
+      await medicService
+        .create(this.element.user?.id, {})
+        .then(res => {
+          if (res.id > 0) this.isMedic = true
+        })
+        .catch(err => alert.onCreateError(err, 'médico'))
   }
 
   async updateUser(): Promise<void> {
@@ -208,29 +236,33 @@ export default class UserController extends Vue {
   }
 
   async submit(): Promise<void> {
-    // eslint-disable-next-line
     //@ts-expect-error
     await this.$refs.form.validate()
     if (this.isValidForm === true) {
       if (this.elementIndex > -1) await this.updateElement()
       else await this.createElement()
+
+      if (this.registerAsMedic) {
+        await this.createMedic()
+      }
     }
   }
   /********************************************************
    *                       Methods                         *
    ********************************************************/
 
-  showLog() {
+  showLog(data: any) {
     //@ts-ignore
-    this.$launchLog(this.element, {
+    this.$launchLog(data.user, {
       title: 'Usuario',
-      msg: `${this.element.lastName} ${this.element.firstName}`
+      msg: `${data.lastName} ${data.firstName}`
     })
   }
 
   async toEditElement(element: Profile): Promise<void> {
     this.elementIndex = this.elements.indexOf(element)
     this.element = Object.assign({}, element)
+    await this.userIsMedic(element.user?.id || 0)
     this.form = true
   }
 
@@ -241,5 +273,7 @@ export default class UserController extends Vue {
     //@ts-expect-error
     this.$refs.form.reset()
     this.passError = ''
+    this.isMedic = false
+    this.registerAsMedic = false
   }
 }

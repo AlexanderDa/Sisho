@@ -60,19 +60,6 @@ export default class MedicController extends Vue {
   /********************************************************
    *                    API Services                       *
    ********************************************************/
-  async createElement(): Promise<void> {
-    let element: Medic = this.element
-    element.dni = element.dni?.replace('-', '')
-    service
-      .create(element)
-      .then(async created => {
-        this.element = created
-        this.elements.push(created)
-        this.elementIndex = this.elements.indexOf(created)
-        alert.onCreateSuccess('Paciente registrado.')
-      })
-      .catch(err => alert.onCreateError(err, 'paciente'))
-  }
 
   async findElements(search?: Search): Promise<void> {
     const filter: Filter<Medic> = { limit: 25, where: { deleted: false } }
@@ -148,7 +135,6 @@ export default class MedicController extends Vue {
     await this.$refs.form.validate()
     if (this.isValidForm === true) {
       if (this.elementIndex > -1) await this.updateElement()
-      else await this.createElement()
     }
   }
 
