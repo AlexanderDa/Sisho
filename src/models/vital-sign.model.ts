@@ -4,8 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { model } from '@loopback/repository'
-import { character } from './pg'
-import { integer } from './pg'
+import { character, integer } from './pg'
 import { id } from './pg'
 import { Audit } from '.'
 
@@ -24,23 +23,23 @@ import { Audit } from '.'
 export class VitalSign extends Audit {
   @id() id?: number
 
-  @character({ length: 5, required: true }) temperature: string
+  @character({ length: 6, required: true }) temperature: string
 
-  @character({ length: 5, required: true }) systolicPressure: string
+  @character({ length: 6, required: true }) systolicPressure: string
 
-  @character({ length: 5, required: true }) diastolicPressure: string
+  @character({ length: 6, required: true }) diastolicPressure: string
 
-  @character({ length: 5, required: true }) pulse: string
+  @character({ length: 6, required: true }) pulse: string
 
-  @character({ length: 5, required: true }) breathingFrequency: string
+  @character({ length: 6, required: true }) breathingFrequency: string
 
-  @integer({ required: true }) oxygenSaturation: number
+  @character({ length: 6, required: true }) oxygenSaturation: string
 
-  @integer({ required: true }) tall: number
+  @character({ length: 6, required: true }) tall: string
 
-  @integer({ required: true }) weight: number
+  @character({ length: 6, required: true }) weight: string
 
-  @integer({ required: true }) mass: number
+  @character({ length: 6, required: true }) mass: string
 
   @integer({ required: true }) medicalRecordId?: number
 

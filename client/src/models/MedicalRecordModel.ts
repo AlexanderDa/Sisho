@@ -6,11 +6,12 @@
 import { Base } from '@/models'
 
 export interface MedicalRecord extends Base {
-  patientId?: number
   reason: string
   currentIllness?: string
   done: boolean
   canceled: boolean | null
+  patientId: number
+  medicId: number
 }
 
 export function createMedicalRecord(): MedicalRecord {
@@ -18,6 +19,8 @@ export function createMedicalRecord(): MedicalRecord {
     id: 0,
     reason: '',
     done: false,
-    canceled: null
+    canceled: null,
+    patientId: 0,
+    medicId: 0
   }
 }

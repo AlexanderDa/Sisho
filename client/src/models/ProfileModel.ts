@@ -17,7 +17,6 @@ export interface Profile extends Base {
   email?: string
   image?: string
   address: string
-  blooType?: string
   user?: User
 }
 

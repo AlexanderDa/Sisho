@@ -231,6 +231,16 @@
           </own-btn>
 
           <own-btn
+            @click="$router.push({ name: 'VitalSigns', query: { patientId: item.id } })"
+            v-if="$access('vitalsigns')"
+            color="grey darken-2"
+            tooltip="Signos vitales"
+            icon
+          >
+            <v-icon small>fa-heartbeat</v-icon>
+          </own-btn>
+
+          <own-btn
             @click="$router.push({ name: 'PatientMedRec', params: { id: item.id } })"
             v-if="$access('medicalrecords')"
             color="grey darken-2"

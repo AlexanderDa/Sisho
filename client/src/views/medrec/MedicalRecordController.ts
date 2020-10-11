@@ -6,12 +6,12 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import service from '@/services/MedicalRecordService'
-import patientService from '@/services/PatientService'
+
 import { createMedicalRecord, Patient, createPatient } from '@/models'
 import { MedicalRecord } from '@/models'
 import Search from '@/utils/search'
 import { Watch } from 'vue-property-decorator'
-import alert from '@/utils/alert'
+
 import List from './MedicalRecordList.vue'
 import PatientInfo from './PatientInfo.vue'
 import Antecedent from './Antecedent.vue'
@@ -31,7 +31,6 @@ export default class MedicalRecordController extends Vue {
   // Element data
   private patientId: number = 0
   private elementIndex = -1
-  private patient: Patient = createPatient()
   private elements: MedicalRecord[] = []
   private element: MedicalRecord = createMedicalRecord()
 
@@ -44,27 +43,13 @@ export default class MedicalRecordController extends Vue {
 
   async beforeMount(): Promise<void> {
     this.patientId = Number(this.$route.params.id)
-    this.findPatient()
     this.findElements()
-    await this.$store.dispatch('loadOptions')
   }
 
   /********************************************************
    *                    API Services                       *
    ********************************************************/
   async createElement(): Promise<void> {}
-
-  async findPatient(): Promise<void> {
-    await patientService
-      .findById(this.patientId)
-      .then(async res => {
-        res.sex = await this.$store.dispatch('optionNameById', res.sex)
-        this.patient = res
-      })
-      .catch(err => {
-        if (err.status === 404) this.$router.push({ name: 'Patients' })
-      })
-  }
 
   async findElements(search?: Search): Promise<void> {
     service.findByPatientId(this.patientId).then(res => {
@@ -129,7 +114,6 @@ export default class MedicalRecordController extends Vue {
   onPatientIdChange(newVal: string, oldVal: string) {
     if (newVal !== oldVal) {
       this.patientId = Number(newVal)
-      this.findPatient()
       this.findElements()
     }
   }

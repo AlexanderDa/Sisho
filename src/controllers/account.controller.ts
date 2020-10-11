@@ -26,7 +26,7 @@ import { PasswordBindings } from '../keys'
 import { AccountBindings } from '../keys'
 import { TokenBindings } from '../keys'
 import { UserBindings } from '../keys'
-import { User } from '../models'
+import { Medic, User } from '../models'
 import jwt from 'jsonwebtoken'
 
 export class AccountController {
@@ -94,8 +94,21 @@ export class AccountController {
 
   @authenticate('jwt')
   @get('/api/account/me', spect.me())
-  async currentUser(@inject(SecurityBindings.USER) session: UserProfile): Promise<User> {
-    return this.acountService.convertToUser(session)
+  async currentUser(
+    @inject(SecurityBindings.USER) session: UserProfile
+  ): Promise<object> {
+    const user = await this.acountService.convertToUser(session)
+    const profile = await this.profileRepo.findById(user.profileId)
+    let isMedic = false
+    let medic: Medic | null = null
+    try {
+      medic = await this.userRepo.medic(user.id).get()
+      isMedic = true
+    } catch (error) {
+      medic = null
+    }
+
+    return { user, profile, isMedic, medic }
   }
 
   @put('/api/account/restore', spect.responseRestorePass())

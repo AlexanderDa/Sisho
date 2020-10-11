@@ -8,7 +8,7 @@ import { OperationObject } from '@loopback/rest'
 import { getModelSchemaRef } from '@loopback/rest'
 import { RequestBodyObject } from '@loopback/rest'
 import { responseAuthNoContentSchema } from './CRUDSpecs'
-import { User } from '../../models'
+import { Profile, User } from '../../models'
 
 /**
  * specifications to response the access token.
@@ -174,16 +174,48 @@ export function me(): OperationObject {
         description: 'User model instance',
         content: {
           'application/json': {
-            schema: getModelSchemaRef(User, {
-              title: 'CreatedUser',
-              exclude: [
-                'deleted',
-                'deletedAt',
-                'password',
-                'emailVerified',
-                'passResetToken'
-              ]
-            })
+            schema: {
+              type: 'object',
+              properties: {
+                user: getModelSchemaRef(User, {
+                  exclude: [
+                    'createdAt',
+                    'createdBy',
+                    'editedAt',
+                    'editedBy',
+                    'deleted',
+                    'deletedAt',
+                    'deletedBy',
+                    'password',
+                    'emailVerified',
+                    'passResetToken'
+                  ]
+                }),
+                profile: getModelSchemaRef(Profile, {
+                  exclude: [
+                    'createdAt',
+                    'createdBy',
+                    'editedAt',
+                    'editedBy',
+                    'deleted',
+                    'deletedAt',
+                    'deletedBy'
+                  ]
+                }),
+                isMedic: { type: 'boolean' },
+                medic: getModelSchemaRef(Profile, {
+                  exclude: [
+                    'createdAt',
+                    'createdBy',
+                    'editedAt',
+                    'editedBy',
+                    'deleted',
+                    'deletedAt',
+                    'deletedBy'
+                  ]
+                })
+              }
+            }
           }
         }
       }

@@ -8,8 +8,8 @@
     </template>
     <template slot="drawer">
       <v-tabs-items v-model="tab">
-        <v-tab-item> <PatientInfo :patient="patient" /> </v-tab-item>
-        <v-tab-item> <Antecedent :patientId="patientId" /> </v-tab-item>
+        <v-tab-item> <PatientInfo :patientId="patientId" /> </v-tab-item>
+        <v-tab-item> <Antecedent :patientId="element.patientId" /> </v-tab-item>
       </v-tabs-items>
     </template>
 
@@ -36,7 +36,7 @@
     </template>
 
     <template slot="content">
-      <List :patientId="patient.id" :show="!form" />
+      <List :elements="elements" :show="!form" />
       <template v-show="form">
         <v-stepper v-model="step" vertical>
           <v-stepper-step :complete="step > 1" step="1">

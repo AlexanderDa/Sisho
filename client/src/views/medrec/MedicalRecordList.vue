@@ -23,6 +23,13 @@
         <own-btn @click="showLog(item)" tooltip="Historial" color="grey darken-2" icon>
           <v-icon small> fa-history </v-icon>
         </own-btn>
+        <own-btn @click="showLog(item)" tooltip="Imprimir" color="grey darken-2" icon>
+          <v-icon small> fa-print </v-icon>
+        </own-btn>
+
+        <own-btn @click="showLog(item)" tooltip="Historial" color="grey darken-2" icon>
+          <v-icon small> fa-trash </v-icon>
+        </own-btn>
       </div>
     </template>
   </v-data-table>
@@ -46,7 +53,7 @@ export default class MedicalRecordListComponent extends Vue {
     { text: 'Motivo', value: 'reason' },
     { text: 'Finalizada', value: 'done' },
     { text: 'Cancelada', value: 'canceled' },
-    { text: 'Acciones', value: 'actions' }
+    { text: 'Acciones', value: 'actions', align: 'right' }
   ]
 
   showLog(element: MedicalRecord) {

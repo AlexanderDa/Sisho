@@ -55,8 +55,6 @@ export class Profile extends Audit {
 
   @address({ required: true }) address: string
 
-  @character({ length: 5 }) blooType?: string
-
   @hasOne(() => User)
   user: User
 

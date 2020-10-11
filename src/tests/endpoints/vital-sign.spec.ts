@@ -57,10 +57,10 @@ describe(message.withAccess('VitalSign'), () => {
         diastolicPressure: '10',
         pulse: '10',
         breathingFrequency: '10',
-        oxygenSaturation: 10,
-        tall: 10,
-        weight: 10,
-        mass: 10
+        oxygenSaturation: '10',
+        tall: '10',
+        weight: '10',
+        mass: '10'
       })
       .auth(token, { type: 'bearer' })
       .expect(200)
@@ -128,7 +128,7 @@ describe(message.withAccess('VitalSign'), () => {
     await client
       .patch(`/api/vitalsign/${testModel.id}`)
       .auth(token, { type: 'bearer' })
-      .send({ tall: 170 })
+      .send({ tall: '170' })
       .expect(204)
       .then(async () => {
         expect(await wasEdited()).to.be.eql(true)

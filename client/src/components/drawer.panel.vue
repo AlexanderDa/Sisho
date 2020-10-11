@@ -15,7 +15,7 @@
 
         <v-spacer></v-spacer>
         <slot name="actions" />
-        <v-app-bar-nav-icon @click="drawer = !drawer" />
+        <v-app-bar-nav-icon v-if="!hideDrawer" @click="drawer = !drawer" />
       </v-app-bar>
       <v-sheet
         :class="scrollable ? 'overflow-y-auto' : ''"
@@ -27,7 +27,7 @@
         </v-container>
       </v-sheet>
     </v-card>
-    <v-card class="overflow-hidden sidebar" v-if="drawer">
+    <v-card class="overflow-hidden sidebar" v-if="!hideDrawer && drawer">
       <v-app-bar
         scroll-target="#scrolling-techniques-7"
         color="grey lighten-4"
@@ -55,6 +55,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
+import { Watch } from 'vue-property-decorator'
 
 @Component({})
 export default class DawerPanel extends Vue {
@@ -62,8 +63,13 @@ export default class DawerPanel extends Vue {
   @Prop() subtitle!: string
   @Prop({ default: false }) fluid!: boolean
   @Prop({ default: false }) empty!: boolean
+  @Prop({ default: false }) hideDrawer!: boolean
   @Prop({ default: false }) scrollable!: boolean
   private drawer: boolean = true
+
+  beforeMount():void{
+    this.drawer = !this.hideDrawer
+  }
 
   private mounted(): void {
     window.addEventListener('resize', () => {
@@ -74,6 +80,11 @@ export default class DawerPanel extends Vue {
       }
     })
   }
+
+@Watch('hideDrawer')
+onHideDrawerChange(v:boolean){
+  this.drawer=!v
+}
 
   public get hasDrawerHeader(): boolean {
     return this.$slots['drawer:header'] ? true : false

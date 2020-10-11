@@ -43,6 +43,13 @@ export default class AppLayoutController extends Vue {
         icon: 'fa-user',
         routerName: 'Users'
       })
+
+    if (modules.includes('medicalrecords') && this.$store.state.session.isMedic)
+      this.items.push({
+        title: 'Revisiones',
+        icon: 'fa-business-time',
+        routerName: 'PendingClinicalHistory'
+      })
     if (modules.includes('patients'))
       this.items.push({
         title: 'Pacientes',
@@ -73,7 +80,13 @@ export default class AppLayoutController extends Vue {
         icon: 'fa-file-signature',
         routerName: 'ExamTypes'
       })
-    //if (modules.includes('')) this.items.push()
+
+    if (modules.includes('vitalsigns'))
+      this.items.push({
+        title: 'Signos vitales',
+        icon: 'fa-heartbeat',
+        routerName: 'VitalSigns'
+      })
   }
 
   private changeRoute(item: Item) {

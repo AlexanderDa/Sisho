@@ -3,106 +3,44 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { Count, CountSchema, Filter, repository, Where } from '@loopback/repository'
-import {
-  del,
-  get,
-  getModelSchemaRef,
-  getWhereSchemaFor,
-  param,
-  patch,
-  post,
-  requestBody
-} from '@loopback/rest'
-import { MedicalRecord, Cros } from '../models'
 import { MedicalRecordRepository } from '../repositories'
+import { authenticate } from '@loopback/authentication'
+import { SecurityBindings } from '@loopback/security'
+import { repository } from '@loopback/repository'
+import { UserProfile } from '@loopback/security'
+import { MedicalRecord, Cros } from '../models'
+import { Filter } from '@loopback/repository'
+import { AccountService } from '../services'
+import { requestBody } from '@loopback/rest'
+import { AccountBindings } from '../keys'
+import { inject } from '@loopback/core'
+import { param } from '@loopback/rest'
+import { post } from '@loopback/rest'
+import { get } from '@loopback/rest'
+import spec from './specs/Cros.specs'
 
+@authenticate('jwt')
 export class MedicalRecordCrosController {
   constructor(
-    @repository(MedicalRecordRepository)
-    protected medicalRecordRepository: MedicalRecordRepository
+    @repository(MedicalRecordRepository) protected medRecRepo: MedicalRecordRepository,
+    @inject(AccountBindings.SERVICE) public acountService: AccountService
   ) {}
 
-  @get('/medical-records/{id}/cros', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord has one Cros',
-        content: {
-          'application/json': {
-            schema: getModelSchemaRef(Cros)
-          }
-        }
-      }
-    }
-  })
+  @get('/api/medicalrecord/{id}/cros', spec.responseOne('MedicalRecord has one Cros'))
   async get(
     @param.path.number('id') id: number,
     @param.query.object('filter') filter?: Filter<Cros>
   ): Promise<Cros> {
-    return this.medicalRecordRepository.cros(id).get(filter)
+    return this.medRecRepo.cros(id).get(filter)
   }
 
-  @post('/medical-records/{id}/cros', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord model instance',
-        content: { 'application/json': { schema: getModelSchemaRef(Cros) } }
-      }
-    }
-  })
+  @post('/api/medicalrecord/{id}/cros', spec.responseOne())
   async create(
+    @inject(SecurityBindings.USER) session: UserProfile,
     @param.path.number('id') id: typeof MedicalRecord.prototype.id,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Cros, {
-            title: 'NewCrosInMedicalRecord',
-            exclude: ['id'],
-            optional: ['medicalRecordId']
-          })
-        }
-      }
-    })
-    cros: Omit<Cros, 'id'>
+    @requestBody(spec.requestBody()) cros: Omit<Cros, 'id'>
   ): Promise<Cros> {
-    return this.medicalRecordRepository.cros(id).create(cros)
-  }
-
-  @patch('/medical-records/{id}/cros', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord.Cros PATCH success count',
-        content: { 'application/json': { schema: CountSchema } }
-      }
-    }
-  })
-  async patch(
-    @param.path.number('id') id: number,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Cros, { partial: true })
-        }
-      }
-    })
-    cros: Partial<Cros>,
-    @param.query.object('where', getWhereSchemaFor(Cros)) where?: Where<Cros>
-  ): Promise<Count> {
-    return this.medicalRecordRepository.cros(id).patch(cros, where)
-  }
-
-  @del('/medical-records/{id}/cros', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord.Cros DELETE success count',
-        content: { 'application/json': { schema: CountSchema } }
-      }
-    }
-  })
-  async delete(
-    @param.path.number('id') id: number,
-    @param.query.object('where', getWhereSchemaFor(Cros)) where?: Where<Cros>
-  ): Promise<Count> {
-    return this.medicalRecordRepository.cros(id).delete(where)
+    cros.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
+    return this.medRecRepo.cros(id).create(cros)
   }
 }

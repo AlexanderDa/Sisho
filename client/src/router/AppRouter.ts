@@ -73,10 +73,22 @@ const ActivateRoutes: RouteConfig = {
       component: () => import('@/views/medic/MedicPage.vue')
     },
     {
+      path: '/pending',
+      name: 'PendingClinicalHistory',
+      meta: { modules: ['medics'] },
+      component: () => import('@/views/medrec/pending/PendingClinicalHistoryPage.vue')
+    },
+    {
       path: '/patient/:id/medidalrecords',
       name: 'PatientMedRec',
       meta: { modules: ['antecedents', 'diagnostics', 'medicalrecords', 'vitalsigns'] },
       component: () => import('@/views/medrec/MedicalRecordPage.vue')
+    },
+    {
+      path: '/vitalsigns',
+      name: 'VitalSigns',
+      meta: { modules: ['vitalsigns'] },
+      component: () => import('@/views/vitalsign/VitalSignPage.vue')
     }
   ]
 }

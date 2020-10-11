@@ -22,6 +22,8 @@ export * from '@/models/GroupModel'
 export * from '@/models/ExamModel'
 export * from '@/models/UserModel'
 export * from '@/models/RoleModel'
+export * from '@/models/CrosModel'
+export * from '@/models/RpeModel'
 
 export interface Base {
   createdAt?: string

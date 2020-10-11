@@ -7,7 +7,7 @@ import { post } from '@/services/Service'
 import { put } from '@/services/Service'
 import { get } from '@/services/Service'
 import { del } from '@/services/Service'
-import { User } from '@/models'
+import { Medic, Profile, User } from '@/models'
 
 interface Session {
   token: string
@@ -31,7 +31,7 @@ class AccountService {
   /**
    * Request for information on a logged account.
    */
-  async me(): Promise<User> {
+  async me(): Promise<{ user: User; profile: Profile; isMedic: boolean; medic?: Medic }> {
     const res = await get('/api/account/me')
     return res.json()
   }

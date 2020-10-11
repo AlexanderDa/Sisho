@@ -11,10 +11,10 @@ export interface VitalSign extends Base {
   diastolicPressure: string
   pulse: string
   breathingFrequency: string
-  oxygenSaturation: number
-  tall: number
-  weight: number
-  mass: number
+  oxygenSaturation: string
+  tall: string
+  weight: string
+  mass: string
   medicalRecordId?: number
 }
 
@@ -26,9 +26,9 @@ export function createVitalSign(): VitalSign {
     diastolicPressure: '',
     pulse: '',
     breathingFrequency: '',
-    oxygenSaturation: 0,
-    tall: 0,
-    weight: 0,
-    mass: 0
+    oxygenSaturation: '',
+    tall: '',
+    weight: '',
+    mass: ''
   }
 }

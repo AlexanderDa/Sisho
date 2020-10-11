@@ -40,7 +40,7 @@ import { Cros } from './cros.model'
 export class MedicalRecord extends Audit {
   @id() id?: number
 
-  @character({ length: 150, required: true }) reason: string
+  @character({ length: 200 }) reason: string
 
   @text() currentIllness?: string
 

@@ -28,17 +28,17 @@ import { Audit } from '.'
 export class Rpe extends Audit {
   @id() id?: number
 
-  @boolean({ required: true, default: false }) head: boolean
+  @boolean({ default: false }) head?: boolean
 
-  @boolean({ required: true, default: false }) neck: boolean
+  @boolean({ default: false }) neck?: boolean
 
-  @boolean({ required: true, default: false }) chest: boolean
+  @boolean({ default: false }) chest?: boolean
 
-  @boolean({ required: true, default: false }) abdomen: boolean
+  @boolean({ default: false }) abdomen?: boolean
 
-  @boolean({ required: true, default: false }) pelvis: boolean
+  @boolean({ default: false }) pelvis?: boolean
 
-  @boolean({ required: true, default: false }) extremities: boolean
+  @boolean({ default: false }) extremities?: boolean
 
   @text() observations?: string
 

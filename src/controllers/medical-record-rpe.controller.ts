@@ -3,106 +3,45 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { Count, CountSchema, Filter, repository, Where } from '@loopback/repository'
-import {
-  del,
-  get,
-  getModelSchemaRef,
-  getWhereSchemaFor,
-  param,
-  patch,
-  post,
-  requestBody
-} from '@loopback/rest'
-import { MedicalRecord, Rpe } from '../models'
 import { MedicalRecordRepository } from '../repositories'
+import { authenticate } from '@loopback/authentication'
+import { SecurityBindings } from '@loopback/security'
+import { repository } from '@loopback/repository'
+import { UserProfile } from '@loopback/security'
+import { MedicalRecord, Rpe } from '../models'
+import { Filter } from '@loopback/repository'
+import { AccountService } from '../services'
+import { requestBody } from '@loopback/rest'
+import { AccountBindings } from '../keys'
+import { inject } from '@loopback/core'
+import { param } from '@loopback/rest'
+import { post } from '@loopback/rest'
+import { get } from '@loopback/rest'
+import spec from './specs/Rpe.specs'
 
+@authenticate('jwt')
 export class MedicalRecordRpeController {
   constructor(
-    @repository(MedicalRecordRepository)
-    protected medicalRecordRepository: MedicalRecordRepository
+    @repository(MedicalRecordRepository) protected medRecRepo: MedicalRecordRepository,
+    @inject(AccountBindings.SERVICE) public acountService: AccountService
   ) {}
 
-  @get('/medical-records/{id}/rpe', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord has one Rpe',
-        content: {
-          'application/json': {
-            schema: getModelSchemaRef(Rpe)
-          }
-        }
-      }
-    }
-  })
+  @get('/api/medicalrecord/{id}/rpe', spec.responseOne('MedicalRecord has one Rpe'))
   async get(
     @param.path.number('id') id: number,
     @param.query.object('filter') filter?: Filter<Rpe>
   ): Promise<Rpe> {
-    return this.medicalRecordRepository.rpe(id).get(filter)
+    return this.medRecRepo.rpe(id).get(filter)
   }
 
-  @post('/medical-records/{id}/rpe', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord model instance',
-        content: { 'application/json': { schema: getModelSchemaRef(Rpe) } }
-      }
-    }
-  })
+  @post('/api/medicalrecord/{id}/rpe', spec.responseOne())
   async create(
+    @inject(SecurityBindings.USER) session: UserProfile,
     @param.path.number('id') id: typeof MedicalRecord.prototype.id,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Rpe, {
-            title: 'NewRpeInMedicalRecord',
-            exclude: ['id'],
-            optional: ['medicalRecordId']
-          })
-        }
-      }
-    })
+    @requestBody(spec.requestBody())
     rpe: Omit<Rpe, 'id'>
   ): Promise<Rpe> {
-    return this.medicalRecordRepository.rpe(id).create(rpe)
-  }
-
-  @patch('/medical-records/{id}/rpe', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord.Rpe PATCH success count',
-        content: { 'application/json': { schema: CountSchema } }
-      }
-    }
-  })
-  async patch(
-    @param.path.number('id') id: number,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Rpe, { partial: true })
-        }
-      }
-    })
-    rpe: Partial<Rpe>,
-    @param.query.object('where', getWhereSchemaFor(Rpe)) where?: Where<Rpe>
-  ): Promise<Count> {
-    return this.medicalRecordRepository.rpe(id).patch(rpe, where)
-  }
-
-  @del('/medical-records/{id}/rpe', {
-    responses: {
-      '200': {
-        description: 'MedicalRecord.Rpe DELETE success count',
-        content: { 'application/json': { schema: CountSchema } }
-      }
-    }
-  })
-  async delete(
-    @param.path.number('id') id: number,
-    @param.query.object('where', getWhereSchemaFor(Rpe)) where?: Where<Rpe>
-  ): Promise<Count> {
-    return this.medicalRecordRepository.rpe(id).delete(where)
+    rpe.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
+    return this.medRecRepo.rpe(id).create(rpe)
   }
 }

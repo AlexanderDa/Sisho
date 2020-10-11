@@ -70,8 +70,7 @@ export default class AccountController extends Vue {
           mobile: this.profile.mobile,
           email: this.profile.email,
           image: this.profile.image,
-          address: this.profile.address,
-          blooType: this.profile.blooType
+          address: this.profile.address
         })
         .then(() => {
           alert.onUpdateSuccess(`Información del perfil actualizado.`)

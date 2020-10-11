@@ -45,7 +45,7 @@ export async function setupApplicationWithToken(): Promise<AppWithClientLogged> 
 
   // get account profile
   const resProfile = await client.get('/api/account/me').auth(token, { type: 'bearer' })
-  const session: User = resProfile.body
+  const session: User = resProfile.body.user
 
   return { app, client, token, session }
 }

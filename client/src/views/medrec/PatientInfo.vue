@@ -122,9 +122,29 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
+import { createPatient } from '@/models'
+import { Patient } from '@/models'
+import service from '@/services/PatientService'
 
 @Component({})
 export default class PatientInfoComponent extends Vue {
-  @Prop() patient!: object
+  @Prop() patientId!: number
+  private patient: Patient = createPatient()
+
+  async beforeMount(): Promise<void> {
+    await this.findPatient()
+  }
+
+  async findPatient(): Promise<void> {
+    await service
+      .findById(this.patientId)
+      .then(async (res: Patient) => {
+        res.sex = await this.$store.dispatch('optionNameById', res.sex)
+        this.patient = res
+      })
+      .catch((err: any) => {
+        if (err.status === 404) this.$emit('onError')
+      })
+  }
 }
 </script>

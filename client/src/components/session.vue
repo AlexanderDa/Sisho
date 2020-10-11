@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" persistent width="500">
-    <v-card>
+    <v-card v-show="dialog">
       <v-system-bar color="primary" class="pa-4 white--text"
         >Sesión expirada<v-spacer></v-spacer>
         <v-icon @click="onClose()" color="white" size="22">far fa-times-circle</v-icon>
