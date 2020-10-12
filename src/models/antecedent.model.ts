@@ -40,7 +40,7 @@ export class Antecedent extends Audit {
 
   @character({ length: 200 }) allergy?: string
 
-  @character({ length: 200 }) aug?: string
+  @character({ length: 200 }) ago?: string
 
   @integer({ required: true }) patientId: number
 

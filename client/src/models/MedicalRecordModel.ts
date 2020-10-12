@@ -4,6 +4,8 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import { Base } from '@/models'
+import { Cros } from './CrosModel'
+import { Rpe } from './RpeModel'
 
 export interface MedicalRecord extends Base {
   reason: string
@@ -12,6 +14,8 @@ export interface MedicalRecord extends Base {
   canceled: boolean | null
   patientId: number
   medicId: number
+  readonly rpe?: Rpe
+  readonly cros?: Cros
 }
 
 export function createMedicalRecord(): MedicalRecord {

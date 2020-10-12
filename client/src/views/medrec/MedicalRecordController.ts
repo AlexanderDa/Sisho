@@ -6,17 +6,17 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import service from '@/services/MedicalRecordService'
-
-import { createMedicalRecord, Patient, createPatient } from '@/models'
+import { createMedicalRecord } from '@/models'
 import { MedicalRecord } from '@/models'
 import Search from '@/utils/search'
 import { Watch } from 'vue-property-decorator'
 
 import List from './MedicalRecordList.vue'
+import Preview from './MedRecPreview.vue'
 import PatientInfo from './PatientInfo.vue'
 import Antecedent from './Antecedent.vue'
 
-@Component({ components: { List, PatientInfo, Antecedent } })
+@Component({ components: { List, PatientInfo, Preview, Antecedent } })
 export default class MedicalRecordController extends Vue {
   /********************************************************
    *                      Attributes                       *
@@ -27,6 +27,13 @@ export default class MedicalRecordController extends Vue {
   private form: boolean = false
   private step: number = 1
   private tab: number = 0
+  private headers: object[] = [
+    { text: 'Fecha de creación', value: 'createdAt' },
+    { text: 'Motivo', value: 'reason' },
+    { text: 'Finalizada', value: 'done' },
+    { text: 'Cancelada', value: 'canceled' },
+    { text: 'Acciones', value: 'actions', align: 'right' }
+  ]
 
   // Element data
   private patientId: number = 0
@@ -86,14 +93,15 @@ export default class MedicalRecordController extends Vue {
    *                       Methods                         *
    ********************************************************/
 
-  toEditElement(element: MedicalRecord): void {
+  toShowElement(element: MedicalRecord): void {
     this.elementIndex = this.elements.indexOf(element)
     this.element = Object.assign({}, element)
+    this.form = true
   }
 
   showLog(element: MedicalRecord) {
     //@ts-ignore
-    this.launchLog(element, {
+    this.$launchLog(element, {
       title: '',
       msg: 'MedicalRecord'
     })

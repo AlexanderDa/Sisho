@@ -121,6 +121,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { Watch } from 'vue-property-decorator'
 import { Prop } from 'vue-property-decorator'
 import { createPatient } from '@/models'
 import { Patient } from '@/models'
@@ -132,6 +133,7 @@ export default class PatientInfoComponent extends Vue {
   private patient: Patient = createPatient()
 
   async beforeMount(): Promise<void> {
+    await this.$store.dispatch('loadOptions')
     await this.findPatient()
   }
 
@@ -145,6 +147,12 @@ export default class PatientInfoComponent extends Vue {
       .catch((err: any) => {
         if (err.status === 404) this.$emit('onError')
       })
+  }
+  @Watch('patientId')
+  onPatientIdChange(n: number, o: number) {
+    if (n !== o) {
+      this.findPatient()
+    }
   }
 }
 </script>

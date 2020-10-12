@@ -14,7 +14,7 @@ export interface Antecedent extends Base {
   clinician?: string
   trauma?: string
   allergy?: string
-  aug?: string
+  ago?: string
   patientId: number
 }
 

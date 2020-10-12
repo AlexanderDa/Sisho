@@ -118,7 +118,7 @@
           auto-grow
           rows="1"
           row-height="5"
-          v-model="antecedent.aug"
+          v-model="antecedent.ago"
           label="AGO"
           autocomplete="off"
         />
@@ -181,7 +181,7 @@ export default class AntecedentComponent extends Vue {
         clinician: this.antecedent.clinician,
         trauma: this.antecedent.trauma,
         allergy: this.antecedent.allergy,
-        aug: this.antecedent.aug,
+        ago: this.antecedent.ago,
         patientId: this.antecedent.patientId
       })
       .then((res: any) => {
