@@ -17,6 +17,7 @@ El sistema está utilizando _postgresql_ como sistema de gestión de bases de da
 
 | ENV                | POR DEFECTO | DESCRIPCIÓN                            |
 | :----------------- | :---------- | :------------------------------------- |
+| SISHO_DATABASE_URL |             | URL de la conexión a la base de datos. |
 | SISHO_PGC_HOST     | localhost   | Host de la base de datos.              |
 | SISHO_PGC_PORT     | 5432        | Puerto utilizado por la base de datos. |
 | SISHO_PGC_USER     | postgres    | Usuario de la base de datos.           |

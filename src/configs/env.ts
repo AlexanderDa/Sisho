@@ -13,6 +13,7 @@ export const SERVER = {
 export const SISHOPGC = {
   name: 'sishoPGC',
   connector: 'postgresql',
+  url: process.env.SISHO_DATABASE_URL,
   host: process.env.SISHO_PGC_HOST ?? 'localhost',
   port: process.env.SISHO_PGC_PORT ?? 5432,
   user: process.env.SISHO_PGC_USER ?? 'postgres',
