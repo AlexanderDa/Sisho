@@ -39,6 +39,7 @@ export class PatientAntecedentController {
     @requestBody(spec.requestBody()) antecedent: Omit<Antecedent, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<Antecedent> {
+    antecedent.createdAt = new Date().toLocaleString()
     antecedent.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.patientRepository.antecedent(id).create(antecedent)
   }

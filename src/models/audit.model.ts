@@ -11,7 +11,7 @@ import { timestamp } from './pg'
 
 @model()
 export class Audit extends Entity {
-  @timestamp({ required: true, default: new Date().toLocaleString() }) createdAt?: string
+  @timestamp({ required: true }) createdAt: string
 
   @integer({ required: true }) createdBy: number
 

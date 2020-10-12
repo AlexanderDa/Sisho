@@ -38,6 +38,7 @@ export class DiseaseTypeController {
     @requestBody(spec.requestBody()) diseaseType: Omit<DiseaseType, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<DiseaseType> {
+    diseaseType.createdAt = new Date().toLocaleString()
     diseaseType.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.diseaseTypeRepo.create(diseaseType)
   }

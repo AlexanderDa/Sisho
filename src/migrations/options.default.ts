@@ -12,21 +12,96 @@ import { CIVILSTATUS } from '.'
  * Default options.
  */
 export const OPTIONS: Option[] = [
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: ' A -' }),
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: ' A +' }),
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: 'AB -' }),
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: 'AB +' }),
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: ' B -' }),
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: ' B +' }),
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: ' O -' }),
-  new Option({ createdBy: 0, groupId: BLOODTYPE.id, name: ' O +' }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: ' A -'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: ' A +'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: 'AB -'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: 'AB +'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: ' B -'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: ' B +'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: ' O -'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: BLOODTYPE.id,
+    name: ' O +'
+  }),
 
-  new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Soltero/a' }),
-  new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Casado/a' }),
-  new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Divorciado/a' }),
-  new Option({ createdBy: 0, groupId: CIVILSTATUS.id, name: 'Viudo/a' }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: CIVILSTATUS.id,
+    name: 'Soltero/a'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: CIVILSTATUS.id,
+    name: 'Casado/a'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: CIVILSTATUS.id,
+    name: 'Divorciado/a'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: CIVILSTATUS.id,
+    name: 'Viudo/a'
+  }),
 
-  new Option({ createdBy: 0, groupId: SEX.id, name: 'Masculino' }),
-  new Option({ createdBy: 0, groupId: SEX.id, name: 'Femenino' }),
-  new Option({ createdBy: 0, groupId: SEX.id, name: 'Otro' })
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: SEX.id,
+    name: 'Masculino'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: SEX.id,
+    name: 'Femenino'
+  }),
+  new Option({
+    createdAt: new Date().toLocaleString(),
+    createdBy: 0,
+    groupId: SEX.id,
+    name: 'Otro'
+  })
 ]

@@ -48,6 +48,7 @@ export class MedicalRecordExamController {
     medExams.map(item => {
       item.medicalRecordId = id
       item.createdBy = createdBy
+      item.createdAt = new Date().toLocaleString()
     })
     const result = await this.medExamRepo.createAll(medExams)
     return { count: result.length }

@@ -6,6 +6,7 @@
 import { Role } from '../models'
 
 export const DEFAULT_ADMIN_ROLE: Role = new Role({
+  createdAt: new Date().toLocaleString(),
   createdBy: 0,
   name: 'Administración',
   description: 'Usuario de administración'

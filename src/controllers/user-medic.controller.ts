@@ -45,6 +45,7 @@ export class UserMedicController {
     if (!user) throw new HttpErrors.NotFound()
     const profile = await this.profileRepo.findById(user.profileId)
 
+    medic.createdAt = new Date().toLocaleString()
     medic.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     medic.dni = profile.dni
     medic.passport = profile.passport

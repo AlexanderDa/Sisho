@@ -37,6 +37,7 @@ export class ProfileController {
     @requestBody(spec.requestBody()) profile: Omit<Profile, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<Profile> {
+    profile.createdAt = new Date().toLocaleString()
     profile.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.profileRepo.create(profile)
   }

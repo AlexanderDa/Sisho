@@ -43,7 +43,7 @@ after(async () => {
 })
 
 describe(message.withAccess('VitalSign'), () => {
-  it('POST    =>  /api/patient/{id}/vitalsign', async () => {
+  it('POST    =>  /api/medicalrecord/{id}/vitalsign', async () => {
     await createMedRec(client, token).then(res => {
       medicModel = new Medic(res.medic)
       medRecModel = new MedicalRecord(res.medRec)

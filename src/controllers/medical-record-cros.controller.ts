@@ -40,6 +40,7 @@ export class MedicalRecordCrosController {
     @param.path.number('id') id: typeof MedicalRecord.prototype.id,
     @requestBody(spec.requestBody()) cros: Omit<Cros, 'id'>
   ): Promise<Cros> {
+    cros.createdAt = new Date().toLocaleString()
     cros.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.medRecRepo.cros(id).create(cros)
   }

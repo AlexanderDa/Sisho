@@ -10,6 +10,7 @@ import { User } from '../models'
  * Administrator user profile.
  */
 export const DEFAULT_PROFILE: Profile = new Profile({
+  createdAt: new Date().toLocaleString(),
   createdBy: 0,
   firstName: 'admin',
   lastName: 'sisho',
@@ -21,6 +22,7 @@ export const DEFAULT_PROFILE: Profile = new Profile({
  * Default Administrator user.
  */
 export const DEFAULT_ADMIN: User = new User({
+  createdAt: new Date().toLocaleString(),
   createdBy: 0,
   email: DEFAULT_PROFILE.email,
   password: 'adminP4$$',

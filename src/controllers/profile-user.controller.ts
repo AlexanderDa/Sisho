@@ -42,6 +42,7 @@ export class ProfileUserController {
     @param.path.number('id') id: typeof Profile.prototype.id,
     @requestBody(spec.requestBody()) user: Omit<User, 'id'>
   ): Promise<User> {
+    user.createdAt = new Date().toLocaleString()
     user.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     user.verificationToken = await this.jwtService.generateToken(user.email)
     return this.profileRepository.user(id).create(user)

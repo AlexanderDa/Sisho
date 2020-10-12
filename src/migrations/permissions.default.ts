@@ -40,6 +40,7 @@ function crud(
   config?: { c?: boolean; r?: boolean; u?: boolean; d?: boolean }
 ): Permission {
   return new Permission({
+    createdAt: new Date().toLocaleString(),
     createdBy: 0,
     moduleId,
     create: config?.c ?? true,

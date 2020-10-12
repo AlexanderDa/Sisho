@@ -37,6 +37,7 @@ export class PatientController {
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<Patient> {
     patient.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
+    patient.createdAt = new Date().toLocaleString()
     return this.patientRepo.create(patient)
   }
 

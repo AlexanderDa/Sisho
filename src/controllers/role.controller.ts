@@ -36,6 +36,7 @@ export class RoleController {
     @requestBody(spec.requestBody()) role: Omit<Role, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<Role> {
+    role.createdAt = new Date().toLocaleString()
     role.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.roleRepo.create(role)
   }

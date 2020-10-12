@@ -48,6 +48,7 @@ export class MedicalRecordDiagnosticController {
     diagnostics.map(item => {
       item.medicalRecordId = id
       item.createdBy = createdBy
+      item.createdAt = new Date().toLocaleString()
     })
     const result = await this.diagnosticRepo.createAll(diagnostics)
     return { count: result.length }

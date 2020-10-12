@@ -39,6 +39,7 @@ export class PatientMedicalRecordController {
     @requestBody(spec.requestBody()) medicalRecord: Omit<MedicalRecord, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<MedicalRecord> {
+    medicalRecord.createdAt = new Date().toLocaleString()
     medicalRecord.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.patientRepository.medicalRecords(id).create(medicalRecord)
   }

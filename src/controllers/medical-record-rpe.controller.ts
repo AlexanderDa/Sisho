@@ -41,6 +41,7 @@ export class MedicalRecordRpeController {
     @requestBody(spec.requestBody())
     rpe: Omit<Rpe, 'id'>
   ): Promise<Rpe> {
+    rpe.createdAt = new Date().toLocaleString()
     rpe.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.medRecRepo.rpe(id).create(rpe)
   }

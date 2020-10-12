@@ -12,7 +12,7 @@ import { OPTION } from '../../migrations'
 import { Permission } from '../../models'
 import { Role } from '../../models'
 import { User } from '../../models'
-import { message } from '../../utils'
+import { message, random } from '../../utils'
 
 let app: Application
 let client: Client
@@ -37,8 +37,9 @@ before('setupApplication', async () => {
   // create a role
   const roleRepo = await app.getRepository(RoleRepository)
   roleModel = await roleRepo.create({
+    createdAt: new Date().toLocaleString(),
     createdBy: session.id,
-    name: 'test',
+    name: random.string(5),
     description: 'test'
   })
 })

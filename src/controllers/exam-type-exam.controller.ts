@@ -41,6 +41,7 @@ export class ExamTypeExamController {
     @requestBody(spec.requestBody()) exam: Omit<Exam, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<Exam> {
+    exam.createdAt = new Date().toLocaleString()
     exam.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.examTypeRepository.exams(id).create(exam)
   }

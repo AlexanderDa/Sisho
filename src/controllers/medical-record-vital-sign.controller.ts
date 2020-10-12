@@ -47,7 +47,9 @@ export class MedicalRecordVitalSignController {
     @requestBody(spec.requestBody()) vitalSign: Omit<VitalSign, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<VitalSign> {
+    vitalSign.createdAt = new Date().toLocaleString()
     vitalSign.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
+
     return this.medicalRecordRepository.vitalSign(id).create(vitalSign)
   }
 }

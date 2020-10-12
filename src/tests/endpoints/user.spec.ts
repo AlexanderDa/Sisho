@@ -40,6 +40,7 @@ before('setupApplication', async () => {
 
   const profileRepo = await app.getRepository(ProfileRepository)
   profileModel = await profileRepo.create({
+    createdAt: new Date().toLocaleString(),
     createdBy: session.id,
     lastName: `test.ln${Date.now()}`,
     firstName: `test.fn${Date.now()}`,

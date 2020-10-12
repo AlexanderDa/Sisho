@@ -36,6 +36,7 @@ export class PermissionController {
     @requestBody(spec.requestBody()) permission: Omit<Permission, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<Permission> {
+    permission.createdAt = new Date().toLocaleString()
     permission.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.permissionRepo.create(permission)
   }

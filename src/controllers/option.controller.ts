@@ -36,6 +36,7 @@ export class OptionController {
     @requestBody(spec.requestBody()) option: Omit<Option, 'id'>,
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<Option> {
+    option.createdAt = new Date().toLocaleString()
     option.createdBy = (await this.acountService.convertToUser(session)).id ?? 0
     return this.optionRepo.create(option)
   }
