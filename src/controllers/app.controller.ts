@@ -25,6 +25,9 @@ export class AppController {
     return {
       name: app.name,
       version: app.version,
+      author: app.author,
+      repository: app.repository,
+      license: app.license,
       company: {
         name: company.name,
         smallName: company.smallName,

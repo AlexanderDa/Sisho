@@ -20,6 +20,9 @@ export function app(): OperationObject {
               properties: {
                 name: { type: 'string' },
                 version: { type: 'string' },
+                author: { type: 'string' },
+                repository: { type: 'string' },
+                license: { type: 'string' },
                 company: {
                   type: 'object',
                   properties: {
