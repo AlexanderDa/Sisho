@@ -15,13 +15,29 @@
 
     <template slot="actions">
       <template v-if="form">
-        <own-btn
-          @click="showLog(element)"
-          v-if="elementIndex > -1"
-          tooltip="Historial"
+         <own-btn
+          @click="$refs.preview.report('print')"
+          tooltip="Imprimir pdf"
           icon
         >
-          <v-icon> fa-history </v-icon>
+          <v-icon> fa-print </v-icon>
+        </own-btn>
+        
+
+         <own-btn
+          @click="$refs.preview.report('download')"
+          tooltip="Descargar pdf"
+          icon
+        >
+          <v-icon> fa-file-download </v-icon>
+        </own-btn>
+
+        <own-btn
+          @click="$refs.preview.report()"
+          tooltip="Abrir pdf"
+          icon
+        >
+          <v-icon> fa-file-pdf </v-icon>
         </own-btn>
 
         <own-btn @click="reset()" tooltip="Cerrar" icon>
@@ -81,7 +97,7 @@
         </template>
       </v-data-table>
       <template v-show="form">
-        <Preview :medRecId="element.id" />
+        <Preview ref="preview" :medRecId="element.id" />
       </template>
     </template>
   </own-panel>

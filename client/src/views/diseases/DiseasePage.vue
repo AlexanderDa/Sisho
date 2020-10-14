@@ -9,7 +9,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <own-search-field v-model="search" />
+        <own-search-field @input="v => findElements(diseaseTypeId, v)" :filter="true" />
         <v-spacer />
         <v-form ref="form" v-model="isValidForm" lazy-validation>
           <v-dialog

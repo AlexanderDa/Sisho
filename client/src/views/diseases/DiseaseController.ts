@@ -11,6 +11,8 @@ import validate from '@/utils/validations'
 import { createDisease } from '@/models'
 import { Disease } from '@/models'
 import alert from '@/utils/alert'
+import Search from '@/utils/search'
+import { Filter } from '@/utils/query'
 
 @Component({})
 export default class DiseaseController extends Vue {
@@ -64,9 +66,25 @@ export default class DiseaseController extends Vue {
       .catch(err => alert.onCreateError(err, 'enfermedad'))
   }
 
-  async findElements(diseaseTypeId: number): Promise<void> {
+  async findElements(diseaseTypeId: number, search?: Search): Promise<void> {
+    const filter: Filter<Disease> = { limit: 25, where: { deleted: false } }
+    if (search) {
+      filter.where = {
+        and: [
+          // undefined to find all profiles and false to find not deleted profiles.
+          { deleted: search.includeRemoveds ? undefined : false },
+          {
+            or: [
+              { code: { ilike: `%${search.value}%` } },
+              { name: { ilike: `%${search.value}%` } },
+              { description: { ilike: `%${search.value}%` } }
+            ]
+          }
+        ]
+      }
+    }
     await service
-      .findByProfileId(diseaseTypeId, { where: { deleted: false } })
+      .findByProfileId(diseaseTypeId, filter)
       .then(list => (this.elements = list))
   }
 

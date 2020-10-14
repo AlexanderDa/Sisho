@@ -3,8 +3,8 @@
     <template>
       <v-row no-gutters>
         <v-col>
-          <v-card class="px-3 py-1" outlined tile
-            ><strong>ESTABLECIMIENTO</strong>
+          <v-card class="px-3 py-1" outlined tile>
+            <strong>MÉDICO</strong>
           </v-card>
         </v-col>
         <v-col>
@@ -29,22 +29,30 @@
       </v-row>
       <v-row no-gutters>
         <v-col>
-          <v-card class="px-3 py-1" outlined tile>{{ hospital.name }}</v-card>
+          <v-card class="px-3 py-1" outlined tile>
+            {{ medic.lastName.toUpperCase() }} {{ medic.firstName.toUpperCase() }}
+          </v-card>
         </v-col>
         <v-col>
-          <v-card class="px-3 py-1" outlined tile>{{ patient.firstName }}</v-card>
+          <v-card class="px-3 py-1" outlined tile>{{
+            patient.firstName.toUpperCase()
+          }}</v-card>
         </v-col>
         <v-col>
-          <v-card class="px-3 py-1" outlined tile>{{ patient.lastName }}</v-card>
+          <v-card class="px-3 py-1" outlined tile>{{
+            patient.lastName.toUpperCase()
+          }}</v-card>
         </v-col>
         <v-col>
-          <v-card class="px-3 py-1" outlined tile>{{ patient.sex }}</v-card>
+          <v-card class="px-3 py-1" outlined tile>{{
+            `${patient.sex}`.toUpperCase()
+          }}</v-card>
         </v-col>
         <v-col>
           <v-card class="px-3 py-1" outlined tile>{{ medRec.id }}</v-card>
         </v-col>
         <v-col>
-          <v-card class="px-3 py-1" outlined tile>{{ patient.hc }}</v-card>
+          <v-card class="px-3 py-1" outlined tile>{{ patient.hc.toUpperCase() }}</v-card>
         </v-col>
       </v-row>
     </template>
@@ -447,7 +455,7 @@
       </v-row>
     </template>
 
-    <!---->
+    <!--  DIAGNOSTIC  -->
     <template>
       <v-row no-gutters class="mt-3">
         <v-col>
@@ -456,9 +464,9 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row no-gutters>
-        <v-col
-          ><v-card class="px-3 py-1" outlined tile>
+      <v-row no-gutters class="mb-5">
+        <v-col>
+          <v-card class="px-3 py-1" outlined tile>
             <v-list subheader two-line v-if="diseases.length > 0">
               <v-list-item v-for="item in diseases" :key="item.id">
                 <v-list-item-content>
@@ -495,6 +503,8 @@ import Component from 'vue-class-component'
 import { Fields } from '@/utils/query'
 import { Disease } from '@/models'
 import { Base } from '@/models'
+import { PdfOutput } from '@/reports'
+import { MedRecReport } from '@/reports'
 
 @Component({})
 export default class MedRecPreviewComponent extends Vue {
@@ -518,6 +528,7 @@ export default class MedRecPreviewComponent extends Vue {
   }
 
   private async beforeMount(): Promise<void> {
+    //@ts-ignore
     await this.$store.dispatch('loadOptions')
     await this.init()
   }
@@ -528,9 +539,9 @@ export default class MedRecPreviewComponent extends Vue {
       await this.findMedicalRecord()
       await this.findPatient()
       await this.findMedic()
-      await this.findAntecedents()
       await this.findVitalSign()
-      this.findDiagnostics()
+      await this.findDiagnostics()
+      await this.findAntecedents()
     }
   }
 
@@ -549,9 +560,18 @@ export default class MedRecPreviewComponent extends Vue {
           { relation: 'rpe', scope: { fields: this.ignoreFields } },
           { relation: 'cros', scope: { fields: this.ignoreFields } }
         ],
-        fields: this.ignoreFields
+        fields: {
+          createdBy: false,
+          editedBy: false,
+          editedAt: false,
+          deleted: false,
+          deletedAt: false,
+          deletedBy: false
+        }
       })
       .then((res: MedicalRecord) => {
+        //@ts-ignore
+        res.createdAt = this.$formatDateTime(res.createdAt)
         this.medRec = res
       })
   }
@@ -560,6 +580,7 @@ export default class MedRecPreviewComponent extends Vue {
     await patientService
       .findById(this.medRec.patientId, { fields: this.ignoreFields })
       .then(async (res: Patient) => {
+        //@ts-ignore
         res.sex = await this.$store.dispatch('optionNameById', res.sex)
         this.patient = res
       })
@@ -575,16 +596,33 @@ export default class MedRecPreviewComponent extends Vue {
 
   public async findAntecedents(): Promise<void> {
     await antecedentService
-      .findByPacientId(this.medRec.patientId, { fields: this.ignoreFields })
-      .then(async (res: Antecedent) => {
-        this.antecedent = res
+      .count({ patientId: this.medRec.patientId })
+      .then(async (res: number) => {
+        if (res === 1) {
+          await antecedentService
+            .findByPacientId(this.medRec.patientId, { fields: this.ignoreFields })
+            .then(async (res: Antecedent) => {
+              this.antecedent = res
+            })
+        }
       })
   }
 
   public async findVitalSign(): Promise<void> {
     await vsService
-      .findByMedRecId(this.medRec.id, { fields: this.ignoreFields })
+      .findByMedRecId(this.medRec.id, {
+        fields: {
+          createdBy: false,
+          editedBy: false,
+          editedAt: false,
+          deleted: false,
+          deletedAt: false,
+          deletedBy: false
+        }
+      })
       .then(async (res: VitalSign) => {
+        //@ts-ignore
+        res.createdAt = this.$formatDateISO(res.createdAt)
         this.vitalSign = res
       })
   }
@@ -595,6 +633,19 @@ export default class MedRecPreviewComponent extends Vue {
       .then((res: Disease[]) => {
         this.diseases = res
       })
+  }
+
+  private report(mode: PdfOutput) {
+    MedRecReport(
+      mode,
+      this.hospital,
+      this.medRec,
+      this.medic,
+      this.patient,
+      this.vitalSign,
+      this.antecedent,
+      this.diseases
+    )
   }
 
   @Watch('medRecId')
