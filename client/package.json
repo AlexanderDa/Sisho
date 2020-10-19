@@ -26,6 +26,7 @@
     "vuex-module-decorators": "^0.17.0"
   },
   "devDependencies": {
+    "@types/pdfmake": "^0.1.15",
     "@types/vue-the-mask": "^0.11.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
