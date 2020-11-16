@@ -8,7 +8,7 @@ import { OperationObject } from '@loopback/rest'
 import { getModelSchemaRef } from '@loopback/rest'
 import { RequestBodyObject } from '@loopback/rest'
 import { responseAuthNoContentSchema } from './CRUDSpecs'
-import { Profile, User } from '../../models'
+import { Profile, User, Role } from '../../models'
 
 /**
  * specifications to response the access token.
@@ -189,6 +189,17 @@ export function me(): OperationObject {
                     'password',
                     'emailVerified',
                     'passResetToken'
+                  ]
+                }),
+                role: getModelSchemaRef(Role, {
+                  exclude: [
+                    'createdAt',
+                    'createdBy',
+                    'editedAt',
+                    'editedBy',
+                    'deleted',
+                    'deletedAt',
+                    'deletedBy'
                   ]
                 }),
                 profile: getModelSchemaRef(Profile, {

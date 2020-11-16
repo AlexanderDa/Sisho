@@ -152,6 +152,7 @@ describe(message.endpoint('Account'), () => {
               .to.have.property('user')
               .to.have.property('email')
               .to.be.equal(DEFAULT_ADMIN.email)
+            expect(res.body).to.have.property('role')
             expect(res.body).to.have.property('profile')
             expect(res.body).to.have.property('isMedic')
             expect(res.body).to.have.property('medic')

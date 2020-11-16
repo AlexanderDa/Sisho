@@ -17,6 +17,7 @@ import { UserProfile } from '@loopback/security'
 import { repository } from '@loopback/repository'
 import { ProfileRepository } from '../repositories'
 import { UserRepository } from '../repositories'
+import { RoleRepository } from '../repositories'
 import { Credentials } from '../utils'
 import * as spect from './specs/account.spect'
 import { DecryptedHasher } from '../services'
@@ -37,7 +38,8 @@ export class AccountController {
     @inject(AccountBindings.SERVICE) public acountService: AccountService,
     @inject(PasswordBindings.HASHER) public bcrypt: DecryptedHasher,
     @repository(ProfileRepository) public profileRepo: ProfileRepository,
-    @repository(UserRepository) public userRepo: UserRepository
+    @repository(UserRepository) public userRepo: UserRepository,
+    @repository(RoleRepository) public roleRepo: RoleRepository
   ) {}
 
   @post('/api/account/login', spect.logged())
@@ -98,6 +100,9 @@ export class AccountController {
     @inject(SecurityBindings.USER) session: UserProfile
   ): Promise<object> {
     const user = await this.acountService.convertToUser(session)
+    const role = await this.roleRepo.findById(user.roleId, {
+      fields: { id: true, name: true, description: true }
+    })
     const profile = await this.profileRepo.findById(user.profileId)
     let isMedic = false
     let medic: Medic | null = null
@@ -108,7 +113,7 @@ export class AccountController {
       medic = null
     }
 
-    return { user, profile, isMedic, medic }
+    return { user, role, profile, isMedic, medic }
   }
 
   @put('/api/account/restore', spect.responseRestorePass())

@@ -6,7 +6,7 @@
       <template v-slot:prepend>
         <v-list-item class="px-2">
           <v-list-item-avatar>
-            <img class="primary" src="/logo.svg" />
+            <img @click="$router.push({ name: 'App' })" class="primary" src="/logo.svg" />
           </v-list-item-avatar>
         </v-list-item>
       </template>
