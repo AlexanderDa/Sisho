@@ -16,6 +16,7 @@ export interface Medic extends Base {
   email?: string
   address: string
   regProfessional: string
+  userId: number
 }
 
 export function createMedic(): Medic {
@@ -24,6 +25,7 @@ export function createMedic(): Medic {
     firstName: '',
     lastName: '',
     address: '',
-    regProfessional: ''
+    regProfessional: '',
+    userId: 0
   }
 }

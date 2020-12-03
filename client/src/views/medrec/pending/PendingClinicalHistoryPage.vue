@@ -68,6 +68,7 @@
       </template>
       <template v-else>
         <v-data-table
+          :item-class="() => 'selectable'"
           height="calc(100vh - 140px)"
           class="elevation-1 mt-1"
           :headers="headers"

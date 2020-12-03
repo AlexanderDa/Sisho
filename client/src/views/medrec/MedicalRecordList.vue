@@ -3,6 +3,7 @@
     v-show="show"
     :headers="headers"
     :items="elements"
+    :item-class="() => 'selectable'"
     height="calc(100vh - 135px)"
     class="elevation-1 mb-4"
   >

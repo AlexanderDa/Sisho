@@ -69,17 +69,14 @@ export default class UserController extends Vue {
    ********************************************************/
 
   async userIsMedic(userId: number): Promise<void> {
-    await medicService
-      .findByUserId(userId)
-      .then(res => {
-        if (res) {
-          this.isMedic = true
-          this.registerAsMedic = true
-        }
-      })
-      .catch(() => {
+    await medicService.count({ userId }).then(count => {
+      if (count === 0) {
         this.isMedic = false
-      })
+      } else {
+        this.isMedic = true
+        this.registerAsMedic = true
+      }
+    })
   }
 
   async findProfiles(search?: Search): Promise<void> {

@@ -75,4 +75,12 @@ body
   & .particle
     background-image: url(./assets/particle.svg)!important
     background-size: 100%!important
+
+// Enable selecction
+.selectable
+  -webkit-touch-callout: text  // iOS Safari
+  -webkit-user-select: text    // Chrome 6.0+, Safari 3.1+, Edge & Opera 15+
+  -moz-user-select: text       // Firefox
+  -ms-user-select: text        // IE 10+ and Edge
+  user-select: text            // Non-prefixed version
 </style>

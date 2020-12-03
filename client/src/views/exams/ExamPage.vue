@@ -4,6 +4,7 @@
     :items="elements"
     :search="search"
     sort-by="name"
+    :item-class="() => 'selectable'"
     height="calc(100vh - 200px)"
     class="elevation-1"
   >

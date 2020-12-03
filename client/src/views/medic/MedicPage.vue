@@ -166,6 +166,7 @@
     </v-row>
 
     <v-data-table
+      :item-class="() => 'selectable'"
       height="calc(100vh - 200px)"
       class="elevation-1 mt-3"
       :headers="headers"

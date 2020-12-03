@@ -15,28 +15,15 @@
 
     <template slot="actions">
       <template v-if="form">
-         <own-btn
-          @click="$refs.preview.report('print')"
-          tooltip="Imprimir pdf"
-          icon
-        >
+        <own-btn @click="$refs.preview.report('print')" tooltip="Imprimir pdf" icon>
           <v-icon> fa-print </v-icon>
         </own-btn>
-        
 
-         <own-btn
-          @click="$refs.preview.report('download')"
-          tooltip="Descargar pdf"
-          icon
-        >
+        <own-btn @click="$refs.preview.report('download')" tooltip="Descargar pdf" icon>
           <v-icon> fa-file-download </v-icon>
         </own-btn>
 
-        <own-btn
-          @click="$refs.preview.report()"
-          tooltip="Abrir pdf"
-          icon
-        >
+        <own-btn @click="$refs.preview.report()" tooltip="Abrir pdf" icon>
           <v-icon> fa-file-pdf </v-icon>
         </own-btn>
 
@@ -51,6 +38,7 @@
         v-if="!form"
         :headers="headers"
         :items="elements"
+        :item-class="() => 'selectable'"
         height="calc(100vh - 135px)"
         class="elevation-1 mb-4"
       >
