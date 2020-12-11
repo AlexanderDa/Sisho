@@ -21,18 +21,20 @@ import { character } from './pg'
 import { MedicalRecord } from './'
 
 @model({
-  indexes: {
-    uniquePatientDNI: {
-      keys: { dni: 1 },
-      options: { unique: true }
-    },
-    uniquePatientPassport: {
-      keys: { passport: 1 },
-      options: { unique: true }
-    },
-    uniquePatientHC: {
-      keys: { hc: 1 },
-      options: { unique: true }
+  settings: {
+    indexes: {
+      uniquePatientDNI: {
+        keys: { dni: 1 },
+        options: { unique: true }
+      },
+      uniquePatientPassport: {
+        keys: { passport: 1 },
+        options: { unique: true }
+      },
+      uniquePatientHC: {
+        keys: { hc: 1 },
+        options: { unique: true }
+      }
     }
   }
 })
